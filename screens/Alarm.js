@@ -10,35 +10,24 @@ import {
 import { useState } from 'react'
 
 
-//다크모드
-import DarkMode from '../components/styles/DarkMode'
-
-
-
 const Alarm = (props) => {
-    // 다크 모드
-    const [ui, setUI] = useState(false);
 
     //리스트
     const [list, setList] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
 
 
-
-
-
     return (
         <SafeAreaView
             style={[
-                ui != false ? DarkMode.lightPriceView : DarkMode.darkPriceView,
                 {
                     flex: 1,
+                    backgroundColor: '#FFFFFF'
                 }
             ]}
         >
             {/* 메인 타이틀 */}
             <Text
                 style={[
-                    ui != false ? DarkMode.lightMainText : DarkMode.darkMainText,
                     styles.mainTitle
                 ]}
             >
@@ -55,13 +44,8 @@ const Alarm = (props) => {
                             style={styles.alarmView}
                         >
                             <View style={styles.alarmImage}></View>
-                            <Text
-                                style={[
-                                    ui != false ? DarkMode.lightMainText : DarkMode.darkMainText,
-                                    styles.alarmText
-                                ]}
-                            >
-                                백지환 님이 회원 님의 iPhone 12 자산에 관심을 가지고 있습니다.
+                            <Text style={styles.alarmText}>
+                                <Text style={styles.highlightText}>백지환</Text> 님이 <Text style={styles.highlightText}>아이폰 12</Text> 자산을 추가했습니다.
                             </Text>
                             <Text style={styles.alarmDate}>17시간</Text>
                         </TouchableOpacity>
@@ -86,8 +70,6 @@ const styles = StyleSheet.create({
     },
 
 
-
-
     //알림 리스트 세션
     listSection: {
         flex: 1,
@@ -108,15 +90,20 @@ const styles = StyleSheet.create({
         marginRight: 12,
     },
     alarmText: {
-        width: '60%',
+        width: '66%',
         fontSize: 14,
+        fontWeight: 'medium',
+        alignSelf: 'flex-start',
+    },
+    highlightText: {
         fontWeight: 'bold',
+        color: '#111111',
     },
     alarmDate: {
+        alignSelf: 'flex-start',
         color: '#767676',
         fontSize: 14,
         position: 'absolute',
         right: 0,
-        top: 0,
     },
 })

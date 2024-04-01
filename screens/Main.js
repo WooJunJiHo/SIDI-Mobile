@@ -10,20 +10,15 @@ import {
 } from 'react-native'
 import { useState } from 'react'
 
-//다크 모드
-import DarkMode from '../components/styles/DarkMode'
 import Linechart from '../components/Linechart/LineChart'
-
+import Swiper from 'react-native-swiper';
 
 
 const Home = (props) => {
-    // 다크 모드
-    const [ui, setUI] = useState(false);
 
     return (
         <SafeAreaView
             style={[
-                ui != false ? DarkMode.lightView : DarkMode.darkView,
                 {
                     flex: 1,
                 }
@@ -34,58 +29,95 @@ const Home = (props) => {
                 {/* 사용자 세션 */}
                 <View style={styles.userSection}>
                     <Text style={[
-                        ui != false ? DarkMode.lightMainText : DarkMode.darkMainText,
                         styles.userText,
                     ]}>
                         백지환
                     </Text>
-                    <TouchableOpacity
-                        style={{
-                            position: 'absolute',
-                            right: 0
-                        }}
-                        onPress={() => {
-                            ui == true ? setUI(false) : setUI(true)
-                        }}
-                    >
-                        <View style={styles.shortCut}>
-                            <Text style={styles.userSubText}>
-                                내 자산 바로가기
-                            </Text>
-                            <Image
-                                style={styles.shortcutIcon}
-                                source={require('../assets/icons/ShortCut-white.png')}
-                            />
-                        </View>
-
-
-                    </TouchableOpacity>
                 </View>
 
-                {/* 사용법 세션 */}
                 <View
                     style={[
-                        ui != false ? DarkMode.lightSubView : DarkMode.darkSubView,
                         styles.section, { height: 200 }
                     ]}
                 >
-                    <View style={styles.explanation}>
-                        <Text style={styles.explanationSubText}>
-                            실물 자산을 편하게 관리하는 방법!
-                        </Text>
-                        <Text style={styles.explanationMainText}>SIDI 사용 방법을 알려드립니다</Text>
-                    </View>
-                    <Image
-                        source={require('../assets/icons/illustration.png')}
-                        style={styles.illustration}
-                    />
+                    <Swiper
+                        style={styles.wrapper}
+                        loop={true}
+                        showsPagination={true}
+                        horizontal={true}
+                        paginationStyle={{ top: -120, right: -280 }}
+                        autoplay={true} 
+                        autoplayTimeout={3} 
+                    >
+                        {/* 첫 번째 슬라이드 */}
+                        <View style={styles.slide}>
+                            <View
+                                style={[
+                                    styles.section, { height: 200 }
+                                ]}
+                            >
+                                <View style={styles.explanation}>
+                                    <Text style={styles.explanationSubText}>
+                                        실물 자산을 편하게 관리하는 방법!
+                                    </Text>
+                                    <Text style={styles.explanationMainText}>SIDI 사용 방법을 알려드립니다</Text>
+                                </View>
+                                <Image
+                                    source={require('../assets/icons/illustration.png')}
+                                    style={styles.illustration}
+                                />
+
+                                <TouchableOpacity
+                                    style={styles.howButton}
+                                    onPress={() => {
+
+                                    }}
+                                >
+                                    <Text style={styles.howText}>방법 보러가기</Text>
+                                </TouchableOpacity>
+
+                            </View>
+                        </View>
+
+                        <View style={styles.slide}>
+                            <View
+                                style={[
+                                    styles.section, { height: 200 }
+                                ]}
+                            >
+                                <View style={styles.explanation}>
+                                    <Text style={styles.explanationSubText}>
+                                        김린하
+                                    </Text>
+                                    <Text style={styles.explanationMainText}>주서진</Text>
+                                </View>
+                                <Image
+                                    source={require('../assets/icons/illustration.png')}
+                                    style={styles.illustration}
+                                />
+
+                                <TouchableOpacity
+                                    style={styles.howButton}
+                                    onPress={() => {
+
+                                    }}
+                                >
+                                    <Text style={styles.howText}>방법 보러가기</Text>
+                                </TouchableOpacity>
+
+                            </View>
+                        </View>
+
+                    </Swiper>
+
 
                 </View>
+
+
 
                 {/* 총 자산 세션 */}
                 <TouchableOpacity
                     style={[
-                        ui != false ? DarkMode.lightSubView : DarkMode.darkSubView,
                         styles.section,
                         {
                             height: 95,
@@ -105,27 +137,32 @@ const Home = (props) => {
                         총 자산{'\n'}
                         <Text
                             style={[
-                                ui != false ? DarkMode.lightMainText : DarkMode.darkMainText,
                                 styles.totalMainText
                             ]}
                         >
                             1,301,590,000원
                         </Text>
                     </Text>
+
                     <Image
                         style={styles.totalShortcutIcon}
                         source={require('../assets/icons/ShortCut-white.png')}
                     />
+
+
                 </TouchableOpacity>
 
 
                 {/* 자산 그래프 세션 */}
                 <View
                     style={[
-                        ui != false ? DarkMode.lightSubView : DarkMode.darkSubView,
                         styles.section, { height: 300 }
                     ]}
                 >
+                    <Image
+                        source={require('../assets/icons/GraphImage.png')}
+                        style={styles.totalGraphImage}
+                    />
                     <Text style={styles.totalText}>총 자산 그래프</Text>
 
                     <Linechart />
@@ -147,6 +184,7 @@ const styles = StyleSheet.create({
         width: '91%',
         borderRadius: 20,
         marginBottom: 20,
+        backgroundColor: '#FFFFFF',
     },
 
     //사용자 세션
@@ -167,13 +205,30 @@ const styles = StyleSheet.create({
         color: '#DBDBDB',
         marginRight: 8,
         // backgroundColor: 'red',
+    },
 
+    howButton: {
+        position: 'absolute',
+        justifyContent: 'center',
+        width: 90,
+        height: 36,
+        borderRadius: 20,
+        backgroundColor: '#6C60F1',
+        right: -10,
+        bottom: 20,
+    },
+
+    howText: {
+        color: '#FFFFFF',
+        fontSize: 12,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        lineHeight: 40,
     },
 
     shortCut: { //바로가기 버튼
         flexDirection: 'row',
         alignItems: 'center',
-        // backgroundColor: 'pink'
     },
     shortcutIcon: { // 바로가기 아이콘
         // backgroundColor: 'blue',
@@ -197,13 +252,15 @@ const styles = StyleSheet.create({
         fontSize: 18,
         left: 20,
         color: '#111111',
-        top: 49,
+        top: 40,
         fontWeight: 'medium',
     },
     illustration: {
         position: 'absolute',
         bottom: 0,
-        right: 260,
+        right: 240,
+        width: 60,
+        height: 80,
     },
 
 
@@ -220,13 +277,13 @@ const styles = StyleSheet.create({
     totalAssetsImage: {
         alignSelf: 'center',
         position: 'absolute',
-        marginLeft: 30.
+        alignItems: 'center',
     },
     totalSubText1: {
         color: '#111111',
         fontSize: 18,
-        fontWeight: 'normal',
-        left: 80
+        fontWeight: 'medium',
+        left: 34
     },
     totalMainText: {
         fontWeight: 'bold',
@@ -234,7 +291,13 @@ const styles = StyleSheet.create({
     },
 
     assetsContainer: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        justifyContent: 'center',
+        backgroundColor: '#6C60F1',
+        width: 50,
+        height: 50,
+        borderRadius: 100,
+        left: 20,
     },
 
     totalShortcutIcon: {   // 총 자산 바로가기 아이콘 스타일
@@ -246,7 +309,12 @@ const styles = StyleSheet.create({
     totalText: {
         fontSize: 18,
         fontWeight: 'medium',
-        left: 20,
+        left: 50,
+        top: 0,
+    },
+
+    totalGraphImage: {
         top: 20,
+        left: 20,
     }
 })

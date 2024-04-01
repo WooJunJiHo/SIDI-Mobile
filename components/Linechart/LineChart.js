@@ -43,7 +43,7 @@ const Chart = () => {
 
     ];
 
-    const spacing = (width / ptData.length) - 4;
+    const spacing = (width / ptData.length) - 4.4;
 
     return (
         <View
@@ -101,7 +101,7 @@ const Chart = () => {
                                     marginTop: -50,
                                     marginLeft: -25,
                                 }}>
-                                <Text style={{ color: '#111111', fontSize: 14, marginBottom: 10, textAlign: 'center' }}>
+                                <Text style={{ color: '#111111', fontSize: 14, marginBottom: 10, textAlign: 'center', left: -5 }}>
                                     {items[0].date}
                                 </Text>
 
