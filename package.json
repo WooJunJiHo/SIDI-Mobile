@@ -26,6 +26,8 @@
     "react-native-gifted-charts": "^1.4.9",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-qrcode-scanner": "^1.5.5",
+    "react-native-swiper": "^1.6.0",
+    "react-native-web-swiper": "^2.2.4",
     "typescript": "^5.3.0"
   },
   "devDependencies": {

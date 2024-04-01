@@ -9,8 +9,6 @@ import {
 } from 'react-native'
 import { useState } from 'react';
 
-//다크모드
-import DarkMode from '../components/styles/DarkMode'
 
 
 const AssetsInfo = (props) => {

@@ -5,13 +5,9 @@ import {
 } from 'react-native'
 import { useState } from 'react';
 
-//다크 모드
-import DarkMode from '../../components/styles/DarkMode'
 
 
 const TabBar = ({ state, descriptors, navigation }) => {
-    //다크모드
-    const [ui, setUI] = useState(false)
 
     //클릭 이벤트
     const [onScreen, setOnScreen] = useState('Home')
@@ -20,7 +16,6 @@ const TabBar = ({ state, descriptors, navigation }) => {
     return (
         <View
             style={[
-                ui != false ? DarkMode.lightView : DarkMode.darkView,
                 {
                     height: 80,
                 }
@@ -31,11 +26,11 @@ const TabBar = ({ state, descriptors, navigation }) => {
                     flexDirection: 'row',
                     width: '100%',
                     height: '100%',
-                    backgroundColor: ui != false ? '#FFFFFF' : '#242424', // 원하는 색상으로 변경
+                    backgroundColor: '#FFFFFF', // 원하는 색상으로 변경
                     borderTopLeftRadius: 10,
                     borderTopRightRadius: 10,
                     borderWidth: 1,
-                    borderColor: '#767676',
+                    borderColor: '#DBDBDB',
                     borderBottomWidth: 0,
                 }}
             >
@@ -64,14 +59,10 @@ const TabBar = ({ state, descriptors, navigation }) => {
                         onScreen == route.name ?  
                         iconName = require('../../assets/icons/blue-home_icon.png') :
                         iconName = require('../../assets/icons/home-grayline.png')
-                    } else if (route.name === 'Search') {
+                    } else if (route.name === 'Scan') {
                         onScreen == route.name ? 
-                        iconName = require('../../assets/icons/blue-search_icon.png') :
-                        iconName = require('../../assets/icons/search-grayline.png')
-                    } else if (route.name === 'Chat') {
-                        onScreen == route.name ? 
-                        iconName = require('../../assets/icons/blue-chat_icon.png') :
-                        iconName = require('../../assets/icons/chat-grayline.png')
+                        iconName = require('../../assets/icons/blue-QRScan.png') :
+                        iconName = require('../../assets/icons/QRScan-grayline.png')
                     } else if (route.name === 'Alarm') {
                         onScreen == route.name ? 
                         iconName = require('../../assets/icons/blue-bell_icon.png') :

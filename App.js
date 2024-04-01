@@ -6,7 +6,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 // 화면 컴포넌트들 (예시로 2개 추가)
 import Main from './screens/Main';
-import Search from './screens/Search';
 import AssetsInfo from './screens/Assets-info'
 import Alarm from './screens/Alarm';
 import MyPage from './screens/MyPage';
@@ -34,9 +33,9 @@ const MainStack = () => (
 );
 
 
-const SearchStack = () => (
+const ScanStack = () => (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="SearchMain" component={Scanner} />
+        <Stack.Screen name="ScanMain" component={Scanner} />
     </Stack.Navigator>
 );
 
@@ -74,7 +73,7 @@ export default function App() {
                 tabBar={(props) => <TabBar {...props} />}
             >
                 <Tab.Screen name='Home' component={MainStack} />
-                <Tab.Screen name='Search' component={SearchStack} />
+                <Tab.Screen name='Scan' component={ScanStack} />
                 <Tab.Screen name='Alarm' component={AlarmStack} />
                 <Tab.Screen name='MyPage' component={MyPageStack} />
             </Tab.Navigator>
