@@ -6,71 +6,106 @@ import {
     TouchableOpacity,
     StyleSheet,
     Dimensions,
-} from 'react-native'
+    Image,
+} from 'react-native';
 import { useState } from 'react';
-
-
+// 아이콘
+import Icon from '../components/styles/Icons';
+// 클립보드 모듈 추가
+import * as Clipboard from 'expo-clipboard';
 
 const AssetsInfo = (props) => {
-    //다크모드
-    const [ui, setUI] = useState(false);
+
+    // 복사하기 버튼 핸들러
+    const handleCopyText = () => {
+        // AiText 스타일을 사용하는 모든 텍스트를 찾아서 복사
+        let copiedText = '';
+        // AiText 스타일을 사용하는 텍스트를 찾아서 복사
+        data.forEach(item => {
+            if (item.style === styles.AiText) {
+                copiedText += item.text + '\n';
+            }
+        });
+        Clipboard.setString(copiedText.trim());
+        // 복사 완료 메시지 또는 처리를 여기에 추가할 수 있습니다.
+    };
+
+    // 데이터 예시 (텍스트와 스타일을 포함하는 배열)
+    const data = [
+        { text: '주서진 김린하 레츠고', style: styles.AiText },
+    ];
 
     return (
         <SafeAreaView
-            style={[
-                ui != false ? DarkMode.lightPriceView : DarkMode.darkPriceView,
-                {
-                    flex: 1,
-                }
-            ]}
+            style={{
+                flex: 1,
+                backgroundColor: '#ffffff',
+            }}
         >
             <ScrollView>
-                <View style={{alignItems: 'center'}}>
+                <TouchableOpacity
+                    style={styles.titleIcon}
+                    onPress={() => {
+                        props.navigation.navigate('MyPageMain');
+                    }}
+                >
+                    <Icon name="arrow-back-outline" size={24} />
+                </TouchableOpacity>
+                <View style={{ alignItems: 'center', marginTop: 60 }}>
                     {/* 자산 이미지 세션 */}
-                    <View style={[styles.imageSection, { height: Dimensions.get('window').width }]}>
-
-                    </View>
+                    <View style={[styles.imageSection, { height: Dimensions.get('window').width }]} />
 
                     {/* 자산 정보 세션 */}
                     <View style={styles.infoSection}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center',}}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <View style={styles.infoUserImage}></View>
-                            <Text style={styles.infoUserName}>
-                                김우희
-                            </Text>
+                            <Text style={styles.infoUserName}>김우희</Text>
+                            <Text style={styles.infoDate}>2024.01.09</Text>
                         </View>
-                        <Text style={[styles.infoAssetsName, ui != false ? DarkMode.lightMainText : DarkMode.darkMainText,]}>아이폰 15 Pro Max 화이트</Text>
-                        <Text style={styles.infoUserName}>2024.01.09</Text>
-                        <View style={styles.infoHeart}></View>
+                        <Text style={styles.infoAssetsName}>아이폰 15 Pro Max 화이트</Text>
+                        <View style={styles.stateContainer}>
+                            <Text style={styles.stateText}>상태</Text>
+                            <Text style={styles.stateDescription}>외판 손상</Text>
+                            <Text style={styles.stateDescription}>버튼 고장</Text>
+                        </View>
+                    </View>
+
+                    {/* AI가 작성해주는 글 세션 */}
+                    <View style={styles.AiSection}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 0, marginTop: 20 }}>
+                            <Image
+                                source={require('../assets/icons/Robot.png')}
+                                style={styles.illustration}
+                            />
+                            <Text style={styles.AiTitle}>AI가 작성해주는 판매글</Text>
+                            <TouchableOpacity onPress={handleCopyText}>
+                                <Text style={styles.copyText}>복사하기</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        <View style={styles.AiTextView}>
+                            {data.map((item, index) => (
+                                <Text key={index} style={[item.style, { paddingRight: 20 }]}>{item.text}</Text>
+                            ))}
+                        </View>
+
                     </View>
 
                     {/* 중고 거래 플랫폼 시세 차트 세션 */}
-                    <View style={[styles.priceChartSection, ui != false ? DarkMode.lightTextInput : DarkMode.darkTextInput,]}>
-
-                    </View>
+                    <View style={styles.priceChartSection} />
 
                     {/* 중고 거래 플랫폼 시세 세션 */}
-                    <View style={[styles.priceSection, ui != false ? DarkMode.lightTextInput : DarkMode.darkTextInput,]}>
+                    <View style={styles.priceSection} />
 
-                    </View>
-
-
-                    {/* 360도 이미지 세션 */}
-                    <View style={[styles.image360Section, ui != false ? DarkMode.lightTextInput : DarkMode.darkTextInput,]}>
-
-                    </View>
-
-
-                    {/* 채팅 버튼 */}
-                    <TouchableOpacity style={styles.chatBtn}>
-                        <Text style={styles.chatBtnText}>채팅 하기</Text>
+                    {/* 삭제 버튼 */}
+                    <TouchableOpacity style={styles.DeleteBtn}>
+                        <Text style={styles.DeleteText}>삭제 하기</Text>
                     </TouchableOpacity>
-
                 </View>
             </ScrollView>
         </SafeAreaView>
-    )
-}
+    );
+};
 
 
 export default AssetsInfo
@@ -81,10 +116,16 @@ const styles = StyleSheet.create({
     //자산 이미지 세션
     imageSection: {
         width: '100%',
-        backgroundColor: '#242424',
+        backgroundColor: '#767676',
     },
 
-
+    titleIcon: {
+        left: 10,
+        top: 30,
+    },
+    illustration: {
+        marginLeft: 20
+    },
 
     //자산 정보 세션
     infoSection: {
@@ -95,6 +136,7 @@ const styles = StyleSheet.create({
         color: '#767676',
         fontSize: 18,
         fontWeight: 'normal',
+        flex: 1,
     },
     infoUserImage: {
         width: 30,
@@ -109,13 +151,25 @@ const styles = StyleSheet.create({
         marginTop: 12,
         marginBottom: 20,
     },
-    infoHeart: {
-        width: 20,
-        height: 18,
-        backgroundColor: 'red',
-        position: 'absolute',
-        right: 0,
-        bottom: 0,
+    infoDate: {
+        fontSize: 14,
+        fontWeight: 'light',
+        color: '#767676',
+    },
+    stateContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    stateText: {
+        fontSize: 14,
+        fontWeight: 'light',
+        color: '#767676',
+    },
+    stateDescription: {
+        marginLeft: 5,
+        fontSize: 16,
+        fontWeight: 'light',
+        color: '#111111',
     },
 
 
@@ -123,8 +177,9 @@ const styles = StyleSheet.create({
     priceChartSection: {
         width: '91%',
         height: 313,
-        marginTop: 30,
+        marginTop: 20,
         borderRadius: 20,
+        backgroundColor: '#F5F5F5',
     },
 
 
@@ -135,34 +190,54 @@ const styles = StyleSheet.create({
         height: 83,
         borderRadius: 20,
         marginTop: 20,
+        backgroundColor: '#F5F5F5',
     },
 
 
 
 
-    //360도 이미지 세션
-    image360Section: {
+    //Ai 세션
+    AiSection: {
         width: '91%',
         height: 305,
         borderRadius: 20,
         marginTop: 20,
+        backgroundColor: '#F5F5F5',
+    },
+    AiTitle: {
+        fontSize: 18,
+        fontWeight: 'medium',
+        marginLeft: 8
+    },
+    AiTextView: {
+
+    },
+    AiText: {
+        fontSize: 14,
+        fontWeight: 'normal',
+        marginLeft: 20,
+        marginTop: 12,
+        color: '#767676',
+    },
+    copyText: {
+        color: '#6C60F1',
+        fontSize: 14,
+        fontWeight: 'normal',
+        left: 100
     },
 
-
-
-
-    //채팅 버튼
-    chatBtn: {
+    //삭제 버튼
+    DeleteBtn: {
         width: '91%',
         height: 51,
-        borderRadius: 10,
+        borderRadius: 20,
         marginTop: 20,
         marginBottom: 20,
-        backgroundColor: '#2A8FF7',
+        backgroundColor: '#6C60F1',
         alignItems: 'center',
         justifyContent: 'center',
     },
-    chatBtnText: {
+    DeleteText: {
         color: 'white',
         fontSize: 18,
         fontWeight: 'normal'

@@ -9,19 +9,18 @@ import {
 } from 'react-native'
 import { useState } from 'react'
 
-
-//아이콘
+// 아이콘
 import Icon from '../components/styles/Icons'
 
-
-
 const MyPage = (props) => {
-
-    //메뉴 선택
+    // 메뉴 선택
     const [category, setCategory] = useState(0)
-
-    //리스트
+    // 리스트
     const [list, setList] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+
+    const navigateToMyAssetsInfo = () => {
+        props.navigation.navigate("MyAssetsInfo");
+    }
 
     return (
         <SafeAreaView
@@ -139,9 +138,7 @@ const MyPage = (props) => {
                                 styles.listView, 
                                 { height: Dimensions.get('window').width / 3 }, 
                             ]}
-                            onPress={() => {
-                                props.navigation.navigate("MyAssetsInfo")
-                            }}
+                            onPress={navigateToMyAssetsInfo}
                         >
 
                         </TouchableOpacity>
@@ -151,6 +148,7 @@ const MyPage = (props) => {
         </SafeAreaView>
     )
 }
+
 
 
 export default MyPage
