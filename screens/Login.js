@@ -3,10 +3,17 @@ import {
     View,
     Text,
     TouchableOpacity,
+    Button,
     StyleSheet,
 } from 'react-native'
 import { useState, useEffect } from 'react';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
+
+//소셜 로그인
+import { GoogleLogin } from '../components/utils/googleLogin';
+//import { KakaoLogin } from '../components/utils/kakaoLogin';
+import { fetchLogin } from '../components/Fetch/FetchData';
 
 //다크 모드
 import DarkMode from '../components/styles/DarkMode'
@@ -19,8 +26,9 @@ import Icon from '../components/styles/Icons';
 
 const Login = (props) => {
     // 다크 모드
-    const [ui, setUI] = useState(false);
+    const [ui, setUI] = useState(true);
 
+    
 
 
     return (
@@ -60,7 +68,8 @@ const Login = (props) => {
             </View>
 
             {/* 로그인 버튼 세션 */}
-
+            <GoogleLogin AsyncStorage={AsyncStorage}/>
+            
 
         </SafeAreaView>
     )

@@ -3,11 +3,13 @@
     "name": "Mobile",
     "slug": "Mobile",
     "version": "1.0.0",
+    "platforms": ["ios", "android"],
+    "scheme": "SIDI-Mobile",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icons/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/icons/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -15,16 +17,25 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.SIDI.Mobile",
+      "infoPlist": {
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": ["com.googleusercontent.apps.733666115774-37prtfvmin9u4cioh1dg38upvjuijblv"]
+          }
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icons/icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.Mobile"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icons/icon.png"
     },
     "expo": {
       "plugins": [
@@ -35,6 +46,11 @@
           }
         ]
       ]
+    },
+    "extra": {
+      "eas": {
+        "projectId": "864f402d-42b5-4c17-ac72-6408c8aae4f3"
+      }
     }
   }
 }

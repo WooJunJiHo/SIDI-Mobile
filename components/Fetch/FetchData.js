@@ -1,7 +1,7 @@
 import axios from "axios";
 
 //서버 주소
-import { REACT_APP_SERVER_URL } from '@env'
+import REACT_APP_SERVER_URL from '../../env'
 
 
 
@@ -31,3 +31,14 @@ export const getColors = async () => {
 
 
 
+//로그인 확인 / POST
+export const fetchLogin = async (data) => {
+    try {
+        const response = await axios.post(`${REACT_APP_SERVER_URL}/fetchLogin`, data);
+        console.log(response.data)
+        return response.data; // 서버로부터 받은 데이터 리턴
+    } catch (error) {
+        console.error('Error:', error);
+        throw error; // 에러를 상위로 다시 던지기
+    }
+}
