@@ -93,14 +93,12 @@ const styles = StyleSheet.create({
         width: '66%',
         fontSize: 14,
         fontWeight: 'medium',
-        alignSelf: 'flex-start',
     },
     highlightText: {
         fontWeight: 'bold',
         color: '#111111',
     },
     alarmDate: {
-        alignSelf: 'flex-start',
         color: '#767676',
         fontSize: 14,
         position: 'absolute',
