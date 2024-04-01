@@ -12,6 +12,7 @@ import Alarm from './screens/Alarm';
 import MyPage from './screens/MyPage';
 import Login from './screens/Login';
 import Setting from './screens/Setting';
+import Scanner from './screens/BarCodeScanner';
 
 
 
@@ -35,8 +36,7 @@ const MainStack = () => (
 
 const SearchStack = () => (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="SearchMain" component={Search} />
-        <Stack.Screen name="SearchAssetsInfo" component={AssetsInfo} />
+        <Stack.Screen name="SearchMain" component={Scanner} />
     </Stack.Navigator>
 );
 
