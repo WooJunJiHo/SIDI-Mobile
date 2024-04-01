@@ -12,6 +12,7 @@ import { useState } from 'react'
 
 //다크 모드
 import DarkMode from '../components/styles/DarkMode'
+import Linechart from '../components/Linechart/LineChart'
 
 
 
@@ -28,120 +29,110 @@ const Home = (props) => {
                 }
             ]}
         >
-            <ScrollView style={{ flex: 1 }}>
-                <View style={{ alignItems: 'center' }}>
+            <View style={{ alignItems: 'center' }}>
 
-                    {/* 사용자 세션 */}
-                    <View style={styles.userSection}>
-                        <Text style={[
-                            ui != false ? DarkMode.lightMainText : DarkMode.darkMainText,
-                            styles.userText,
-                        ]}>
-                            백지환
-                        </Text>
-                        <TouchableOpacity
-                            style={{
-                                position: 'absolute',
-                                right: 0
-                            }}
-                            onPress={() => {
-                                ui == true ? setUI(false) : setUI(true)
-                            }}
-                        >
-                            <View style={styles.shortCut}>
-                                <Text style={styles.userSubText}>
-                                    내 자산 바로가기
-                                </Text>
-                                <Image
-                                    style={styles.shortcutIcon}
-                                    source={require('../assets/icons/ShortCut-white.png')}
-                                />
-                            </View>
-
-
-                        </TouchableOpacity>
-                    </View>
-
-                    {/* 사용법 세션 */}
-                    <View
-                        style={[
-                            ui != false ? DarkMode.lightSubView : DarkMode.darkSubView,
-                            styles.section, { height: 90 }
-                        ]}
-                    >
-                        <View style={styles.explanation}>
-                            <Text style={styles.explanationSubText}>
-                                실물 자산을 편하게 관리하는 방법!
-                            </Text>
-                            <Text style={styles.explanationMainText}>SODA 사용 방법을 알려드립니다</Text>
-                        </View>
-                        <Image
-                            source={require('../assets/icons/illustration.png')}
-                            style={styles.illustration}
-                        />
-
-                    </View>
-
-                    {/* 총 자산 세션 */}
+                {/* 사용자 세션 */}
+                <View style={styles.userSection}>
+                    <Text style={[
+                        ui != false ? DarkMode.lightMainText : DarkMode.darkMainText,
+                        styles.userText,
+                    ]}>
+                        백지환
+                    </Text>
                     <TouchableOpacity
-                        style={[
-                            ui != false ? DarkMode.lightSubView : DarkMode.darkSubView,
-                            styles.section,
-                            {
-                                height: 95,
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                            }
-                        ]}
+                        style={{
+                            position: 'absolute',
+                            right: 0
+                        }}
+                        onPress={() => {
+                            ui == true ? setUI(false) : setUI(true)
+                        }}
                     >
-                        <View style={styles.assetsContainer}>
+                        <View style={styles.shortCut}>
+                            <Text style={styles.userSubText}>
+                                내 자산 바로가기
+                            </Text>
                             <Image
-                                source={require('../assets/icons/Hand-Icon.png')}
-                                style={styles.totalAssetsImage}
+                                style={styles.shortcutIcon}
+                                source={require('../assets/icons/ShortCut-white.png')}
                             />
                         </View>
 
-                        <Text style={styles.totalSubText1}>
-                            총 자산{'\n'}
-                            <Text
-                                style={[
-                                    ui != false ? DarkMode.lightMainText : DarkMode.darkMainText,
-                                    styles.totalMainText
-                                ]}
-                            >
-                                1,301,590,000원
-                            </Text>
-                        </Text>
-                        <Image
-                            style={styles.totalShortcutIcon}
-                            source={require('../assets/icons/ShortCut-white.png')}
-                        />
+
                     </TouchableOpacity>
-
-
-                    {/* 자산 그래프 세션 */}
-                    <View
-                        style={[
-                            ui != false ? DarkMode.lightSubView : DarkMode.darkSubView,
-                            styles.section, { height: 280 }
-                        ]}
-                    >
-
-
-
-                    </View>
-
-                    {/* 자산 비율 세션 */}
-                    <View
-                        style={[
-                            ui != false ? DarkMode.lightSubView : DarkMode.darkSubView,
-                            styles.section, { height: 310 }
-                        ]}
-                    >
-                        
-                    </View>
                 </View>
-            </ScrollView>
+
+                {/* 사용법 세션 */}
+                <View
+                    style={[
+                        ui != false ? DarkMode.lightSubView : DarkMode.darkSubView,
+                        styles.section, { height: 200 }
+                    ]}
+                >
+                    <View style={styles.explanation}>
+                        <Text style={styles.explanationSubText}>
+                            실물 자산을 편하게 관리하는 방법!
+                        </Text>
+                        <Text style={styles.explanationMainText}>SIDI 사용 방법을 알려드립니다</Text>
+                    </View>
+                    <Image
+                        source={require('../assets/icons/illustration.png')}
+                        style={styles.illustration}
+                    />
+
+                </View>
+
+                {/* 총 자산 세션 */}
+                <TouchableOpacity
+                    style={[
+                        ui != false ? DarkMode.lightSubView : DarkMode.darkSubView,
+                        styles.section,
+                        {
+                            height: 95,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                        }
+                    ]}
+                >
+                    <View style={styles.assetsContainer}>
+                        <Image
+                            source={require('../assets/icons/Hand-Icon.png')}
+                            style={styles.totalAssetsImage}
+                        />
+                    </View>
+
+                    <Text style={styles.totalSubText1}>
+                        총 자산{'\n'}
+                        <Text
+                            style={[
+                                ui != false ? DarkMode.lightMainText : DarkMode.darkMainText,
+                                styles.totalMainText
+                            ]}
+                        >
+                            1,301,590,000원
+                        </Text>
+                    </Text>
+                    <Image
+                        style={styles.totalShortcutIcon}
+                        source={require('../assets/icons/ShortCut-white.png')}
+                    />
+                </TouchableOpacity>
+
+
+                {/* 자산 그래프 세션 */}
+                <View
+                    style={[
+                        ui != false ? DarkMode.lightSubView : DarkMode.darkSubView,
+                        styles.section, { height: 300 }
+                    ]}
+                >
+                    <Text style={styles.totalText}>총 자산 그래프</Text>
+
+                    <Linechart />
+
+                </View>
+
+            </View>
 
         </SafeAreaView>
     )
@@ -205,13 +196,14 @@ const styles = StyleSheet.create({
         position: 'absolute',
         fontSize: 18,
         left: 20,
-        color: '#DBDBDB',
-        top: 49
+        color: '#111111',
+        top: 49,
+        fontWeight: 'medium',
     },
     illustration: {
         position: 'absolute',
         bottom: 0,
-        right: 40
+        right: 260,
     },
 
 
@@ -231,9 +223,10 @@ const styles = StyleSheet.create({
         marginLeft: 30.
     },
     totalSubText1: {
-        color: '#DBDBDB',
+        color: '#111111',
         fontSize: 18,
         fontWeight: 'normal',
+        left: 80
     },
     totalMainText: {
         fontWeight: 'bold',
@@ -250,4 +243,10 @@ const styles = StyleSheet.create({
         right: 20,
     },
 
+    totalText: {
+        fontSize: 18,
+        fontWeight: 'medium',
+        left: 20,
+        top: 20,
+    }
 })
