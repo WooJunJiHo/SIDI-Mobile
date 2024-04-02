@@ -33,7 +33,7 @@ const AssetsInfo = (props) => {
 
     // 데이터 예시 (텍스트와 스타일을 포함하는 배열)
     const data = [
-        { text: '주서진 김린하 레츠고', style: styles.AiText },
+        { text: '조서진 박유빈 김수민 주서진 레츠고', style: styles.AiText },
     ];
 
     const getCurrentDateTime = () => {
@@ -60,7 +60,10 @@ const AssetsInfo = (props) => {
                         props.navigation.navigate('MyPageMain');
                     }}
                 >
-                    <Icon name="arrow-back-outline" size={24} />
+                    <Image
+                        source={require('../assets/icons/ShortCut-black.png')}
+                        left={8}
+                    />
                 </TouchableOpacity>
                 <View style={{ alignItems: 'center', marginTop: 60 }}>
                     {/* 자산 이미지 세션 */}

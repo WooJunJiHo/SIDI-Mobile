@@ -4,12 +4,10 @@ import {
     Text,
     TouchableOpacity,
     StyleSheet,
+    Image,
 } from 'react-native'
 import { useState } from 'react';
 
-
-//다크 모드
-import DarkMode from '../components/styles/DarkMode'
 
 //아이콘
 import Icon from '../components/styles/Icons';
@@ -19,15 +17,10 @@ import Icon from '../components/styles/Icons';
 
 
 const Setting = (props) => {
-    // 다크 모드
-    const [ui, setUI] = useState(false);
-
-
 
     return (
         <SafeAreaView
             style={[
-                ui != false ? DarkMode.lightView : DarkMode.darkView,
                 {
                     flex: 1,
                     alignItems: 'center',
@@ -37,7 +30,6 @@ const Setting = (props) => {
             {/* 타이틀 & 내 정보 세션 */}
             <View
                 style={[
-                    ui != false ? DarkMode.lightSubView : DarkMode.darkSubView,
                     styles.titleInfoSection,
                 ]}
             >
@@ -45,20 +37,17 @@ const Setting = (props) => {
                 <View style={styles.titleSection}>
                     <Text
                         style={[
-                            ui != false ? DarkMode.lightMainText : DarkMode.darkMainText,
                             styles.mainTitle
                         ]}
                     >
-                        내 자산
+                        내 정보
                     </Text>
                     <TouchableOpacity
                         style={styles.iconBtn}
                         onPress={() => { props.navigation.goBack() }}
                     >
-                        <Icon
-                            name='arrow-back-outline'
-                            size={24}
-                            color={ui != false ? 'black' : 'white'}
+                        <Image
+                            source={require('../assets/icons/ShortCut-black.png')}
                         />
                     </TouchableOpacity>
                 </View>
@@ -69,7 +58,6 @@ const Setting = (props) => {
                     <Text
                         style={[
                             styles.infoName,
-                            ui != false ? DarkMode.lightMainText : DarkMode.darkMainText,
                         ]}
                     >
                         백지환
@@ -77,10 +65,10 @@ const Setting = (props) => {
                 </View>
             </View>
 
+
             {/* 버튼 세션 */}
             <View
                 style={[
-                    ui != false ? DarkMode.lightSubView : DarkMode.darkSubView,
                     styles.infoHeartSection,
                 ]}
             >
@@ -88,94 +76,56 @@ const Setting = (props) => {
                     <Text
                         style={[
                             styles.btnText,
-                            ui != false ? DarkMode.lightMainText : DarkMode.darkMainText,
                         ]}
                     >
                         개인정보
                     </Text>
                     <View style={styles.btnIcon}>
-                        <Icon
-                            name='arrow-forward-outline'
-                            size={24}
-                            color='#767676'
-                        />    
+                        <Image
+                            source={require('../assets/icons/ShortCut-dark.png')}
+                        />
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.btn}>
                     <Text
                         style={[
                             styles.btnText,
-                            ui != false ? DarkMode.lightMainText : DarkMode.darkMainText,
-                        ]}
-                    >
-                        관심
-                    </Text>
-                    <View style={styles.btnIcon}>
-                        <Icon
-                            name='arrow-forward-outline'
-                            size={24}
-                            color='#767676'
-                        />    
-                    </View>
-                </TouchableOpacity>
-            </View>
-
-            {/* 버튼 세션 */}
-            <View
-                style={[
-                    ui != false ? DarkMode.lightSubView : DarkMode.darkSubView,
-                    styles.infoHeartSection,
-                ]}
-            >
-                <TouchableOpacity style={styles.btn}>
-                    <Text
-                        style={[
-                            styles.btnText,
-                            ui != false ? DarkMode.lightMainText : DarkMode.darkMainText,
                         ]}
                     >
                         도움말
                     </Text>
                     <View style={styles.btnIcon}>
-                        <Icon
-                            name='arrow-forward-outline'
-                            size={24}
-                            color='#767676'
-                        />    
+                        <Image
+                            source={require('../assets/icons/ShortCut-dark.png')}
+                        />
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.btn}>
                     <Text
                         style={[
                             styles.btnText,
-                            ui != false ? DarkMode.lightMainText : DarkMode.darkMainText,
                         ]}
                     >
                         설정
                     </Text>
                     <View style={styles.btnIcon}>
-                        <Icon
-                            name='arrow-forward-outline'
-                            size={24}
-                            color='#767676'
-                        />    
+                        <Image
+                            source={require('../assets/icons/ShortCut-dark.png')}
+                        />
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.btn}>
                     <Text
                         style={[
                             styles.btnText,
-                            ui != false ? DarkMode.lightMainText : DarkMode.darkMainText,
                         ]}
                     >
                         로그아웃
                     </Text>
                     <View style={styles.btnIcon}>
-                        <Icon
-                            name='arrow-forward-outline'
-                            size={24}
-                            color='#767676'
-                        />    
+                        <Image
+                            source={require('../assets/icons/ShortCut-dark.png')}
+                        />
                     </View>
                 </TouchableOpacity>
             </View>
@@ -196,6 +146,7 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         paddingBottom: 20,
+        backgroundColor: '#ffffff',
     },
 
 
@@ -221,7 +172,7 @@ const styles = StyleSheet.create({
     infoSection: {
         width: '91%',
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     infoImage: {
         width: 40,
@@ -244,6 +195,7 @@ const styles = StyleSheet.create({
         width: '100%',
         marginTop: 20,
         alignItems: 'center',
+        backgroundColor: '#ffffff',
     },
     btn: {
         width: '91%',

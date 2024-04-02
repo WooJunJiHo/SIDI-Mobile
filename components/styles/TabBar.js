@@ -1,32 +1,24 @@
-import {
-    View,
-    TouchableOpacity,
-    Image
-} from 'react-native'
-import { useState } from 'react';
-
-
+import React from 'react';
+import { View, TouchableOpacity, Image } from 'react-native';
 
 const TabBar = ({ state, descriptors, navigation }) => {
-
-    //클릭 이벤트
-    const [onScreen, setOnScreen] = useState('Home')
-
+    const handleTabPress = (routeName) => {
+        if (routeName === 'MyPage') {
+            // Mypage 탭일 경우 항상 Mypage.js로 이동하도록 설정
+            navigation.navigate('MyPageMain');
+        } else {
+            navigation.navigate(routeName);
+        }
+    };
 
     return (
-        <View
-            style={[
-                {
-                    height: 80,
-                }
-            ]}
-        >
+        <View style={{ height: 80 }}>
             <View
                 style={{
                     flexDirection: 'row',
                     width: '100%',
                     height: '100%',
-                    backgroundColor: '#FFFFFF', // 원하는 색상으로 변경
+                    backgroundColor: '#FFFFFF',
                     borderTopLeftRadius: 10,
                     borderTopRightRadius: 10,
                     borderWidth: 1,
@@ -37,44 +29,18 @@ const TabBar = ({ state, descriptors, navigation }) => {
                 {state.routes.map((route, index) => {
                     const { options } = descriptors[route.key];
                     const label = options.tabBarLabel !== undefined ? options.tabBarLabel : options.title !== undefined ? options.title : route.name;
-
                     const isFocused = state.index === index;
 
-                    const onPress = () => {
-                        const event = navigation.emit({
-                            type: 'tabPress',
-                            target: route.key,
-                        });
-
-                        if (!isFocused && !event.defaultPrevented) {
-                            setOnScreen(route.name)
-                            navigation.navigate(route.name);
-                        }
-                    };
-
-
-                    // 아이콘 이름을 동적으로 가져오는 대신 직접 지정
                     let iconName;
                     if (route.name === 'Home') {
-                        onScreen == route.name ?  
-                        iconName = require('../../assets/icons/blue-home_icon.png') :
-                        iconName = require('../../assets/icons/home-grayline.png')
+                        iconName = isFocused ? require('../../assets/icons/blue-home_icon.png') : require('../../assets/icons/home-grayline.png');
                     } else if (route.name === 'Scan') {
-                        onScreen == route.name ? 
-                        iconName = require('../../assets/icons/blue-QRScan.png') :
-                        iconName = require('../../assets/icons/QRScan-grayline.png')
+                        iconName = isFocused ? require('../../assets/icons/blue-QRScan.png') : require('../../assets/icons/QRScan-grayline.png');
                     } else if (route.name === 'Alarm') {
-                        onScreen == route.name ? 
-                        iconName = require('../../assets/icons/blue-bell_icon.png') :
-                        iconName = require('../../assets/icons/bell-grayline.png')
+                        iconName = isFocused ? require('../../assets/icons/blue-bell_icon.png') : require('../../assets/icons/bell-grayline.png');
                     } else if (route.name === 'MyPage') {
-                        onScreen == route.name ? 
-                        iconName = require('../../assets/icons/blue-man_icon.png') :
-                        iconName = require('../../assets/icons/man-grayline.png')
-                    } 
-
-
-
+                        iconName = isFocused ? require('../../assets/icons/blue-man_icon.png') : require('../../assets/icons/man-grayline.png');
+                    }
 
                     return (
                         <View
@@ -85,15 +51,8 @@ const TabBar = ({ state, descriptors, navigation }) => {
                                 alignItems: 'center',
                             }}
                         >
-                            {/* 탭에 따른 아이콘, 라벨 또는 커스텀 컴포넌트를 여기에 추가 */}
-                            <TouchableOpacity
-                                key={index}
-                                onPress={onPress}
-                                style={{bottom: 10,}}
-                            >
-                                <Image
-                                    source={iconName}
-                                />
+                            <TouchableOpacity onPress={() => handleTabPress(route.name)} style={{ bottom: 10 }}>
+                                <Image source={iconName} />
                             </TouchableOpacity>
                         </View>
                     );
@@ -103,5 +62,4 @@ const TabBar = ({ state, descriptors, navigation }) => {
     );
 };
 
-
-export default TabBar
+export default TabBar;
