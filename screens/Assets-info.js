@@ -13,6 +13,7 @@ import { useState } from 'react';
 import Icon from '../components/styles/Icons';
 // 클립보드 모듈 추가
 import * as Clipboard from 'expo-clipboard';
+import Linechart from '../components/Linechart/LineChart'
 
 const AssetsInfo = (props) => {
 
@@ -34,6 +35,16 @@ const AssetsInfo = (props) => {
     const data = [
         { text: '주서진 김린하 레츠고', style: styles.AiText },
     ];
+
+    const getCurrentDateTime = () => {
+        // 현재 시간을 가져오기 위해 Date 객체 생성
+        const currentDate = new Date();
+
+        // 현재 날짜와 시간을 문자열로 변환하여 반환
+        return currentDate.toLocaleString();
+    };
+
+    const currentDateTimeString = getCurrentDateTime();
 
     return (
         <SafeAreaView
@@ -92,10 +103,28 @@ const AssetsInfo = (props) => {
                     </View>
 
                     {/* 중고 거래 플랫폼 시세 차트 세션 */}
-                    <View style={styles.priceChartSection} />
+                    <View style={styles.priceChartSection}>
+                        <Image
+                            source={require('../assets/icons/GraphImage.png')}
+                            style={styles.totalGraphImage}
+                        />
+                        <Text style={styles.totalText}>가격 그래프</Text>
+                        <Linechart />
+                    </View>
 
                     {/* 중고 거래 플랫폼 시세 세션 */}
-                    <View style={styles.priceSection} />
+                    <View style={styles.priceSection}>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.flatformText}>번개장터</Text>
+                            <Text style={styles.flatformPrice}>1,100,000원</Text>
+
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.liveDateText}>{currentDateTimeString} 기준</Text>
+                            <Text style={styles.updownText}>-3.6%</Text>
+                        </View>
+
+                    </View>
 
                     {/* 삭제 버튼 */}
                     <TouchableOpacity style={styles.DeleteBtn}>
@@ -181,6 +210,17 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         backgroundColor: '#F5F5F5',
     },
+    totalText: {
+        fontSize: 18,
+        fontWeight: 'medium',
+        left: 50,
+        top: 0,
+    },
+
+    totalGraphImage: {
+        top: 20,
+        left: 20,
+    },
 
 
 
@@ -192,7 +232,36 @@ const styles = StyleSheet.create({
         marginTop: 20,
         backgroundColor: '#F5F5F5',
     },
-
+    flatformText: {
+        fontSize: 18,
+        fontWeight: 'medium',
+        marginLeft: 20,
+        marginTop: 20,
+        color: '#111111',
+    },
+    flatformPrice: {
+        fontSize: 18,
+        fontWeight: 'medium',
+        marginLeft: 'auto',
+        marginRight: 20,
+        marginTop: 20,
+        color: '#111111',
+    },
+    liveDateText: {
+        fontSize: 14,
+        fontWeight: 'normal',
+        marginLeft: 20,
+        marginTop: 12,
+        color: '#767676',
+    },
+    updownText: {
+        fontSize: 14,
+        fontWeight: 'normal',
+        marginLeft: 'auto',
+        marginRight: 20,
+        marginTop: 12,
+        color: 'blue',
+    },
 
 
 
