@@ -12,8 +12,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //소셜 로그인
 import { GoogleLogin } from '../components/utils/googleLogin';
-//import { KakaoLogin } from '../components/utils/kakaoLogin';
-import { fetchLogin } from '../components/Fetch/FetchData';
 
 //다크 모드
 import DarkMode from '../components/styles/DarkMode'
@@ -68,7 +66,10 @@ const Login = (props) => {
             </View>
 
             {/* 로그인 버튼 세션 */}
-            <GoogleLogin AsyncStorage={AsyncStorage}/>
+            <GoogleLogin 
+                AsyncStorage={AsyncStorage}
+                navi={props}
+            />
             
 
         </SafeAreaView>
