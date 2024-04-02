@@ -61,15 +61,15 @@ export const GoogleLogin = (props) => {
             );
             const userInfoResponse = await response.json();
             // 유저 정보를 AsyncStorage에 저장, 상태업뎃
-            await AsyncStorage.setItem("@user", JSON.stringify(userInfoResponse));
-            console.log(userInfoResponse)
-            
             const data = {
                 nickname: userInfoResponse.name,
                 email: userInfoResponse.email,
                 profileImg: userInfoResponse.picture,
             }
-            fetchLogin(data)
+            const userData = await fetchLogin(data)
+            await AsyncStorage.setItem("@user", JSON.stringify(userData));
+            
+            props.navi.navigation.navigate('MyPageMain')
             //return userInfoResponse
         } catch (e) {
             console.log(e);
