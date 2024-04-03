@@ -44,7 +44,7 @@ const MyPage = (props) => {
                 setList(JSON.parse(assetData))
                 setLoading(false);
             } else {
-                props.navigation.navigate('Login')
+                // props.navigation.navigate('Login')
             }
         };
 
