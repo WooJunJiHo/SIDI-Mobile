@@ -85,7 +85,7 @@ export const fetchAssetsImages = async (data) => {
             const url = await getDownloadURL(item);
 
             // 정규식을 사용하여 파일 이름에서 자산 ID와 이미지 번호를 추출
-            const regex = /(\d+)_+(\d+)\.jpg/;
+            const regex = /(\d+)_+(\d+)\.(jpg|jpeg|png)/;
             const match = item.name.match(regex);
 
             if (match) {

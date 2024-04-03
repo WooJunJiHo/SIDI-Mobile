@@ -14,9 +14,6 @@ import { useIsFocused } from '@react-navigation/native';
 // 아이콘
 import Icon from '../components/styles/Icons'
 
-//DB 로드
-import { fetchUserAssets, fetchAssetsImages } from '../components/Fetch/FetchData'
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
@@ -34,19 +31,17 @@ const MyPage = (props) => {
     // 로딩 상태
     const [loading, setLoading] = useState(true);
 
-    const navigateToMyAssetsInfo = () => {
-        props.navigation.navigate("MyAssetsInfo");
-    }
 
     useEffect(() => {
         const fetchUser = async () => {
+            //await AsyncStorage.removeItem("@user");
             setLoading(true);
             const user = await AsyncStorage.getItem("@user");
             if (user !== null) {
-                const imageData = await fetchAssetsImages(JSON.parse(user).userID)
-                setImage(imageData);
-                const userData = await fetchUserAssets(JSON.parse(user))
-                setList(userData)
+                const imageData = await AsyncStorage.getItem("@imageData");
+                setImage(JSON.parse(imageData))
+                const assetData = await AsyncStorage.getItem("@assetData");
+                setList(JSON.parse(assetData))
                 setLoading(false);
             } else {
                 props.navigation.navigate('Login')
@@ -82,11 +77,8 @@ const MyPage = (props) => {
                 {category === 0 ? (
                     // category가 0일 때 list를 사용하여 렌더링
                     list.map((item, idx) => {
-                        // 현재 list 항목의 assetID
-                        const AssetsID = item.AssetsID;
-
                         // 현재 list 항목과 일치하는 첫 번째 이미지 찾기
-                        const matchedImage = image.find(imageItem => imageItem.assetID == AssetsID && imageItem.imageNumber == 1);
+                        const matchedImage = image.find(imageItem => imageItem.assetID == item.AssetsID && imageItem.imageNumber == 1);
 
                         // 이미지가 없는 경우
                         if (!matchedImage) {
@@ -102,7 +94,9 @@ const MyPage = (props) => {
                                     styles.listView,
                                     { height: Dimensions.get('window').width / 3 },
                                 ]}
-                                onPress={navigateToMyAssetsInfo}
+                                onPress={() => {
+                                    props.navigation.navigate("MyAssetsInfo", {assetID: item.AssetsID});
+                                }}
                             >
                                 <Image
                                     source={{ uri: imageURL }}
@@ -134,7 +128,9 @@ const MyPage = (props) => {
                                     styles.listView,
                                     { height: Dimensions.get('window').width / 3 },
                                 ]}
-                                onPress={navigateToMyAssetsInfo}
+                                onPress={() => {
+                                    props.navigation.navigate("MyAssetsInfo", {assetID: item.AssetsID});
+                                }}
                             >
                                 <Image
                                     source={{ uri: imageURL }}
@@ -264,7 +260,9 @@ const MyPage = (props) => {
 
             {/* 자산 리스트 세션 */}
             <ScrollView>
-                <View style={styles.listSection}>
+                <View 
+                    style={[styles.listSection, { width: Dimensions.get('window').width }]}
+                >
                     {loading == false ? <LoadList /> : <View />}
                 </View>
             </ScrollView>
