@@ -3,12 +3,15 @@ import * as Google from "expo-auth-session/providers/google";
 WebBrowser.maybeCompleteAuthSession();
 
 import {
-    Button
+    Button,
+    Image,
+    View,
 } from 'react-native'
 import { useState, useEffect } from 'react';
 
 //서버 통신
-import { fetchLogin } from '../Fetch/FetchData'
+import { fetchLogin, fetchUserAssets, fetchAssetsImages } from '../Fetch/FetchData'
+
 
 
 
@@ -32,6 +35,9 @@ export const GoogleLogin = (props) => {
         handleSignInWithGoogle();
     }, [response]);
 
+    //로딩
+    const [loading, setLoading] = useState(false)
+
 
     // Google 로그인 처리하는 함수
     const handleSignInWithGoogle = async () => {
@@ -53,12 +59,15 @@ export const GoogleLogin = (props) => {
     const getUserInfo = async (token) => {
         if (!token) return;
         try {
+            setLoading(true)
+
             const response = await fetch(
                 "https://www.googleapis.com/oauth2/v3/userinfo",
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }
             );
+            
             const userInfoResponse = await response.json();
             // 유저 정보를 AsyncStorage에 저장, 상태업뎃
             const data = {
@@ -66,9 +75,17 @@ export const GoogleLogin = (props) => {
                 email: userInfoResponse.email,
                 profileImg: userInfoResponse.picture,
             }
+            
+
             const userData = await fetchLogin(data)
             await AsyncStorage.setItem("@user", JSON.stringify(userData));
-            
+
+            const imageData = await fetchAssetsImages(userData.userID)
+            await AsyncStorage.setItem("@imageData", JSON.stringify(imageData));
+            const assetData = await fetchUserAssets(userData)
+            await AsyncStorage.setItem("@assetData", JSON.stringify(assetData));
+            setLoading(false)
+
             props.navi.navigation.navigate('MyPageMain')
             //return userInfoResponse
         } catch (e) {
@@ -82,6 +99,11 @@ export const GoogleLogin = (props) => {
     };
 
 
+    if (loading == true) {
+        return (
+            <Image style={{ width: 200, height: 200 }} source={require('../../assets/icons/loading.gif')} />
+        )
+    }
     return (
         <Button
             disabled={!request}

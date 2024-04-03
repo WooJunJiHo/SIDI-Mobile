@@ -8,13 +8,29 @@ import {
     Image,
     Dimensions,
 } from 'react-native'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useIsFocused } from '@react-navigation/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Linechart from '../components/Linechart/LineChart'
 import Swiper from 'react-native-swiper';
 
 
 const Home = (props) => {
+    const isFocused = useIsFocused();
+    const [nickname, setNickname] = useState('로그인 해주세요!')
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const user = await AsyncStorage.getItem("@user");
+
+            if (user !== null) {
+                setNickname(JSON.parse(user).nickname)
+            }
+        };
+
+        fetchUser();
+    }, [isFocused]);
 
     return (
         <SafeAreaView
@@ -31,7 +47,7 @@ const Home = (props) => {
                     <Text style={[
                         styles.userText,
                     ]}>
-                        백지환
+                        {nickname}
                     </Text>
                 </View>
 

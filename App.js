@@ -3,6 +3,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 
+import { useState, useEffect } from 'react';
+import {
+    View, Image
+} from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+//DB 로드
+import { fetchUserAssets, fetchAssetsImages } from './components/Fetch/FetchData'
+
 
 // 화면 컴포넌트들 (예시로 2개 추가)
 import Main from './screens/Main';
@@ -63,6 +72,31 @@ const MyPageStack = () => (
 
 
 export default function App() {
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            setLoading(true)
+            const user = await AsyncStorage.getItem("@user");
+
+            if (user !== null) {
+                const imageData = await fetchAssetsImages(JSON.parse(user).userID)
+                await AsyncStorage.setItem("@imageData", JSON.stringify(imageData));
+                const assetData = await fetchUserAssets(JSON.parse(user))
+                await AsyncStorage.setItem("@assetData", JSON.stringify(assetData));
+            }
+            setLoading(false)
+        }
+        fetchUserData();
+    }, [])
+
+    if (loading == true) {
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <Image style={{ width: '30%', height: '30%' }} source={require('./assets/icons/loading.gif')} />
+            </View>
+        )
+    }
     return (
         <NavigationContainer>
             <Tab.Navigator

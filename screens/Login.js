@@ -64,14 +64,13 @@ const Login = (props) => {
                     />
                 </TouchableOpacity>
             </View>
-
-            {/* 로그인 버튼 세션 */}
-            <GoogleLogin 
-                AsyncStorage={AsyncStorage}
-                navi={props}
-            />
-            
-
+            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                {/* 로그인 버튼 세션 */}
+                <GoogleLogin 
+                    AsyncStorage={AsyncStorage}
+                    navi={props}
+                />    
+            </View>
         </SafeAreaView>
     )
 }

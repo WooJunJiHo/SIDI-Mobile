@@ -8,7 +8,10 @@ import {
     Dimensions,
     Image,
 } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useIsFocused } from '@react-navigation/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 // 아이콘
 import Icon from '../components/styles/Icons';
 // 클립보드 모듈 추가
@@ -16,6 +19,46 @@ import * as Clipboard from 'expo-clipboard';
 import Linechart from '../components/Linechart/LineChart'
 
 const AssetsInfo = (props) => {
+    const isFocused = useIsFocused();
+
+    //로그인 확인
+    const { params } = props.route;
+    const assetID = params ? params.assetID : null;
+
+    // 리스트
+    const [user, setUser] = useState()
+    const [asset, setAsset] = useState();
+    const [image, setImage] = useState();
+
+    // 로딩 상태
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            //await AsyncStorage.removeItem("@user");
+            setLoading(true);
+            const userData = await AsyncStorage.getItem("@user");
+            if (userData !== null) {
+                const imageData = await AsyncStorage.getItem("@imageData");
+                const assetData = await AsyncStorage.getItem("@assetData");
+
+                const imageList = JSON.parse(imageData).filter(item => item.assetID == assetID);
+                const assetList = JSON.parse(assetData).filter(item => item.AssetsID == assetID);
+
+                setUser(JSON.parse(userData))
+                setAsset(assetList)
+                setImage(imageList)
+
+                setLoading(false);
+            } else {
+                props.navigation.navigate('Login')
+            }
+        };
+
+        fetchUser();
+    }, [isFocused]);
+
+
 
     // 복사하기 버튼 핸들러
     const handleCopyText = () => {
@@ -46,6 +89,15 @@ const AssetsInfo = (props) => {
 
     const currentDateTimeString = getCurrentDateTime();
 
+
+    if (loading == true) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Image style={{ width: 200, height: 200 }} source={require('../assets/icons/loading.gif')} />
+            </View>
+
+        )
+    }
     return (
         <SafeAreaView
             style={{
@@ -67,16 +119,31 @@ const AssetsInfo = (props) => {
                 </TouchableOpacity>
                 <View style={{ alignItems: 'center', marginTop: 60 }}>
                     {/* 자산 이미지 세션 */}
-                    <View style={[styles.imageSection, { height: Dimensions.get('window').width }]} />
+                    <ScrollView
+                        style={[styles.imageSection, { height: Dimensions.get('window').width }]}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false} // 수평 스크롤 바 숨김
+                        showsVerticalScrollIndicator={false} // 수직 스크롤 바 숨김
+                    >
+                        {image.map((item, idx) => {
+                            return (
+                                <Image
+                                    key={idx}
+                                    style={[{ height: '100%' }, { width: Dimensions.get('window').width }]}
+                                    source={{ uri: item.url }}
+                                />
+                            )
+                        })}
 
+                    </ScrollView>
                     {/* 자산 정보 세션 */}
                     <View style={styles.infoSection}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <View style={styles.infoUserImage}></View>
-                            <Text style={styles.infoUserName}>김우희</Text>
-                            <Text style={styles.infoDate}>2024.01.09</Text>
+                            <Image style={styles.infoUserImage} source={{ uri: user.profileImg }} />
+                            <Text style={styles.infoUserName}>{user.nickname}</Text>
+                            <Text style={styles.infoDate}>{asset[0].DATE}</Text>
                         </View>
-                        <Text style={styles.infoAssetsName}>아이폰 15 Pro Max 화이트</Text>
+                        <Text style={styles.infoAssetsName}>{asset[0].COMPANY} {asset[0].MODEL}</Text>
                         <View style={styles.stateContainer}>
                             <Text style={styles.stateText}>상태</Text>
                             <Text style={styles.stateDescription}>외판 손상</Text>
