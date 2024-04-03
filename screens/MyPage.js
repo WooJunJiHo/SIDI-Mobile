@@ -49,7 +49,7 @@ const MyPage = (props) => {
                 setList(userData)
                 setLoading(false);
             } else {
-                props.navigation.navigate('Login')
+                // props.navigation.navigate('Login')
             }
         };
 

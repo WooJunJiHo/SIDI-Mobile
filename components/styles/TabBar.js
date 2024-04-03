@@ -4,8 +4,7 @@ import { View, TouchableOpacity, Image } from 'react-native';
 const TabBar = ({ state, descriptors, navigation }) => {
     const handleTabPress = (routeName) => {
         if (routeName === 'MyPage') {
-            // Mypage 탭일 경우 항상 Mypage.js로 이동하도록 설정
-            navigation.navigate('MyPageMain');
+            navigation.navigate('MyPage');
         } else {
             navigation.navigate(routeName);
         }
