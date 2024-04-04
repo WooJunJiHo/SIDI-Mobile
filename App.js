@@ -10,7 +10,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //DB 로드
-import { fetchUserAssets, fetchAssetsImages } from './components/Fetch/FetchData'
+import { fetchUserAssets, fetchAssetsImages, getScrapingAssets } from './components/Fetch/FetchData'
 
 
 // 화면 컴포넌트들 (예시로 2개 추가)
@@ -84,6 +84,8 @@ export default function App() {
                 await AsyncStorage.setItem("@imageData", JSON.stringify(imageData));
                 const assetData = await fetchUserAssets(JSON.parse(user))
                 await AsyncStorage.setItem("@assetData", JSON.stringify(assetData));
+                const priceData = await getScrapingAssets();
+                await AsyncStorage.setItem("@priceData", JSON.stringify(priceData))
             }
             setLoading(false)
         }

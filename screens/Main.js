@@ -181,7 +181,8 @@ const Home = (props) => {
                     />
                     <Text style={styles.totalText}>총 자산 그래프</Text>
 
-                    <Linechart />
+                    {/* 자산 그래프 
+                    <Linechart />*/}
 
                 </View>
 

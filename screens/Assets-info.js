@@ -14,6 +14,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // 아이콘
 import Icon from '../components/styles/Icons';
+
+//시세 계산
+import { priceOfDate, persentOfDate } from '../components/utils/priceOfDate';
+
 // 클립보드 모듈 추가
 import * as Clipboard from 'expo-clipboard';
 import Linechart from '../components/Linechart/LineChart'
@@ -25,10 +29,22 @@ const AssetsInfo = (props) => {
     const { params } = props.route;
     const assetID = params ? params.assetID : null;
 
-    // 리스트
+    // 변수 리스트
     const [user, setUser] = useState()
     const [asset, setAsset] = useState();
     const [image, setImage] = useState();
+    const [price, setPrice] = useState();
+    const [datePrice, setDatePrice] = useState();
+    const [persent, setPersent] = useState();
+    const [todayPrice, setTodayPrice] = useState();
+
+
+    //날짜
+    const date = new Date();
+    const yesterdayDate = new Date(date);
+    yesterdayDate.setDate(date.getDate() - 1);
+    const today = date.toLocaleDateString('ko-KR')
+    const yesterday = yesterdayDate.toLocaleDateString('ko-KR');
 
     // 로딩 상태
     const [loading, setLoading] = useState(true);
@@ -41,13 +57,26 @@ const AssetsInfo = (props) => {
             if (userData !== null) {
                 const imageData = await AsyncStorage.getItem("@imageData");
                 const assetData = await AsyncStorage.getItem("@assetData");
+                const priceData = await AsyncStorage.getItem("@priceData");
 
                 const imageList = JSON.parse(imageData).filter(item => item.assetID == assetID);
                 const assetList = JSON.parse(assetData).filter(item => item.AssetsID == assetID);
+                const priceList = JSON.parse(priceData).filter(item => item.AssetsName == assetList[0].MODEL)
+
+                const datePrice = priceOfDate(priceList)
+
+                const todayPrice = datePrice.filter(item => item.date == today)
+                const yesterdayPrice = datePrice.filter(item => item.date == yesterday)
+
+                const persentData = persentOfDate(todayPrice, yesterdayPrice);
 
                 setUser(JSON.parse(userData))
                 setAsset(assetList)
                 setImage(imageList)
+                setPrice(priceList)
+                setDatePrice(datePrice)
+                setPersent(persentData)
+                setTodayPrice(todayPrice)
 
                 setLoading(false);
             } else {
@@ -141,7 +170,7 @@ const AssetsInfo = (props) => {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Image style={styles.infoUserImage} source={{ uri: user.profileImg }} />
                             <Text style={styles.infoUserName}>{user.nickname}</Text>
-                            <Text style={styles.infoDate}>{asset[0].DATE}</Text>
+                            <Text style={styles.infoDate}>{new Date(asset[0].DATE).toLocaleDateString('ko-KR')}</Text>
                         </View>
                         <Text style={styles.infoAssetsName}>{asset[0].COMPANY} {asset[0].MODEL}</Text>
                         <View style={styles.stateContainer}>
@@ -179,19 +208,19 @@ const AssetsInfo = (props) => {
                             style={styles.totalGraphImage}
                         />
                         <Text style={styles.totalText}>가격 그래프</Text>
-                        <Linechart />
+                        <Linechart data={datePrice}/>
                     </View>
 
                     {/* 중고 거래 플랫폼 시세 세션 */}
                     <View style={styles.priceSection}>
                         <View style={{ flexDirection: 'row' }}>
                             <Text style={styles.flatformText}>번개장터</Text>
-                            <Text style={styles.flatformPrice}>1,100,000원</Text>
+                            <Text style={styles.flatformPrice}>{todayPrice[0].value}원</Text>
 
                         </View>
                         <View style={{ flexDirection: 'row' }}>
                             <Text style={styles.liveDateText}>{currentDateTimeString} 기준</Text>
-                            <Text style={styles.updownText}>-3.6%</Text>
+                            <Text style={styles.updownText}>{persent}%</Text> 
                         </View>
 
                     </View>

@@ -37,6 +37,17 @@ export const getColors = async () => {
     }
 }
 
+// /getScrapingAssets에 GET 요청 보내기
+export const getScrapingAssets = async () => {
+    try {
+        const response = await axios.get(`${REACT_APP_SERVER_URL}/getScrapingAssets`);
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error; // 에러를 상위로 다시 던지기
+    }
+}
+
 
 
 //로그인 확인 / POST
