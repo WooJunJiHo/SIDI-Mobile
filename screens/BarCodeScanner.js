@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button, Alert, Linking } from 'react-native';
 import { Camera } from 'expo-camera';
+import ScannerOverlay from './ScannerOverlay';
 
 const Scanner = () => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -55,8 +56,15 @@ const Scanner = () => {
         type={Camera.Constants.Type.back}
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         ref={(ref) => setCameraRef(ref)}
-      />
-      {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+      >
+        <View style={styles.overlay}>
+          <Text style={styles.overlayMainText}>제품 가격 • 상태 • 그래프</Text>
+          <Text style={styles.overlayText}>QR 코드 찍고 간편하게 등록하세요!</Text>
+        </View>
+        
+        <ScannerOverlay />
+
+      </Camera>
     </View>
   );
 };
@@ -71,6 +79,24 @@ const styles = StyleSheet.create({
   camera: {
     flex: 1,
     width: '100%',
+  },
+  overlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    bottom: 140,
+  },
+  overlayMainText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'medium',
+    marginBottom: 12,
+  },
+  overlayText: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'medium',
   },
 });
 
