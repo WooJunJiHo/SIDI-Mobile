@@ -73,12 +73,13 @@ const MyPageStack = () => (
 
 export default function App() {
     const [loading, setLoading] = useState(true)
+    const [login, setLogin] = useState(null)
 
     useEffect(() => {
         const fetchUserData = async () => {
             setLoading(true)
             const user = await AsyncStorage.getItem("@user");
-
+            setLogin(user)
             if (user !== null) {
                 const imageData = await fetchAssetsImages(JSON.parse(user).userID)
                 await AsyncStorage.setItem("@imageData", JSON.stringify(imageData));

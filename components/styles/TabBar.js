@@ -1,12 +1,30 @@
 import React from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect, useState } from 'react';
 
 const TabBar = ({ state, descriptors, navigation }) => {
     const handleTabPress = (routeName) => {
         if (routeName === 'MyPage') {
-            navigation.navigate('MyPage');
+            const fetchLogin = async() => {
+                const user = await AsyncStorage.getItem("@user");
+                if (user == null) {
+                    navigation.navigate('MyPage', {screen: 'Login'});
+                } else {
+                    navigation.navigate('MyPage');
+                }
+            }
+            fetchLogin()
         } else {
-            navigation.navigate(routeName);
+            const fetchLogin = async() => {
+                const user = await AsyncStorage.getItem("@user");
+                if (user == null) {
+                    navigation.navigate('MyPage', {screen: 'Login'});
+                } else {
+                    navigation.navigate(routeName);
+                }
+            }
+            fetchLogin() 
         }
     };
 
