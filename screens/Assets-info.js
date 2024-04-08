@@ -16,7 +16,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from '../components/styles/Icons';
 
 //시세 계산
-import { priceOfDate, persentOfDate } from '../components/utils/priceOfDate';
+import { priceOfDate, persentOfDate, notFoundYseterday } from '../components/utils/priceOfDate';
 
 // 클립보드 모듈 추가
 import * as Clipboard from 'expo-clipboard';
@@ -39,13 +39,6 @@ const AssetsInfo = (props) => {
     const [todayPrice, setTodayPrice] = useState();
 
 
-    //날짜
-    const date = new Date();
-    const yesterdayDate = new Date(date);
-    yesterdayDate.setDate(date.getDate() - 1);
-    const today = date.toLocaleDateString('ko-KR')
-    const yesterday = yesterdayDate.toLocaleDateString('ko-KR');
-
     // 로딩 상태
     const [loading, setLoading] = useState(true);
 
@@ -55,19 +48,26 @@ const AssetsInfo = (props) => {
             setLoading(true);
             const userData = await AsyncStorage.getItem("@user");
             if (userData !== null) {
+                //핸드폰에 저장되어있는 데이터 불러오기
                 const imageData = await AsyncStorage.getItem("@imageData");
                 const assetData = await AsyncStorage.getItem("@assetData");
                 const priceData = await AsyncStorage.getItem("@priceData");
 
+                //불러온 데이터에서 필요한 값만 필터링
                 const imageList = JSON.parse(imageData).filter(item => item.assetID == assetID);
                 const assetList = JSON.parse(assetData).filter(item => item.AssetsID == assetID);
                 const priceList = JSON.parse(priceData).filter(item => item.AssetsName == assetList[0].MODEL)
 
+                //날짜 정렬
                 const datePrice = priceOfDate(priceList)
 
-                const todayPrice = datePrice.filter(item => item.date == today)
-                const yesterdayPrice = datePrice.filter(item => item.date == yesterday)
-
+                //오늘, 전일 금액 데이터 로드
+                const todayPrice = [];
+                todayPrice.push(datePrice[datePrice.length-1])
+                const yesterdayPrice = [];
+                yesterdayPrice.push(datePrice[datePrice.length-2])
+                
+                //변동률 계산
                 const persentData = persentOfDate(todayPrice, yesterdayPrice);
 
                 setUser(JSON.parse(userData))
@@ -134,7 +134,10 @@ const AssetsInfo = (props) => {
                 backgroundColor: '#ffffff',
             }}
         >
-            <ScrollView>
+            <ScrollView
+                showsHorizontalScrollIndicator={false} // 수평 스크롤 바 숨김
+                showsVerticalScrollIndicator={false} // 수직 스크롤 바 숨김
+            >
                 <TouchableOpacity
                     style={styles.titleIcon}
                     onPress={() => {
