@@ -44,7 +44,7 @@ const Home = (props) => {
           <Text style={styles.userText}>{nickname}</Text>
         </View>
 
-        <View style={[styles.section, { height: 200 }]}>
+        <View style={[styles.section, { height: 200 , backgroundColor: 'rgba(255, 255, 255, 0)' }]}>
           <Swiper
             style={styles.wrapper}
             loop={true}
@@ -52,10 +52,12 @@ const Home = (props) => {
             horizontal={true}
             paginationStyle={{ top: -120, right: -280 }}
             autoplay={true}
-            autoplayTimeout={3}>
+            autoplayTimeout={3}
+            >
+              
             {/* 첫 번째 슬라이드 */}
-            <View style={styles.slide}>
-              <View style={[styles.section, { height: 200 }]}>
+            <View>
+              <View style={[styles.section1, { height: 200 }]}>
                 <View style={styles.explanation}>
                   <Text style={styles.explanationSubText}>
                     실물 자산을 편하게 관리하는 방법!
@@ -80,8 +82,8 @@ const Home = (props) => {
             </View>
 
             {/* 두 번째 슬라이드 */}
-            <View style={styles.slide}>
-              <View style={[styles.section, { height: 200 }]}>
+            <View>
+              <View style={[styles.section1, { height: 200 }]}>
                 <View style={styles.explanation}>
                   <Text style={styles.explanationSubText}>테스트 1</Text>
                   <Text style={styles.explanationMainText}>테스트 2</Text>
@@ -168,8 +170,18 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
   },
+  wrapper:{
+    overflow: 'hidden',
+  },
   section: {
     width: '91%',
+    height: 95,
+    borderRadius: 20,
+    marginBottom: 20,
+    backgroundColor: '#FFFFFF',
+  },
+  section1: {
+    width: '100%',
     height: 95,
     borderRadius: 20,
     marginBottom: 20,
@@ -212,7 +224,7 @@ const styles = StyleSheet.create({
   illustration: {
     position: 'absolute',
     bottom: 0,
-    right: 240,
+    right: 260,
     width: 60,
     height: 80,
   },
@@ -223,7 +235,7 @@ const styles = StyleSheet.create({
     height: 36,
     borderRadius: 20,
     backgroundColor: '#6C60F1',
-    right: -10,
+    right: 20,
     bottom: 20,
   },
   howText: {
