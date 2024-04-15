@@ -1,107 +1,100 @@
+import React, { useState } from 'react';
 import {
-    SafeAreaView,
-    View,
-    Text,
-    ScrollView,
-    TextInput,
-    TouchableOpacity,
-    StyleSheet,
-} from 'react-native'
-import { useState } from 'react'
-
+  SafeAreaView,
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+} from 'react-native';
 
 const Alarm = (props) => {
+  const [list, setList] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
 
-    //리스트
-    const [list, setList] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+  const [pressedIndex, setPressedIndex] = useState(null); // 눌린 알림의 인덱스
 
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+      <Text style={styles.mainTitle}>알림</Text>
 
-    return (
-        <SafeAreaView
-            style={[
-                {
-                    flex: 1,
-                    backgroundColor: '#FFFFFF'
-                }
-            ]}
-        >
-            {/* 메인 타이틀 */}
-            <Text
-                style={[
-                    styles.mainTitle
-                ]}
+      <ScrollView>
+        <View style={styles.listSection}>
+          {list.map((item, idx) => (
+            <View
+              key={idx}
+              style={[
+                styles.alarmView,
+                pressedIndex === idx && styles.pressedAlarmView
+              ]}
+              onTouchStart={() => setPressedIndex(idx)}
+              onTouchEnd={() => setPressedIndex(null)}
             >
-                알림
-            </Text>
+            <View>
+                
+            </View>
+              <View style={styles.alarmImage}></View>
+              <Text style={styles.alarmText}>
+                <Text style={styles.highlightText}>백지환</Text> 님이 <Text style={styles.highlightText}>아이폰 12</Text> 자산을 추가했습니다.
+              </Text>
+              <Text style={styles.alarmDate}>17시간</Text>
+            </View>
+          ))}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
 
-
-            {/* 알림 리스트 세션 */}
-            <ScrollView>
-                <View style={styles.listSection}>
-                    {list.map((item, idx) => (
-                        <TouchableOpacity
-                            key={idx}
-                            style={styles.alarmView}
-                        >
-                            <View style={styles.alarmImage}></View>
-                            <Text style={styles.alarmText}>
-                                <Text style={styles.highlightText}>백지환</Text> 님이 <Text style={styles.highlightText}>아이폰 12</Text> 자산을 추가했습니다.
-                            </Text>
-                            <Text style={styles.alarmDate}>17시간</Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
-            </ScrollView>
-        </SafeAreaView>
-    )
-}
-
-
-export default Alarm
-
+export default Alarm;
 
 const styles = StyleSheet.create({
-    //메인 타이틀
-    mainTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginTop: 30,
-    },
-
-
-    //알림 리스트 세션
-    listSection: {
-        flex: 1,
-        marginTop: 30,
-        alignItems: 'center',
-    },
-    alarmView: {
-        width: '94%',
-        flexDirection: 'row',
-        marginBottom: 20,
-        alignItems: 'center',
-    },
-    alarmImage: {
-        width: 40,
-        height: 40,
-        backgroundColor: '#D9D9D9',
-        borderRadius: 100,
-        marginRight: 12,
-    },
-    alarmText: {
-        width: '66%',
-        fontSize: 14,
-        fontWeight: 'medium',
-    },
-    highlightText: {
-        fontWeight: 'bold',
-        color: '#111111',
-    },
-    alarmDate: {
-        color: '#767676',
-        fontSize: 14,
-        position: 'absolute',
-        right: 0,
-    },
-})
+  mainTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 30,
+  },
+  listSection: {
+    flex: 1,
+    marginTop: 30,
+    alignItems: 'center',
+  },
+  alarmView: {
+    width: '100%',
+    flexDirection: 'row',
+    height: 64,
+    alignItems: 'center',
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
+    elevation: 2, // 그림자 효과
+    transitionDuration: 150,
+    transitionProperty: 'transform',
+  },
+  pressedAlarmView: {
+    transform: [{ scale: 0.95 }], // 눌렸을 때 스케일 줄이기
+    backgroundColor: '#F5F5F5', // 선택된 부분의 배경색
+  },
+  alarmImage: {
+    width: 40,
+    height: 40,
+    backgroundColor: '#D9D9D9',
+    borderRadius: 100,
+    marginRight: 12,
+    left: 20,
+  },
+  alarmText: {
+    width: '66%',
+    fontSize: 14,
+    fontWeight: 'medium',
+    left: 20,
+  },
+  highlightText: {
+    fontWeight: 'bold',
+    color: '#111111',
+  },
+  alarmDate: {
+    color: '#767676',
+    fontSize: 14,
+    position: 'absolute',
+    right: 20,
+  },
+});
