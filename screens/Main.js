@@ -24,7 +24,7 @@ const Home = (props) => {
   const [totalScale, setTotalScale] = useState(1);
   const [animateToNumber, setAnimateToNumber] = useState(1000000 - 64732);
   const [initialAnimationCompleted, setInitialAnimationCompleted] = useState(true); // 초기 애니메이션 완료 상태로 설정
-
+  const [buttonColor, setButtonColor] = useState('#6C60F1'); // 초기 버튼 색상 설정
 
   const increase = () => {
     setAnimateToNumber(animateToNumber + 64732);
@@ -35,35 +35,35 @@ const Home = (props) => {
   };
 
   const doubledecrease = () => {
-    setAnimateToNumber(animateToNumber - 64732*2);
+    setAnimateToNumber(animateToNumber - 64732 * 2);
   };
 
   const handleTotalPress = () => {
     props.navigation.navigate('MyPage');
     doubledecrease();
   };
-  
+
   useEffect(() => {
     const fetchUser = async () => {
       const user = await AsyncStorage.getItem('@user');
-  
+
       if (user !== null) {
         setNickname(JSON.parse(user).nickname);
       }
     };
-  
+
     const unsubscribeBlur = props.navigation.addListener('blur', () => {
       decrease();
     });
-  
+
     fetchUser();
-  
+
     const timer = setTimeout(() => {
       increase();
     }, 1);
 
   }, [isFocused]);
-  
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
@@ -97,9 +97,17 @@ const Home = (props) => {
                 />
 
                 <View
-                  onTouchStart={() => setButtonScale(0.95)}
-                  onTouchEnd={() => setButtonScale(1)}
-                  style={[styles.howButton, { transform: [{ scale: buttonScale }] }]}
+                  onTouchStart={() => {
+                    setButtonScale(0.95);
+                    // 스케일이 줄어들 때 배경색 변경
+                    setButtonColor('#423A7A'); // 어두운 색상으로 변경
+                  }}
+                  onTouchEnd={() => {
+                    setButtonScale(1);
+                    // 스케일이 다시 원래대로 돌아올 때 배경색 원래 색상으로 변경
+                    setButtonColor('#6C60F1'); // 원래 색상으로 변경
+                  }}
+                  style={[styles.howButton, { transform: [{ scale: buttonScale }], backgroundColor: buttonColor }]}
                 >
                   <Text style={styles.howText}>방법 보러가기</Text>
                 </View>
@@ -118,9 +126,17 @@ const Home = (props) => {
                 />
 
                 <View
-                  onTouchStart={() => setButtonScale(0.95)}
-                  onTouchEnd={() => setButtonScale(1)}
-                  style={[styles.howButton, { transform: [{ scale: buttonScale }] }]}
+                  onTouchStart={() => {
+                    setButtonScale(0.95);
+                    // 스케일이 줄어들 때 배경색 변경
+                    setButtonColor('#423A7A'); // 어두운 색상으로 변경
+                  }}
+                  onTouchEnd={() => {
+                    setButtonScale(1);
+                    // 스케일이 다시 원래대로 돌아올 때 배경색 원래 색상으로 변경
+                    setButtonColor('#6C60F1'); // 원래 색상으로 변경
+                  }}
+                  style={[styles.howButton, { transform: [{ scale: buttonScale }], backgroundColor: buttonColor }]}
                 >
                   <Text style={styles.howText}>방법 보러가기</Text>
                 </View>
@@ -164,7 +180,7 @@ const Home = (props) => {
                       fontStyle={styles.totalMainText}
                     />
                   )}
-                  <Text style={{ marginLeft: 5, fontSize: 18, fontWeight: 'bold' }}>원</Text>
+                  <Text style={{ marginLeft: 5, fontSize: 18, fontFamily: 'Pretendard-SemiBold' }}>원</Text>
 
                   {/* increase 버튼이 없으면 돌아가지 않아서 화면에 나오지 않게만 처리 */}
                   <View style={{ width: 1, height: 20 }}>
@@ -234,14 +250,14 @@ const styles = StyleSheet.create({
   },
   userText: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily: 'Pretendard-SemiBold',
     color: '#111111'
   },
   explanation: {},
   explanationSubText: {
     position: 'absolute',
     color: '#767676',
-    fontWeight: 'normal',
+    fontFamily: 'Pretendard-light',
     fontSize: 14,
     left: 20,
     top: 20,
@@ -252,7 +268,7 @@ const styles = StyleSheet.create({
     left: 20,
     color: '#111111',
     top: 40,
-    fontWeight: 'medium',
+    fontFamily: 'Pretendard-Regular',
   },
   illustration: {
     position: 'absolute',
@@ -274,7 +290,7 @@ const styles = StyleSheet.create({
   howText: {
     color: '#FFFFFF',
     fontSize: 12,
-    fontWeight: 'bold',
+    fontFamily: 'Pretendard-SemiBold',
     textAlign: 'center',
     lineHeight: 40,
   },
@@ -294,11 +310,11 @@ const styles = StyleSheet.create({
   totalSubText1: {
     color: '#111111',
     fontSize: 18,
-    fontWeight: 'medium',
+    fontFamily: 'Pretendard-Regular',
     top: 14,
   },
   totalMainText: {
-    fontWeight: 'bold',
+    fontFamily: 'Pretendard-SemiBold',
     fontSize: 18,
   },
   assetsContainer: {
@@ -317,7 +333,7 @@ const styles = StyleSheet.create({
   },
   totalText: {
     fontSize: 18,
-    fontWeight: 'medium',
+    fontFamily: 'Pretendard-Regular',
     left: 50,
     top: 0,
   },

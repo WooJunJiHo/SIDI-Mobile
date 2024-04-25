@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     infoUserName: {
         color: '#767676',
         fontSize: 18,
-        fontWeight: 'normal',
+        fontFamily: 'Pretendard-Regular',
         flex: 1,
     },
     infoUserImage: {
@@ -254,13 +254,13 @@ const styles = StyleSheet.create({
     },
     infoAssetsName: {
         fontSize: 18,
-        fontWeight: 'bold',
+        fontFamily: 'Pretendard-SemiBold',
         marginTop: 12,
         marginBottom: 20,
     },
     infoDate: {
         fontSize: 14,
-        fontWeight: 'light',
+        fontFamily: 'Pretendar-Light',
         color: '#767676',
     },
     stateContainer: {
@@ -269,13 +269,13 @@ const styles = StyleSheet.create({
     },
     stateText: {
         fontSize: 14,
-        fontWeight: 'light',
+        fontFamily: 'Pretendard-Light',
         color: '#767676',
     },
     stateDescription: {
         marginLeft: 5,
         fontSize: 16,
-        fontWeight: 'light',
+        fontFamily: 'Pretendard-Light',
         color: '#111111',
     },
 
@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
     },
     totalText: {
         fontSize: 18,
-        fontWeight: 'medium',
+        fontFamily: 'Pretendard-Regular',
         left: 50,
         top: 0,
     },
@@ -312,14 +312,14 @@ const styles = StyleSheet.create({
     },
     flatformText: {
         fontSize: 18,
-        fontWeight: 'medium',
+        fontFamily: 'Pretendard-Regular',
         marginLeft: 20,
         marginTop: 20,
         color: '#111111',
     },
     flatformPrice: {
         fontSize: 18,
-        fontWeight: 'medium',
+        fontFamily: 'Pretendard-Regular',
         marginLeft: 'auto',
         marginRight: 20,
         marginTop: 20,
@@ -327,14 +327,14 @@ const styles = StyleSheet.create({
     },
     liveDateText: {
         fontSize: 14,
-        fontWeight: 'normal',
+        fontFamily: 'Pretendard-Regular',
         marginLeft: 20,
         marginTop: 12,
         color: '#767676',
     },
     updownText: {
         fontSize: 14,
-        fontWeight: 'normal',
+        fontFamily: 'Pretendard-Regular',
         marginLeft: 'auto',
         marginRight: 20,
         marginTop: 12,
@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
     },
     AiTitle: {
         fontSize: 18,
-        fontWeight: 'medium',
+        fontFamily: 'Pretendard-Regular',
         marginLeft: 8
     },
     AiTextView: {
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
     },
     AiText: {
         fontSize: 14,
-        fontWeight: 'normal',
+        fontFamily: 'Pretendard-Regular',
         marginLeft: 20,
         marginTop: 12,
         color: '#767676',
@@ -369,7 +369,7 @@ const styles = StyleSheet.create({
     copyText: {
         color: '#6C60F1',
         fontSize: 14,
-        fontWeight: 'normal',
+        fontFamily: 'Pretendard-Regular',
         left: 100
     },
 
@@ -387,6 +387,6 @@ const styles = StyleSheet.create({
     DeleteText: {
         color: 'white',
         fontSize: 18,
-        fontWeight: 'normal'
+        fontFamily: 'Pretendard-Regular',
     },
 })

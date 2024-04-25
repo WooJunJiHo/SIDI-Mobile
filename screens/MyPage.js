@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Dimensions, Animated, ActivityIndicator } from 'react-native';
+import { SafeAreaView, View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Dimensions, Animated, ActivityIndicator, useFonts } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from '../components/styles/Icons'; // Icon 컴포넌트 import 추가
@@ -14,6 +14,46 @@ const MyPage = (props) => {
     const [image, setImage] = useState([]);
     const [loading, setLoading] = useState(true);
     const [slideAnimation] = useState(new Animated.Value(0)); // 막대기 위치를 조절할 애니메이션 값
+
+    const [button1Scale, setButton1Scale] = useState(1);
+    const [button2Scale, setButton2Scale] = useState(1);
+    const [button1Color, setButton1Color] = useState('#CAC5FF');
+    const [button2Color, setButton2Color] = useState('#6C60F1');
+    
+    const handleButton1Press = () => {
+        // 버튼1이 눌렸을 때 스케일 줄이기
+        setButton1Scale(0.95);
+        // 버튼1이 눌렸을 때 색상 변경
+        setButton1Color('#B5AEFF');
+        // 버튼2 스케일과 색상 초기화
+        setButton2Scale(1);
+        setButton2Color('#6C60F1');
+    };
+
+    const handleButton2Press = () => {
+        // 버튼2가 눌렸을 때 스케일 줄이기
+        setButton2Scale(0.95);
+        // 버튼2가 눌렸을 때 색상 변경
+        setButton2Color('#423A7A');
+        // 버튼1 스케일과 색상 초기화
+        setButton1Scale(1);
+        setButton1Color('#CAC5FF');
+    };
+
+    const handleButton1Release = () => {
+        // 버튼1을 뗄 때 원래 스케일로 돌리기
+        setButton1Scale(1);
+        // 버튼1의 색상 원래대로 돌리기
+        setButton1Color('#CAC5FF');
+    };
+
+    const handleButton2Release = () => {
+        // 버튼2를 뗄 때 원래 스케일로 돌리기
+        setButton2Scale(1);
+        // 버튼2의 색상 원래대로 돌리기
+        setButton2Color('#6C60F1');
+    };
+
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -60,9 +100,6 @@ const MyPage = (props) => {
     });
 
 
-
-
-
     if (loading == true) {
         return (
             <ActivityIndicator size={'large'} />
@@ -85,7 +122,28 @@ const MyPage = (props) => {
 
             <View style={styles.priceSection}>
                 <Text style={styles.priceSubText}>총 자산</Text>
-                <Text style={styles.priceMainText}>1,301,590,000원</Text>
+                <Text style={styles.priceMainText}>1,590,000 원</Text>
+
+                <View style={styles.btnView}>
+                    <TouchableOpacity
+                        style={[styles.btn, { transform: [{ scale: button1Scale }], backgroundColor: button1Color }]}
+                        onPressIn={handleButton1Press}
+                        onPressOut={handleButton1Release}
+                        activeOpacity={1}
+                    >
+                        <Text style={styles.btnText}>뭐 넣지</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.btn1, { transform: [{ scale: button2Scale }], backgroundColor: button2Color }]}
+                        onPress={() => { props.navigation.navigate('Scan') }}
+                        onPressIn={handleButton2Press}
+                        onPressOut={handleButton2Release}
+                        activeOpacity={1}
+                    >
+                        <Text style={styles.btnText1}>자산 추가</Text>
+                    </TouchableOpacity>
+                </View>
+
             </View>
 
             <View style={styles.menuSection}>
@@ -177,9 +235,8 @@ const styles = StyleSheet.create({
     },
     mainTitle: {
         marginTop: 30,
-        fontFamily: 'PretendardVariable',
         fontSize: 20,
-        fontWeight: 'bold',
+        fontFamily: 'Pretendard-SemiBold',
         textAlign: 'center',
     },
     userBtn: {
@@ -193,32 +250,60 @@ const styles = StyleSheet.create({
         top: 30,
     },
     priceSection: {
-        width: '91%',
-        height: 120,
+        width: '88%',
+        height: 180,
         marginTop: 20,
         marginBottom: 10,
-        justifyContent: 'center',
-        borderRadius: 20,
-        backgroundColor: '#6C60F1',
     },
     priceSubText: {
-        color: '#ffffff',
+        color: '#111111',
+        fontFamily: 'Pretendard-light',
         fontSize: 18,
-        fontWeight: 'medium',
-        left: 20,
-        bottom: 10,
+        top: 20,
     },
     priceMainText: {
-        fontSize: 26,
-        fontWeight: 'medium',
+        fontSize: 30,
+        fontFamily: 'Pretendard-SemiBold',
         alignItems: 'center',
+        color: '#111111',
+        top: 28,
+    },
+    btnView: {
+        flexDirection: 'row',
+        top: 60,
+        alignSelf: 'center',
+    },
+    btn: {
+        width: '48%',
+        height: 50,
+        backgroundColor: '#CAC5FF',
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 12,
+    },
+    btn1: {
+        width: '48%',
+        height: 50,
+        backgroundColor: '#6C60F1',
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    btnText: {
+        color: '#4D3DFF',
+        fontSize: 16,
+        fontFamily: 'Pretendard-SemiBold',
+    },
+    btnText1: {
         color: '#ffffff',
-        left: 20,
+        fontSize: 16,
+        fontFamily: 'Pretendard-SemiBold',
     },
     menuSection: {
         flexDirection: 'row',
         width: '100%',
-        marginTop: 30,
+        marginTop: 14,
     },
     menuTextWrapper: {
         flex: 1,
@@ -227,7 +312,7 @@ const styles = StyleSheet.create({
     },
     menuText: {
         fontSize: 18,
-        fontWeight: 'normal',
+        fontFamily: 'Pretendard-Regular',
         color: '#111111',
         textAlign: 'center',
     },
