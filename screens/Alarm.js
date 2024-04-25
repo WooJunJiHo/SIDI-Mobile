@@ -49,7 +49,7 @@ export default Alarm;
 const styles = StyleSheet.create({
   mainTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily: 'Pretendard-SemiBold',
     textAlign: 'center',
     marginTop: 30,
   },
@@ -84,15 +84,16 @@ const styles = StyleSheet.create({
   alarmText: {
     width: '66%',
     fontSize: 14,
-    fontWeight: 'medium',
+    fontFamily: 'Pretendard-Regular',
     left: 20,
   },
   highlightText: {
-    fontWeight: 'bold',
+    fontFamily: 'Pretendard-SemiBold',
     color: '#111111',
   },
   alarmDate: {
     color: '#767676',
+    fontFamily: 'Pretendard-Regular',
     fontSize: 14,
     position: 'absolute',
     right: 20,

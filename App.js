@@ -12,6 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 //DB 로드
 import { fetchUserAssets, fetchAssetsImages, getScrapingAssets } from './components/Fetch/FetchData'
 
+import { useFonts } from 'expo-font';
 
 // 화면 컴포넌트들 (예시로 2개 추가)
 import Main from './screens/Main';
@@ -93,12 +94,20 @@ export default function App() {
         fetchUserData();
     }, [])
 
-    if (loading == true) {
+    let [fontsLoaded] = useFonts({
+        'Pretendard-Light': require('./assets/fonts/Pretendard-Light.otf'),
+        'Pretendard-Regular': require('./assets/fonts/Pretendard-Regular.otf'),
+        'Pretendard-SemiBold': require('./assets/fonts/Pretendard-SemiBold.otf'),
+        'Pretendard-Bold': require('./assets/fonts/Pretendard-Bold.otf'),
+    });
+
+
+    if (!fontsLoaded || loading) {
         return (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                 <Image style={{ width: '30%', height: '30%' }} source={require('./assets/icons/loading.gif')} />
             </View>
-        )
+        );
     }
     return (
         <NavigationContainer>
