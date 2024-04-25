@@ -12,15 +12,13 @@ import { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// 아이콘
-import Icon from '../components/styles/Icons';
-
-//시세 계산
-import { priceOfDate, persentOfDate, notFoundYseterday } from '../components/utils/priceOfDate';
 
 // 클립보드 모듈 추가
 import * as Clipboard from 'expo-clipboard';
 import Linechart from '../components/Linechart/LineChart'
+
+//크롤링 데이터 전처리
+import { filterPriceList, priceAverage } from '../components/utils/filterPriceList'
 
 const AssetsInfo = (props) => {
     const isFocused = useIsFocused();
@@ -33,10 +31,8 @@ const AssetsInfo = (props) => {
     const [user, setUser] = useState()
     const [asset, setAsset] = useState();
     const [image, setImage] = useState();
-    const [price, setPrice] = useState();
-    const [datePrice, setDatePrice] = useState();
-    const [persent, setPersent] = useState();
-    const [todayPrice, setTodayPrice] = useState();
+    const [prices, setPrices] = useState(null);
+    const [average, setAverage] = useState('');
 
 
     // 로딩 상태
@@ -53,30 +49,18 @@ const AssetsInfo = (props) => {
                 const assetData = await AsyncStorage.getItem("@assetData");
                 const priceData = await AsyncStorage.getItem("@priceData");
 
-                //불러온 데이터에서 필요한 값만 필터링
                 const imageList = JSON.parse(imageData).filter(item => item.assetID == assetID);
                 const assetList = JSON.parse(assetData).filter(item => item.AssetsID == assetID);
-                const priceList = JSON.parse(priceData).filter(item => item.AssetsName == assetList[0].MODEL)
 
-                //날짜 정렬
-                const datePrice = priceOfDate(priceList)
-
-                //오늘, 전일 금액 데이터 로드
-                const todayPrice = [];
-                todayPrice.push(datePrice[datePrice.length-1])
-                const yesterdayPrice = [];
-                yesterdayPrice.push(datePrice[datePrice.length-2])
-                
-                //변동률 계산
-                const persentData = persentOfDate(todayPrice, yesterdayPrice);
+                const filteredList = filterPriceList(JSON.parse(priceData), `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`)
+                setPrices(filteredList)
+                const avgResult = priceAverage(filteredList)
+                setAverage(avgResult)
 
                 setUser(JSON.parse(userData))
-                setAsset(assetList)
                 setImage(imageList)
-                setPrice(priceList)
-                setDatePrice(datePrice)
-                setPersent(persentData)
-                setTodayPrice(todayPrice)
+                setAsset(assetList)
+
 
                 setLoading(false);
             } else {
@@ -157,15 +141,7 @@ const AssetsInfo = (props) => {
                         showsHorizontalScrollIndicator={false} // 수평 스크롤 바 숨김
                         showsVerticalScrollIndicator={false} // 수직 스크롤 바 숨김
                     >
-                        {image.map((item, idx) => {
-                            return (
-                                <Image
-                                    key={idx}
-                                    style={[{ height: '100%' }, { width: Dimensions.get('window').width }]}
-                                    source={{ uri: item.url }}
-                                />
-                            )
-                        })}
+                        {/* 이미지 로드 */}
 
                     </ScrollView>
                     {/* 자산 정보 세션 */}
@@ -173,9 +149,9 @@ const AssetsInfo = (props) => {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Image style={styles.infoUserImage} source={{ uri: user.profileImg }} />
                             <Text style={styles.infoUserName}>{user.nickname}</Text>
-                            <Text style={styles.infoDate}>{new Date(asset[0].DATE).toLocaleDateString('ko-KR')}</Text>
+                            <Text style={styles.infoDate}>{asset[0].DATE}</Text>
                         </View>
-                        <Text style={styles.infoAssetsName}>{asset[0].COMPANY} {asset[0].MODEL}</Text>
+                        <Text style={styles.infoAssetsName}>{asset[0].COMPANY} {asset[0].MODEL} {asset[0].MORE} {asset[0].COLOR}</Text>
                         <View style={styles.stateContainer}>
                             <Text style={styles.stateText}>상태</Text>
                             <Text style={styles.stateDescription}>외판 손상</Text>
@@ -211,19 +187,19 @@ const AssetsInfo = (props) => {
                             style={styles.totalGraphImage}
                         />
                         <Text style={styles.totalText}>가격 그래프</Text>
-                        <Linechart data={datePrice}/>
+                        <Linechart ptData={prices}/>
                     </View>
 
                     {/* 중고 거래 플랫폼 시세 세션 */}
                     <View style={styles.priceSection}>
                         <View style={{ flexDirection: 'row' }}>
                             <Text style={styles.flatformText}>번개장터</Text>
-                            <Text style={styles.flatformPrice}>{todayPrice[0].value}원</Text>
+                            <Text style={styles.flatformPrice}>{average} 원</Text>
 
                         </View>
                         <View style={{ flexDirection: 'row' }}>
                             <Text style={styles.liveDateText}>{currentDateTimeString} 기준</Text>
-                            <Text style={styles.updownText}>{persent}%</Text> 
+                            <Text style={styles.updownText}>%</Text>
                         </View>
 
                     </View>

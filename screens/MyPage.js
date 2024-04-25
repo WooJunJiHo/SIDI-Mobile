@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Dimensions, Animated } from 'react-native';
+import { SafeAreaView, View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Dimensions, Animated, ActivityIndicator } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from '../components/styles/Icons'; // Icon 컴포넌트 import 추가
-import * as Font from 'expo-font';
 
 const MyPage = (props) => {
 
@@ -60,14 +59,15 @@ const MyPage = (props) => {
         outputRange: [0, Dimensions.get('window').width / 4, 2 * Dimensions.get('window').width / 4, 3 * Dimensions.get('window').width / 4]
     });
 
-    const LoadList = () => {
-        return (
-            <>
-                {/* 자산 리스트 렌더링 코드 */}
-            </>
-        );
-    };
 
+
+
+
+    if (loading == true) {
+        return (
+            <ActivityIndicator size={'large'} />
+        )
+    }
     return (
         <SafeAreaView style={[styles.container]}>
             <View style={styles.titleSection}>
@@ -106,7 +106,60 @@ const MyPage = (props) => {
 
             <ScrollView>
                 <View style={styles.listSection}>
-                    {loading == false ? <LoadList /> : <View />}
+                    {   category==0 ?
+                        list.map((item, idx) => {
+                            // 현재 list 항목과 일치하는 첫 번째 이미지 찾기
+                            const matchedImage = image.find(imageItem => imageItem.assetID == item.AssetsID && imageItem.imageNumber == 1);
+
+                            // 이미지가 없는 경우
+                            if (!matchedImage) {
+                                return null;
+                            }
+                            // 이미지가 있는 경우, 이미지의 URL을 가져오기
+                            const imageURL = matchedImage.url;
+
+                            return (
+                                <TouchableOpacity
+                                    key={idx}
+                                    style={styles.listView}
+                                    onPress={() => {
+                                        props.navigation.navigate('MyAssetsInfo', {assetID: item.AssetsID})
+                                    }}
+                                >
+                                    <Image
+                                        source={{ uri: imageURL }}
+                                        style={{ width: '100%', height: '100%' }}
+                                    />
+                                </TouchableOpacity>
+                            )
+                        }) : 
+                        selectList.map((item, idx) => {
+                            // 현재 list 항목과 일치하는 첫 번째 이미지 찾기
+                            const matchedImage = image.find(imageItem => imageItem.assetID == item.AssetsID && imageItem.imageNumber == 1);
+
+                            // 이미지가 없는 경우
+                            if (!matchedImage) {
+                                return null;
+                            }
+                            // 이미지가 있는 경우, 이미지의 URL을 가져오기
+                            const imageURL = matchedImage.url;
+
+                            return (
+                                <TouchableOpacity
+                                    key={idx}
+                                    style={styles.listView}
+                                    onPress={() => {
+                                        props.navigation.navigate('MyAssetsInfo', {assetID: item.AssetsID})
+                                    }}
+                                >
+                                    <Image
+                                        source={{ uri: imageURL }}
+                                        style={{ width: '100%', height: '100%' }}
+                                    />
+                                </TouchableOpacity>
+                            )
+                        })
+                    }
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -193,12 +246,14 @@ const styles = StyleSheet.create({
     },
     listSection: {
         flex: 1,
+        width: Dimensions.get('window').width,
         flexDirection: 'row',
         flexWrap: 'wrap',
         marginTop: 0,
     },
     listView: {
         width: '33.3%',
+        height: Dimensions.get('window').width / 3,
         borderWidth: 1,
         borderColor: '#ececec',
         alignItems: 'center',

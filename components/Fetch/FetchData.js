@@ -5,7 +5,7 @@ import storage from './FireBaseStorage'
 import { listAll, getDownloadURL, ref, uploadBytesResumable } from '@firebase/storage';
 
 //서버 주소
-import REACT_APP_SERVER_URL from '../../env'
+import { keys } from '../../env'
 
 
 
@@ -18,7 +18,7 @@ import REACT_APP_SERVER_URL from '../../env'
 // /getInfo에 GET 요청 보내기 
 export const getInfos = async () => {
     try {
-        const response = await axios.get(`${REACT_APP_SERVER_URL}/getInfo`);
+        const response = await axios.get(`${keys.nodeURL}/getInfo`);
         return response.data;
     } catch (error) {
         console.error('Error:', error);
@@ -29,7 +29,7 @@ export const getInfos = async () => {
 // /getColor에 GET 요청 보내기
 export const getColors = async () => {
     try {
-        const response = await axios.get(`${REACT_APP_SERVER_URL}/getColor`);
+        const response = await axios.get(`${keys.nodeURL}/getColor`);
         return response.data;
     } catch (error) {
         console.error('Error:', error);
@@ -40,7 +40,7 @@ export const getColors = async () => {
 // /getScrapingAssets에 GET 요청 보내기
 export const getScrapingAssets = async () => {
     try {
-        const response = await axios.get(`${REACT_APP_SERVER_URL}/getScrapingAssets`);
+        const response = await axios.get(`${keys.nodeURL}/getScrapingAssets`);
         return response.data;
     } catch (error) {
         console.error('Error:', error);
@@ -53,7 +53,7 @@ export const getScrapingAssets = async () => {
 //로그인 확인 / POST
 export const fetchLogin = async (data) => {
     try {
-        const response = await axios.post(`${REACT_APP_SERVER_URL}/fetchLogin`, data);
+        const response = await axios.post(`${keys.nodeURL}/fetchLogin`, data);
         return response.data; // 서버로부터 받은 데이터 리턴
     } catch (error) {
         console.error('Error:', error);
@@ -65,7 +65,18 @@ export const fetchLogin = async (data) => {
 //사용자 자산 로드 / POST
 export const fetchUserAssets = async (data) => {
     try {
-        const response = await axios.post(`${REACT_APP_SERVER_URL}/fetchUserAssets`, data);
+        const response = await axios.post(`${keys.nodeURL}/fetchUserAssets`, data);
+        return response.data; // 서버로부터 받은 데이터 리턴
+    } catch (error) {
+        console.error('Error:', error);
+        throw error; // 에러를 상위로 다시 던지기
+    }
+}
+
+//사용자 QR코드 자산 추가 / POST
+export const fetchQR = async (data) => {
+    try {
+        const response = await axios.post(`${keys.nodeURL}/updateQR`, data);
         return response.data; // 서버로부터 받은 데이터 리턴
     } catch (error) {
         console.error('Error:', error);
@@ -116,3 +127,39 @@ export const fetchAssetsImages = async (data) => {
     return imageUrls;
 };
 
+
+
+//사용자 자산 이미지 업로드
+export const updateAssetImage = async (uri, id, number, assetID) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+
+    const metadata = {
+        contentType: 'image/jpeg',
+    };
+
+    // Firebase Storage의 참조를 만듭니다. 여기서 `ref`는 import한 함수를 사용합니다.
+    const storageRef = ref(storage, `/${id}/${assetID}_${number}.jpeg`);
+    const uploadTask = uploadBytesResumable(storageRef, blob, metadata);
+
+    uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+            // 진행 상태를 추적할 수 있음 (옵션)
+        },
+        (error) => {
+            // 업로드 중 오류 처리
+            console.log(error);
+            alert('업로드 중 오류가 발생했습니다.');
+        },
+        () => {
+            // 성공적으로 업로드된 경우 다운로드 URL을 가져옵니다.
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                // 다운로드 URL을 이용한 후속 작업...
+            }).catch((error) => {
+                // 에러 처리
+                console.error("다운로드 URL을 가져오는 중 오류 발생:", error);
+            });
+        }
+    );
+}

@@ -6,7 +6,7 @@ import { Dimensions } from 'react-native';
 const { width } = Dimensions.get('window');
 
 const Chart = (props) => {
-    const ptData = props.data
+    const ptData = props.ptData
 
     const [selectedPeriod, setSelectedPeriod] = useState('1일');
     const [chartData, setChartData] = useState([]);
@@ -60,7 +60,7 @@ const Chart = (props) => {
                 endOpacity={0}
                 initialSpacing={36}
                 noOfSections={6}
-                maxValue={500000}
+                maxValue={800000}
                 yAxisThickness={0}
                 rulesColor="#fafafa"
                 xAxisThickness={0}
