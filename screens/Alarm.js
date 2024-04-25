@@ -28,9 +28,9 @@ const Alarm = (props) => {
               onTouchStart={() => setPressedIndex(idx)}
               onTouchEnd={() => setPressedIndex(null)}
             >
-            <View>
-                
-            </View>
+              <View>
+
+              </View>
               <View style={styles.alarmImage}></View>
               <Text style={styles.alarmText}>
                 <Text style={styles.highlightText}>백지환</Text> 님이 <Text style={styles.highlightText}>아이폰 12</Text> 자산을 추가했습니다.
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   },
   listSection: {
     flex: 1,
-    marginTop: 30,
+    marginTop: 20,
     alignItems: 'center',
   },
   alarmView: {

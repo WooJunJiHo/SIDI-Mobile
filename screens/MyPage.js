@@ -3,8 +3,10 @@ import { SafeAreaView, View, Text, TouchableOpacity, ScrollView, Image, StyleShe
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from '../components/styles/Icons'; // Icon 컴포넌트 import 추가
+import * as Font from 'expo-font';
 
 const MyPage = (props) => {
+
     const isFocused = useIsFocused();
 
     const [category, setCategory] = useState(0);
@@ -70,11 +72,14 @@ const MyPage = (props) => {
         <SafeAreaView style={[styles.container]}>
             <View style={styles.titleSection}>
                 <Text style={styles.mainTitle}>내 자산</Text>
+
+                {/* person-outline 부분은 setting으로 병합해서 사용자 이름 부분 섹션 클릭하면 로그인 될 수 있도록 구현하게 변경할 것 */}
                 <TouchableOpacity style={styles.userBtn} onPress={() => { props.navigation.navigate('Login') }}>
                     <Icon name='person-outline' size={24} />
                 </TouchableOpacity>
+
                 <TouchableOpacity style={styles.settingBtn} onPress={() => { props.navigation.navigate('Setting') }}>
-                    <Icon name='settings-outline' size={24} />
+                    <Icon name='settings-sharp' size={24} color={'#767676'} />
                 </TouchableOpacity>
             </View>
 
@@ -85,16 +90,16 @@ const MyPage = (props) => {
 
             <View style={styles.menuSection}>
                 <Animated.View style={[styles.menuIndicator, { transform: [{ translateX: slidePosition }] }]} />
-                <TouchableOpacity style={[styles.menuTextWrapper, category === 0 && styles.menuTextSelected]} onPress={() => setCategory(0)}>
+                <TouchableOpacity style={[styles.menuTextWrapper, category === 0 && styles.menuTextSelected]} onPress={() => setCategory(0)} activeOpacity={1}>
                     <Text style={[styles.menuText, category !== 0 && styles.menuTextUnselected]}>전체</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.menuTextWrapper, category === 1 && styles.menuTextSelected]} onPress={() => setCategory(1)}>
+                <TouchableOpacity style={[styles.menuTextWrapper, category === 1 && styles.menuTextSelected]} onPress={() => setCategory(1)} activeOpacity={1}>
                     <Text style={[styles.menuText, category !== 1 && styles.menuTextUnselected]}>핸드폰</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.menuTextWrapper, category === 2 && styles.menuTextSelected]} onPress={() => setCategory(2)}>
+                <TouchableOpacity style={[styles.menuTextWrapper, category === 2 && styles.menuTextSelected]} onPress={() => setCategory(2)} activeOpacity={1}>
                     <Text style={[styles.menuText, category !== 2 && styles.menuTextUnselected]}>태블릿</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.menuTextWrapper, category === 3 && styles.menuTextSelected]} onPress={() => setCategory(3)}>
+                <TouchableOpacity style={[styles.menuTextWrapper, category === 3 && styles.menuTextSelected]} onPress={() => setCategory(3)} activeOpacity={1}>
                     <Text style={[styles.menuText, category !== 3 && styles.menuTextUnselected]}>노트북</Text>
                 </TouchableOpacity>
             </View>
@@ -112,13 +117,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
     },
     titleSection: {
         width: '91%',
     },
     mainTitle: {
         marginTop: 30,
+        fontFamily: 'PretendardVariable',
         fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'center',
@@ -135,26 +141,26 @@ const styles = StyleSheet.create({
     },
     priceSection: {
         width: '91%',
-        height: 61,
-        borderRadius: 10,
+        height: 120,
         marginTop: 20,
         marginBottom: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#f5f5f5'
+        justifyContent: 'center',
+        borderRadius: 20,
+        backgroundColor: '#6C60F1',
     },
     priceSubText: {
-        color: '#767676',
+        color: '#ffffff',
         fontSize: 18,
-        fontWeight: 'normal',
-        position: 'absolute',
+        fontWeight: 'medium',
         left: 20,
+        bottom: 10,
     },
     priceMainText: {
-        fontSize: 18,
-        fontWeight: 'normal',
-        position: 'absolute',
-        right: 20,
+        fontSize: 26,
+        fontWeight: 'medium',
+        alignItems: 'center',
+        color: '#ffffff',
+        left: 20,
     },
     menuSection: {
         flexDirection: 'row',

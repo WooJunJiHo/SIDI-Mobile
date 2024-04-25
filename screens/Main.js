@@ -9,42 +9,69 @@ import {
   StyleSheet,
   Image,
   Dimensions,
+  Button,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import Swiper from 'react-native-swiper';
+import AnimatedNumbers from 'react-native-animated-numbers';
+import Icon from 'react-native-vector-icons/Entypo'; // Entypo 아이콘 import
 
 const Home = (props) => {
   const isFocused = useIsFocused();
   const [nickname, setNickname] = useState('로그인 해주세요!');
   const [buttonScale, setButtonScale] = useState(1);
-  const [totalScale, setTotalScale] = useState(1); // 총 자산 스케일 상태 추가
+  const [totalScale, setTotalScale] = useState(1);
+  const [animateToNumber, setAnimateToNumber] = useState(1000000 - 64732);
+  const [initialAnimationCompleted, setInitialAnimationCompleted] = useState(true); // 초기 애니메이션 완료 상태로 설정
+
+
+  const increase = () => {
+    setAnimateToNumber(animateToNumber + 64732);
+  };
+
+  const decrease = () => {
+    setAnimateToNumber(animateToNumber - 64732);
+  };
+
+  const doubledecrease = () => {
+    setAnimateToNumber(animateToNumber - 64732*2);
+  };
 
   const handleTotalPress = () => {
     props.navigation.navigate('MyPage');
+    doubledecrease();
   };
-
+  
   useEffect(() => {
     const fetchUser = async () => {
       const user = await AsyncStorage.getItem('@user');
-
+  
       if (user !== null) {
         setNickname(JSON.parse(user).nickname);
       }
     };
-
+  
+    const unsubscribeBlur = props.navigation.addListener('blur', () => {
+      decrease();
+    });
+  
     fetchUser();
-  }, [isFocused]);
+  
+    const timer = setTimeout(() => {
+      increase();
+    }, 1);
 
+  }, [isFocused]);
+  
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-        {/* 사용자 세션 */}
         <View style={styles.userSection}>
           <Text style={styles.userText}>{nickname}</Text>
         </View>
 
-        <View style={[styles.section, { height: 200 , backgroundColor: 'rgba(255, 255, 255, 0)' }]}>
+        <View style={[styles.section, { height: 200, backgroundColor: 'rgba(255, 255, 255, 0)' }]}>
           <Swiper
             style={styles.wrapper}
             loop={true}
@@ -53,9 +80,7 @@ const Home = (props) => {
             paginationStyle={{ top: -120, right: -280 }}
             autoplay={true}
             autoplayTimeout={3}
-            >
-              
-            {/* 첫 번째 슬라이드 */}
+          >
             <View>
               <View style={[styles.section1, { height: 200 }]}>
                 <View style={styles.explanation}>
@@ -81,7 +106,6 @@ const Home = (props) => {
               </View>
             </View>
 
-            {/* 두 번째 슬라이드 */}
             <View>
               <View style={[styles.section1, { height: 200 }]}>
                 <View style={styles.explanation}>
@@ -105,9 +129,8 @@ const Home = (props) => {
           </Swiper>
         </View>
 
-        {/* 총 자산 세션 */}
         <View style={styles.section}>
-          <TouchableWithoutFeedback onPress={handleTotalPress}>
+          <TouchableWithoutFeedback onPress={handleTotalPress} >
             <View
               onTouchStart={() => setTotalScale(0.95)}
               onTouchEnd={() => setTotalScale(1)}
@@ -129,29 +152,38 @@ const Home = (props) => {
                   style={styles.totalAssetsImage}
                 />
               </View>
-
-              <Text style={styles.totalSubText1}>
-                총 자산{'\n'}
-                <Text
-                  style={[
-                    styles.totalMainText
-                  ]}
-                >
-                  1,301,590,000원
+              <View style={{ width: '60%', left: 30, height: '90%' }}>
+                <Text style={styles.totalSubText1}>
+                  총 자산{'\n'}
                 </Text>
-              </Text>
-              <Image
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  {initialAnimationCompleted && (
+                    <AnimatedNumbers
+                      includeComma
+                      animateToNumber={animateToNumber}
+                      fontStyle={styles.totalMainText}
+                    />
+                  )}
+                  <Text style={{ marginLeft: 5, fontSize: 18, fontWeight: 'bold' }}>원</Text>
+
+                  {/* increase 버튼이 없으면 돌아가지 않아서 화면에 나오지 않게만 처리 */}
+                  <View style={{ width: 1, height: 20 }}>
+                    <Button title="increase" onPress={increase} />
+                  </View>
+
+                </View>
+              </View>
+
+              <Icon
+                name="chevron-small-right"
+                size={24}
+                color="#767676"
                 style={styles.totalShortcutIcon}
-                source={require('../assets/icons/ShortCut-white.png')}
               />
             </View>
           </TouchableWithoutFeedback>
-
-
         </View>
 
-
-        {/* 자산 그래프 세션 */}
         <View style={[styles.section, { height: 300 }]}>
           <Image
             source={require('../assets/icons/GraphImage.png')}
@@ -170,7 +202,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
   },
-  wrapper:{
+  wrapper: {
     overflow: 'hidden',
   },
   section: {
@@ -203,6 +235,7 @@ const styles = StyleSheet.create({
   userText: {
     fontSize: 20,
     fontWeight: 'bold',
+    color: '#111111'
   },
   explanation: {},
   explanationSubText: {
@@ -262,11 +295,11 @@ const styles = StyleSheet.create({
     color: '#111111',
     fontSize: 18,
     fontWeight: 'medium',
-    left: 24,
+    top: 14,
   },
   totalMainText: {
     fontWeight: 'bold',
-    lineHeight: 25,
+    fontSize: 18,
   },
   assetsContainer: {
     flexDirection: 'row',
@@ -280,7 +313,7 @@ const styles = StyleSheet.create({
   totalShortcutIcon: {
     marginTop: 1,
     position: 'absolute',
-    right: 18,
+    right: 10,
   },
   totalText: {
     fontSize: 18,
