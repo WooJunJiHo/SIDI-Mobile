@@ -10,10 +10,14 @@ import { keys } from '../env'
 //db로드
 import { fetchQR, fetchAssetsImages, fetchUserAssets, updateAssetImage } from '../components/Fetch/FetchData'
 
+//크롤링 데이터 전처리
+import { filterPriceList } from '../components/utils/filterPriceList'
+
 const Scanner = (props) => {
     const isFocused = useIsFocused();
 
     const [user, setUser] = useState(null)
+    const [priceList, setPriceList] = useState(null)
     const [load, setLoad] = useState(false)
 
     const [hasPermission, setHasPermission] = useState(null);
@@ -32,7 +36,9 @@ const Scanner = (props) => {
     useEffect(() => {
         const fetchLogin = async () => {
             const users = await AsyncStorage.getItem("@user");
+            const priceData = await AsyncStorage.getItem("@priceData");
             setUser(JSON.parse(users))
+            setPriceList(JSON.parse(priceData))
         }
         fetchLogin()
     }, [isFocused])
@@ -52,14 +58,16 @@ const Scanner = (props) => {
                         text: '등록', onPress: () => {
                             const updateQR = async () => {
                                 setLoad(true)
+                                const filteredList = filterPriceList(priceList, `${JSON.parse(data).asset.COMPANY} ${JSON.parse(data).asset.MODEL} ${JSON.parse(data).asset.MORE}`)
                                 await fetchQR({
                                     userID: user.userID,
-                                    assetID: data
+                                    assetID: JSON.parse(data).id,
+                                    price: filteredList[filteredList.length-1].value,
                                 })
-                                for ( i=1; i<=4; i++) {
-                                    await updateAssetImage(`${keys.flaskURL}/image_${i}`, user.userID, i, data)    
+                                for (i = 1; i <= 4; i++) {
+                                    await updateAssetImage(`${keys.flaskURL}/image_${i}`, user.userID, i, JSON.parse(data).id)
                                 }
-                                
+
                                 const imageData = await fetchAssetsImages(user.userID)
                                 await AsyncStorage.setItem("@imageData", JSON.stringify(imageData));
                                 const assetData = await fetchUserAssets(user)
@@ -97,8 +105,8 @@ const Scanner = (props) => {
 
     if (load == true) {
         return (
-            <ActivityIndicator size={'large'}/>    
-        )  
+            <ActivityIndicator size={'large'} />
+        )
     }
     return (
         <View style={styles.container}>

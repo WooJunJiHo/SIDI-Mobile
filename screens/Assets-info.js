@@ -141,7 +141,11 @@ const AssetsInfo = (props) => {
                         showsHorizontalScrollIndicator={false} // 수평 스크롤 바 숨김
                         showsVerticalScrollIndicator={false} // 수직 스크롤 바 숨김
                     >
-                        {/* 이미지 로드 */}
+                        {image.map((item, idx) => {
+                            return (
+                                <Image key={idx} source={{uri: item.url}} style={styles.assetImage}/>
+                            )
+                        })}
 
                     </ScrollView>
                     {/* 자산 정보 세션 */}
@@ -224,6 +228,10 @@ const styles = StyleSheet.create({
     imageSection: {
         width: '100%',
         backgroundColor: '#767676',
+    },
+    assetImage: {
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').width,
     },
 
     titleIcon: {

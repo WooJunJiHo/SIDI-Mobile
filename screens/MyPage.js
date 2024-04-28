@@ -4,6 +4,12 @@ import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from '../components/styles/Icons'; // Icon 컴포넌트 import 추가
 
+//db로드
+import { fetchUserAssets } from '../components/Fetch/FetchData'
+
+//페치 데이터
+import { totalPrices } from '../components/utils/filterPriceList';
+
 const MyPage = (props) => {
 
     const isFocused = useIsFocused();
@@ -12,6 +18,7 @@ const MyPage = (props) => {
     const [list, setList] = useState([]);
     const [selectList, setSelectList] = useState([]);
     const [image, setImage] = useState([]);
+    const [totalPrice, setTotalPrice] = useState(0)
     const [loading, setLoading] = useState(true);
     const [slideAnimation] = useState(new Animated.Value(0)); // 막대기 위치를 조절할 애니메이션 값
 
@@ -19,7 +26,7 @@ const MyPage = (props) => {
     const [button2Scale, setButton2Scale] = useState(1);
     const [button1Color, setButton1Color] = useState('#CAC5FF');
     const [button2Color, setButton2Color] = useState('#6C60F1');
-    
+
     const handleButton1Press = () => {
         // 버튼1이 눌렸을 때 스케일 줄이기
         setButton1Scale(0.95);
@@ -64,6 +71,11 @@ const MyPage = (props) => {
                 setImage(JSON.parse(imageData))
                 const assetData = await AsyncStorage.getItem("@assetData");
                 setList(JSON.parse(assetData))
+                const priceData = await fetchUserAssets(JSON.parse(user))
+                const totalValue = totalPrices(priceData)
+                if (totalValue != null) {
+                    setTotalPrice(totalValue)
+                }
                 setLoading(false);
             } else {
                 // props.navigation.navigate('Login')
@@ -100,6 +112,77 @@ const MyPage = (props) => {
     });
 
 
+
+
+
+    const AssetList = () => {
+        return (
+            <>
+                {category == 0 ?
+                    list.map((item, idx) => {
+                        // 현재 list 항목과 일치하는 첫 번째 이미지 찾기
+                        const matchedImage = image.find(imageItem => imageItem.assetID == item.AssetsID && imageItem.imageNumber == 1);
+
+                        // 이미지가 없는 경우
+                        if (!matchedImage) {
+                            return null;
+                        }
+                        // 이미지가 있는 경우, 이미지의 URL을 가져오기
+                        const imageURL = matchedImage.url;
+
+                        return (
+                            <TouchableOpacity
+                                key={idx}
+                                style={styles.listView}
+                                onPress={() => {
+                                    props.navigation.navigate('MyAssetsInfo', { assetID: item.AssetsID })
+                                }}
+                            >
+                                <Image
+                                    source={{ uri: imageURL }}
+                                    style={{ width: '100%', height: '100%' }}
+                                />
+                            </TouchableOpacity>
+                        )
+                    }) :
+                    selectList.map((item, idx) => {
+                        // 현재 list 항목과 일치하는 첫 번째 이미지 찾기
+                        const matchedImage = image.find(imageItem => imageItem.assetID == item.AssetsID && imageItem.imageNumber == 1);
+
+                        // 이미지가 없는 경우
+                        if (!matchedImage) {
+                            return null;
+                        }
+                        // 이미지가 있는 경우, 이미지의 URL을 가져오기
+                        const imageURL = matchedImage.url;
+
+                        return (
+                            <TouchableOpacity
+                                key={idx}
+                                style={styles.listView}
+                                onPress={() => {
+                                    props.navigation.navigate('MyAssetsInfo', { assetID: item.AssetsID })
+                                }}
+                            >
+                                <Image
+                                    source={{ uri: imageURL }}
+                                    style={{ width: '100%', height: '100%' }}
+                                />
+                            </TouchableOpacity>
+                        )
+                    })
+                }
+            </>
+        )
+    }
+
+
+
+
+
+
+
+
     if (loading == true) {
         return (
             <ActivityIndicator size={'large'} />
@@ -122,7 +205,7 @@ const MyPage = (props) => {
 
             <View style={styles.priceSection}>
                 <Text style={styles.priceSubText}>총 자산</Text>
-                <Text style={styles.priceMainText}>1,590,000 원</Text>
+                <Text style={styles.priceMainText}>{totalPrice} 원</Text>
 
                 <View style={styles.btnView}>
                     <TouchableOpacity
@@ -164,60 +247,7 @@ const MyPage = (props) => {
 
             <ScrollView>
                 <View style={styles.listSection}>
-                    {   category==0 ?
-                        list.map((item, idx) => {
-                            // 현재 list 항목과 일치하는 첫 번째 이미지 찾기
-                            const matchedImage = image.find(imageItem => imageItem.assetID == item.AssetsID && imageItem.imageNumber == 1);
-
-                            // 이미지가 없는 경우
-                            if (!matchedImage) {
-                                return null;
-                            }
-                            // 이미지가 있는 경우, 이미지의 URL을 가져오기
-                            const imageURL = matchedImage.url;
-
-                            return (
-                                <TouchableOpacity
-                                    key={idx}
-                                    style={styles.listView}
-                                    onPress={() => {
-                                        props.navigation.navigate('MyAssetsInfo', {assetID: item.AssetsID})
-                                    }}
-                                >
-                                    <Image
-                                        source={{ uri: imageURL }}
-                                        style={{ width: '100%', height: '100%' }}
-                                    />
-                                </TouchableOpacity>
-                            )
-                        }) : 
-                        selectList.map((item, idx) => {
-                            // 현재 list 항목과 일치하는 첫 번째 이미지 찾기
-                            const matchedImage = image.find(imageItem => imageItem.assetID == item.AssetsID && imageItem.imageNumber == 1);
-
-                            // 이미지가 없는 경우
-                            if (!matchedImage) {
-                                return null;
-                            }
-                            // 이미지가 있는 경우, 이미지의 URL을 가져오기
-                            const imageURL = matchedImage.url;
-
-                            return (
-                                <TouchableOpacity
-                                    key={idx}
-                                    style={styles.listView}
-                                    onPress={() => {
-                                        props.navigation.navigate('MyAssetsInfo', {assetID: item.AssetsID})
-                                    }}
-                                >
-                                    <Image
-                                        source={{ uri: imageURL }}
-                                        style={{ width: '100%', height: '100%' }}
-                                    />
-                                </TouchableOpacity>
-                            )
-                        })
-                    }
+                    {list != [] ? <AssetList /> : <></>}
                 </View>
             </ScrollView>
         </SafeAreaView>
