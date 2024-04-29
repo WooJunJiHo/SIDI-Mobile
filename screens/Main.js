@@ -29,7 +29,7 @@ const Home = (props) => {
 	const [totalScale, setTotalScale] = useState(1);
 	const [animateToNumber, setAnimateToNumber] = useState(1000000 - 64732);
 	const [initialAnimationCompleted, setInitialAnimationCompleted] = useState(true); // 초기 애니메이션 완료 상태로 설정
-	const [buttonColor, setButtonColor] = useState('#6C60F1'); // 초기 버튼 색상 설정
+	const [buttonColor, setButtonColor] = useState('#967DFB'); // 초기 버튼 색상 설정
 
 	const increase = () => {
 		setAnimateToNumber(animateToNumber + 64732);
@@ -63,148 +63,187 @@ const Home = (props) => {
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
-			<View style={styles.container}>
-				<View style={styles.userSection}>
-					<Text style={styles.userText}>{nickname}</Text>
-				</View>
+			<ScrollView>
+				<View style={styles.container}>
+					<View style={styles.userSection}>
+						<Text style={styles.userText}>{nickname}</Text>
+					</View>
 
-				<View style={[styles.section, { height: 200, backgroundColor: 'rgba(255, 255, 255, 0)' }]}>
-					<Swiper
-						style={styles.wrapper}
-						loop={true}
-						showsPagination={true}
-						horizontal={true}
-						paginationStyle={{ top: -120, right: -280 }}
-						autoplay={true}
-						autoplayTimeout={3}
-					>
-						<View>
-							<View style={[styles.section1, { height: 200 }]}>
-								<View style={styles.explanation}>
-									<Text style={styles.explanationSubText}>
-										실물 자산을 편하게 관리하는 방법!
-									</Text>
-									<Text style={styles.explanationMainText}>
-										SIDI 사용 방법을 알려드립니다
-									</Text>
-								</View>
-								<Image
-									source={require('../assets/icons/illustration.png')}
-									style={styles.illustration}
-								/>
-
-								<View
-									onTouchStart={() => {
-										setButtonScale(0.95);
-										// 스케일이 줄어들 때 배경색 변경
-										setButtonColor('#423A7A'); // 어두운 색상으로 변경
-									}}
-									onTouchEnd={() => {
-										setButtonScale(1);
-										// 스케일이 다시 원래대로 돌아올 때 배경색 원래 색상으로 변경
-										setButtonColor('#6C60F1'); // 원래 색상으로 변경
-									}}
-									style={[styles.howButton, { transform: [{ scale: buttonScale }], backgroundColor: buttonColor }]}
-								>
-									<Text style={styles.howText}>방법 보러가기</Text>
-								</View>
-							</View>
-						</View>
-
-						<View>
-							<View style={[styles.section1, { height: 200 }]}>
-								<View style={styles.explanation}>
-									<Text style={styles.explanationSubText}>테스트 1</Text>
-									<Text style={styles.explanationMainText}>테스트 2</Text>
-								</View>
-								<Image
-									source={require('../assets/icons/illustration.png')}
-									style={styles.illustration}
-								/>
-
-								<View
-									onTouchStart={() => {
-										setButtonScale(0.95);
-										// 스케일이 줄어들 때 배경색 변경
-										setButtonColor('#423A7A'); // 어두운 색상으로 변경
-									}}
-									onTouchEnd={() => {
-										setButtonScale(1);
-										// 스케일이 다시 원래대로 돌아올 때 배경색 원래 색상으로 변경
-										setButtonColor('#6C60F1'); // 원래 색상으로 변경
-									}}
-									style={[styles.howButton, { transform: [{ scale: buttonScale }], backgroundColor: buttonColor }]}
-								>
-									<Text style={styles.howText}>방법 보러가기</Text>
-								</View>
-							</View>
-						</View>
-					</Swiper>
-				</View>
-
-				<View style={styles.section}>
-					<TouchableWithoutFeedback onPress={handleTotalPress} >
-						<View
-							onTouchStart={() => setTotalScale(0.95)}
-							onTouchEnd={() => setTotalScale(1)}
-							style={[
-								styles.sectioninside,
-								{
-									height: 80,
-									top: 8,
-									flexDirection: 'row',
-									alignItems: 'center',
-									transform: [{ scale: totalScale }],
-									backgroundColor: totalScale === 0.95 ? '#F5F5F5' : '#FFFFFF',
-								}
-							]}
+					<View style={[styles.section, { height: 200, backgroundColor: 'rgba(255, 255, 255, 0)' }]}>
+						<Swiper
+							style={styles.wrapper}
+							loop={true}
+							showsPagination={true}
+							horizontal={true}
+							paginationStyle={{ top: -120, right: -280 }}
+							autoplay={true}
+							autoplayTimeout={3}
 						>
-							<View style={styles.assetsContainer}>
-								<Image
-									source={require('../assets/icons/Hand-Icon.png')}
-									style={styles.totalAssetsImage}
-								/>
-							</View>
-							<View style={{ width: '60%', left: 30, height: '90%' }}>
-								<Text style={styles.totalSubText1}>
-									총 자산{'\n'}
-								</Text>
-								<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-									{initialAnimationCompleted && (
-										<AnimatedNumbers
-											includeComma
-											animateToNumber={totalPrice}
-											fontStyle={styles.totalMainText}
-										/>
-									)}
-									<Text style={{ marginLeft: 5, fontSize: 18, fontFamily: 'Pretendard-SemiBold' }}>원</Text>
-
-									{/* increase 버튼이 없으면 돌아가지 않아서 화면에 나오지 않게만 처리 */}
-									<View style={{ width: 1, height: 20 }}>
-										<Button title="increase" onPress={increase} />
+							<View>
+								<View style={[styles.section1, { height: 200 }]}>
+									<View style={styles.explanation}>
+										<Text style={styles.explanationSubText}>
+											실물 자산을 편하게 관리하는 방법!
+										</Text>
+										<Text style={styles.explanationMainText}>
+											SIDI 사용 방법을 알려드립니다
+										</Text>
 									</View>
+									<Image
+										source={require('../assets/icons/Man.png')}
+										style={styles.illustration}
+									/>
 
+									<View
+										onTouchStart={() => {
+											setButtonScale(0.95);
+											// 스케일이 줄어들 때 배경색 변경
+											setButtonColor('#423A7A'); // 어두운 색상으로 변경
+										}}
+										onTouchEnd={() => {
+											setButtonScale(1);
+											// 스케일이 다시 원래대로 돌아올 때 배경색 원래 색상으로 변경
+											setButtonColor('#967DFB'); // 원래 색상으로 변경
+										}}
+										style={[styles.howButton, { transform: [{ scale: buttonScale }], backgroundColor: buttonColor }]}
+									>
+										<Text style={styles.howText}>방법 보러가기</Text>
+									</View>
 								</View>
 							</View>
 
-							<Icon
-								name="chevron-small-right"
-								size={24}
-								color="#767676"
-								style={styles.totalShortcutIcon}
+							<View>
+								<View style={[styles.section1, { height: 200 }]}>
+									<View style={styles.explanation}>
+										<Text style={styles.explanationSubText}>테스트 1</Text>
+										<Text style={styles.explanationMainText}>테스트 2</Text>
+									</View>
+									<Image
+										source={require('../assets/icons/Man.png')}
+										style={styles.illustration}
+									/>
+
+									<View
+										onTouchStart={() => {
+											setButtonScale(0.95);
+											// 스케일이 줄어들 때 배경색 변경
+											setButtonColor('#423A7A'); // 어두운 색상으로 변경
+										}}
+										onTouchEnd={() => {
+											setButtonScale(1);
+											// 스케일이 다시 원래대로 돌아올 때 배경색 원래 색상으로 변경
+											setButtonColor('#967DFB'); // 원래 색상으로 변경
+										}}
+										style={[styles.howButton, { transform: [{ scale: buttonScale }], backgroundColor: buttonColor }]}
+									>
+										<Text style={styles.howText}>방법 보러가기</Text>
+									</View>
+								</View>
+							</View>
+						</Swiper>
+					</View>
+
+					<View style={styles.section}>
+						<TouchableWithoutFeedback onPress={handleTotalPress} >
+							<View
+								onTouchStart={() => setTotalScale(0.95)}
+								onTouchEnd={() => setTotalScale(1)}
+								style={[
+									styles.sectioninside,
+									{
+										height: 80,
+										top: 8,
+										flexDirection: 'row',
+										alignItems: 'center',
+										transform: [{ scale: totalScale }],
+										backgroundColor: totalScale === 0.95 ? '#F5F5F5' : '#FFFFFF',
+									}
+								]}
+							>
+								<View style={styles.assetsContainer}>
+									<Image
+										source={require('../assets/icons/Pig.png')}
+										style={styles.totalAssetsImage}
+									/>
+								</View>
+								<View style={{ width: '60%', left: 24, height: '90%' }}>
+									<Text style={styles.totalSubText1}>
+										총 자산{'\n'}
+									</Text>
+									<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+										{initialAnimationCompleted && (
+											<AnimatedNumbers
+												includeComma
+												animateToNumber={totalPrice}
+												fontStyle={styles.totalMainText}
+											/>
+										)}
+										<Text style={{ marginLeft: 5, fontSize: 18, fontFamily: 'Pretendard-SemiBold' }}>원</Text>
+
+										{/* increase 버튼이 없으면 돌아가지 않아서 화면에 나오지 않게만 처리 */}
+										<View style={{ width: 1, height: 20 }}>
+											<Button title="increase" onPress={increase} />
+										</View>
+
+									</View>
+								</View>
+
+								<Icon
+									name="chevron-small-right"
+									size={24}
+									color="#767676"
+									style={styles.totalShortcutIcon}
+								/>
+							</View>
+						</TouchableWithoutFeedback>
+					</View>
+
+					<View style={[styles.section, { height: 300 }]}>
+						<Image
+							source={require('../assets/icons/Graph.png')}
+							style={styles.totalGraphImage}
+						/>
+						<Text style={styles.totalText}>총 자산 그래프</Text>
+					</View>
+				</View>
+				<View style={{ width: '100%', alignSelf: 'center', flexDirection: 'row' }}>
+					<ScrollView
+						horizontal={true}
+						showsHorizontalScrollIndicator={false}
+					>
+						<View style={styles.firstSmallSection}>
+							<Image
+								source={require('../assets/icons/QRcode-Hand.png')}
+								style={styles.BottomImage}
 							/>
+							<Text style={styles.smallsectionText}>QR 코드 {'\n'}간단 등록</Text>
 						</View>
-					</TouchableWithoutFeedback>
+						<View style={styles.smallSection}>
+							<Image
+								source={require('../assets/icons/Check.png')}
+								style={styles.BottomImage}
+							/>
+							<Text style={styles.smallsectionText}>시세 {'\n'}그래프 확인</Text>
+						</View>
+						<View style={styles.smallSection}>
+							<Image
+								source={require('../assets/icons/Phone.png')}
+								style={styles.BottomPhoneImage}
+							/>
+							<Text style={styles.smallsectionText}>내 자산 {'\n'}모아보기</Text>
+						</View>
+						<View style={styles.lastSmallSection}>
+							<Image
+								source={require('../assets/icons/Pen.png')}
+								style={styles.BottomImage}
+							/>
+							<Text style={styles.smallsectionText}>중고 거래글 {'\n'}작성 AI</Text>
+						</View>
+					</ScrollView>
+
 				</View>
 
-				<View style={[styles.section, { height: 300 }]}>
-					<Image
-						source={require('../assets/icons/GraphImage.png')}
-						style={styles.totalGraphImage}
-					/>
-					<Text style={styles.totalText}>총 자산 그래프</Text>
-				</View>
-			</View>
+			</ScrollView>
 		</SafeAreaView>
 	);
 };
@@ -222,8 +261,34 @@ const styles = StyleSheet.create({
 		width: '91%',
 		height: 95,
 		borderRadius: 20,
-		marginBottom: 20,
+		marginBottom: 12,
 		backgroundColor: '#FFFFFF',
+	},
+	smallSection: {
+		width: 120,
+		height: 120,
+		borderRadius: 20,
+		marginBottom: 12,
+		backgroundColor: '#FFFFFF',
+		marginRight: 12,
+	},
+	firstSmallSection: {
+		width: 120,
+		height: 120,
+		borderRadius: 20,
+		marginBottom: 12,
+		backgroundColor: '#FFFFFF',
+		left: 16,
+		marginRight: 28,
+	},
+	lastSmallSection: {
+		width: 120,
+		height: 120,
+		borderRadius: 20,
+		marginBottom: 12,
+		backgroundColor: '#FFFFFF',
+		right: 16,
+		marginLeft: 16,
 	},
 	section1: {
 		width: '100%',
@@ -265,14 +330,14 @@ const styles = StyleSheet.create({
 		left: 20,
 		color: '#111111',
 		top: 40,
-		fontFamily: 'Pretendard-Regular',
+		fontFamily: 'Pretendard-SemiBold',
 	},
 	illustration: {
 		position: 'absolute',
 		bottom: 0,
-		right: 260,
-		width: 60,
-		height: 80,
+		right: 240,
+		width: 100,
+		height: 100,
 	},
 	howButton: {
 		position: 'absolute',
@@ -303,6 +368,8 @@ const styles = StyleSheet.create({
 	totalAssetsImage: {
 		alignSelf: 'center',
 		position: 'absolute',
+		width: 90,
+		height: 90,
 	},
 	totalSubText1: {
 		color: '#111111',
@@ -317,7 +384,6 @@ const styles = StyleSheet.create({
 	assetsContainer: {
 		flexDirection: 'row',
 		justifyContent: 'center',
-		backgroundColor: '#6C60F1',
 		width: 50,
 		height: 50,
 		borderRadius: 100,
@@ -331,11 +397,30 @@ const styles = StyleSheet.create({
 	totalText: {
 		fontSize: 18,
 		fontFamily: 'Pretendard-Regular',
-		left: 50,
-		top: 0,
+		left: 54,
+		top: -18,
 	},
 	totalGraphImage: {
-		top: 20,
-		left: 20,
+		top: 10,
+		left: 10,
+		width: 40,
+		height: 40,
+	},
+	smallsectionText: {
+		fontSize: 18,
+		fontFamily: 'Pretendard-SemiBold',
+		left: 14,
+		top: 34,
+	},
+	BottomImage: {
+		width: 30,
+		height: 30,
+		left: 14,
+		top: 14,
+	},
+	BottomPhoneImage: {
+		width: 40,
+		height: 30,
+		top: 14,
 	},
 });

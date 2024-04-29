@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Button, Alert, Linking, ActivityIndicator } from 'react-native';
+import { Text, View, StyleSheet, Button, Alert, Linking, ActivityIndicator, Image } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Camera } from 'expo-camera';
@@ -62,7 +62,7 @@ const Scanner = (props) => {
                                 await fetchQR({
                                     userID: user.userID,
                                     assetID: JSON.parse(data).id,
-                                    price: filteredList[filteredList.length-1].value,
+                                    price: filteredList[filteredList.length - 1].value,
                                 })
                                 for (i = 1; i <= 4; i++) {
                                     await updateAssetImage(`${keys.flaskURL}/image_${i}`, user.userID, i, JSON.parse(data).id)
@@ -117,6 +117,10 @@ const Scanner = (props) => {
                 ref={(ref) => setCameraRef(ref)}
             >
                 <View style={styles.overlay}>
+                    <Image
+                        source={require('../assets/icons/SIDI icon.png')}
+                        style={styles.icon}
+                    />
                     <Text style={styles.overlayMainText}>제품 가격 • 상태 • 그래프</Text>
                     <Text style={styles.overlayText}>QR 코드 찍고 간편하게 등록하세요!</Text>
                 </View>
@@ -144,18 +148,22 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'transparent',
-        bottom: 140,
+        bottom: 210,
     },
     overlayMainText: {
         color: 'white',
         fontSize: 20,
-        fontWeight: 'medium',
+        fontFamily: 'Pretendard-Regular',
         marginBottom: 12,
     },
     overlayText: {
         color: 'white',
         fontSize: 24,
-        fontWeight: 'medium',
+        fontFamily: 'Pretendard-SemiBold',
+    },
+    icon: {
+        width: 200,
+        height: 200,
     },
 });
 

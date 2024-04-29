@@ -41,6 +41,8 @@ const Setting = (props) => {
                 </View>
             </View>
 
+            <View style={{ width: '100%', height: 12, backgroundColor: '#f5f5f5', marginBottom: 10, marginTop: 10, }}></View>
+
             {/* 버튼 세션 */}
             <View style={styles.infoHeartSection}>
                 <TouchableWithoutFeedback
@@ -95,6 +97,7 @@ const Setting = (props) => {
                     </View>
                 </TouchableWithoutFeedback>
             </View>
+            <View style={{ width: '100%', height: '100%', backgroundColor: '#f5f5f5', marginBottom: 10, marginTop: 10, }}></View>
         </SafeAreaView>
     );
 };
@@ -105,6 +108,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
+        backgroundColor: '#FFFFFF'
     },
     titleInfoSection: {
         width: '100%',
@@ -131,6 +135,7 @@ const styles = StyleSheet.create({
         width: '91%',
         flexDirection: 'row',
         alignItems: 'center',
+        top: 8,
     },
     infoImage: {
         width: 40,
@@ -146,7 +151,6 @@ const styles = StyleSheet.create({
     },
     infoHeartSection: {
         width: '100%',
-        marginTop: 20,
         alignItems: 'center',
         backgroundColor: '#ffffff',
     },
@@ -155,9 +159,8 @@ const styles = StyleSheet.create({
         height: 60,
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: 10,
         marginBottom: 10,
-        borderRadius: 10,
+        borderRadius: 20,
         backgroundColor: '#ffffff',
     },
     btn2: {
@@ -167,7 +170,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 0,
         marginBottom: 10,
-        borderRadius: 10,
+        borderRadius: 20,
         backgroundColor: '#ffffff',
     },
     btn3: {
@@ -177,7 +180,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 0,
         marginBottom: 10,
-        borderRadius: 10,
+        borderRadius: 20,
         backgroundColor: '#ffffff',
     },
     btn4: {
@@ -186,8 +189,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginTop: 0,
-        marginBottom: 10,
-        borderRadius: 10,
+        borderRadius: 20,
         backgroundColor: '#ffffff',
     },
     btnPressed: {
@@ -197,7 +199,7 @@ const styles = StyleSheet.create({
     btnText: {
         fontSize: 18,
         fontFamily: 'Pretendard-Regular',
-        left: 10,
+        left: 12,
     },
     btnIcon: {
         position: 'absolute',
