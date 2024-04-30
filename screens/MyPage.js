@@ -80,10 +80,12 @@ const MyPage = (props) => {
                 const assetData = await AsyncStorage.getItem("@assetData");
                 setList(JSON.parse(assetData))
                 const priceData = await fetchUserAssets(JSON.parse(user))
-                const totalValue = totalPrices(priceData)
-                if (totalValue != null) {
-                    setTotalPrice(totalValue)
-                }
+				if (priceData != 0) {
+					const totalValue = totalPrices(priceData)
+					if (totalValue != null) {
+						setTotalPrice(totalValue)
+					}
+				}
                 setLoading(false);
             } else {
                 // props.navigation.navigate('Login')

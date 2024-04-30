@@ -48,11 +48,12 @@ const Home = (props) => {
 				setNickname(JSON.parse(user).nickname);
 
 				const priceData = await fetchUserAssets(JSON.parse(user))
-				const totalValue = totalPrices(priceData)
-				if (totalValue != null) {
-					setTotalPrice(totalValue)
+				if (priceData != 0) {
+					const totalValue = totalPrices(priceData)
+					if (totalValue != null) {
+						setTotalPrice(totalValue)
+					}
 				}
-
 			}
 		};
 
