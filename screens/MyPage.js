@@ -202,9 +202,10 @@ const MyPage = (props) => {
                 <Text style={styles.mainTitle}>내 자산</Text>
 
                 {/* person-outline 부분은 setting으로 병합해서 사용자 이름 부분 섹션 클릭하면 로그인 될 수 있도록 구현하게 변경할 것 */}
-                <TouchableOpacity style={styles.userBtn} onPress={() => { props.navigation.navigate('Login') }}>
+
+                {/* <TouchableOpacity style={styles.userBtn} onPress={() => { props.navigation.navigate('Login') }}>
                     <Icon name='person-outline' size={24} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
                 <TouchableOpacity style={styles.settingBtn} onPress={() => { props.navigation.navigate('Setting') }}>
                     <Icon name='settings-sharp' size={24} color={'#767676'} />
