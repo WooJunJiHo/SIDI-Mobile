@@ -101,13 +101,13 @@ const Chart = (props) => {
                 }}
             />
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10, bottom: 34, right: 10 }}>
-                <TouchableOpacity onPress={() => handlePeriodSelect('1일')} style={[styles.dayBt, selectedPeriod === '1일' ? styles.selectedButton : styles.unselectedButton]}>
+                <TouchableOpacity onPress={() => handlePeriodSelect('1일')} style={[styles.dayBt, selectedPeriod === '1일' ? styles.selectedButton : styles.unselectedButton]} activeOpacity={1}>
                     <Text style={[styles.btText, selectedPeriod === '1일' ? styles.selectedButtonText : styles.unselectedButtonText]}>1일</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => handlePeriodSelect('1주')} style={[styles.dayBt, selectedPeriod === '1주' ? styles.selectedButton : styles.unselectedButton]}>
+                <TouchableOpacity onPress={() => handlePeriodSelect('1주')} style={[styles.dayBt, selectedPeriod === '1주' ? styles.selectedButton : styles.unselectedButton]} activeOpacity={1}>
                     <Text style={[styles.btText, selectedPeriod === '1주' ? styles.selectedButtonText : styles.unselectedButtonText]}>1주</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => handlePeriodSelect('1달')} style={[styles.dayBt, selectedPeriod === '1달' ? styles.selectedButton : styles.unselectedButton]}>
+                <TouchableOpacity onPress={() => handlePeriodSelect('1달')} style={[styles.dayBt, selectedPeriod === '1달' ? styles.selectedButton : styles.unselectedButton]} activeOpacity={1}>
                     <Text style={[styles.btText, selectedPeriod === '1달' ? styles.selectedButtonText : styles.unselectedButtonText]}>1달</Text>
                 </TouchableOpacity>
             </View>
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
         fontWeight: 'medium',
     },
     selectedButton: {
-        backgroundColor: '#6C60F1',
+        backgroundColor: '#967DFB',
     },
     unselectedButton: {
         backgroundColor: '#EDEDED',

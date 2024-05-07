@@ -101,7 +101,7 @@ export const GoogleLogin = (props) => {
 
     if (loading == true) {
         return (
-            <Image style={{ width: 200, height: 200 }} source={require('../../assets/icons/loading.gif')} />
+            <Image style={{ width: 300, height: 300 }} source={require('../../assets/icons/SIDI Logo.gif')} />
         )
     }
     return (

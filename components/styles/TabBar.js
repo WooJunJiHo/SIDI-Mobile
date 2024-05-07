@@ -115,7 +115,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
                                             source={iconName}
                                             style={{
                                                 width: 24,
-                                                height: 24,
+                                                height: 24.5,
                                             }}
                                         />
                                     </Animated.View>

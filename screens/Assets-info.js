@@ -11,6 +11,7 @@ import {
 import { useState, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Icon from 'react-native-vector-icons/Entypo'; // Entypo 아이콘 import
 
 
 // 클립보드 모듈 추가
@@ -37,6 +38,20 @@ const AssetsInfo = (props) => {
 
     // 로딩 상태
     const [loading, setLoading] = useState(true);
+
+    const [isCopyButtonPressed, setIsCopyButtonPressed] = useState(false);
+    const [isDeleteButtonPressed, setIsDeleteButtonPressed] = useState(false);
+
+    const handleDeleteButtonPressIn = () => {
+        setIsDeleteButtonPressed(true);
+    };
+
+    const handleDeleteButtonPressOut = () => {
+        setIsDeleteButtonPressed(false);
+    };
+
+    const buttonBackgroundColor = isCopyButtonPressed ? '#745FC6' : '#967DFB';
+
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -106,7 +121,7 @@ const AssetsInfo = (props) => {
     if (loading == true) {
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Image style={{ width: 200, height: 200 }} source={require('../assets/icons/loading.gif')} />
+                <Image style={{ width: 300, height: 300 }} source={require('../assets/icons/SIDI Logo.gif')} />
             </View>
 
         )
@@ -127,11 +142,9 @@ const AssetsInfo = (props) => {
                     onPress={() => {
                         props.navigation.navigate('MyPageMain');
                     }}
+                    activeOpacity={1}
                 >
-                    <Image
-                        source={require('../assets/icons/ShortCut-black.png')}
-                        left={8}
-                    />
+                    <Icon name="chevron-small-left" size={30} color="#111111" left={-4} top={-4} />
                 </TouchableOpacity>
                 <View style={{ alignItems: 'center', marginTop: 60 }}>
                     {/* 자산 이미지 세션 */}
@@ -143,7 +156,7 @@ const AssetsInfo = (props) => {
                     >
                         {image.map((item, idx) => {
                             return (
-                                <Image key={idx} source={{uri: item.url}} style={styles.assetImage}/>
+                                <Image key={idx} source={{ uri: item.url }} style={styles.assetImage} />
                             )
                         })}
 
@@ -153,52 +166,26 @@ const AssetsInfo = (props) => {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Image style={styles.infoUserImage} source={{ uri: user.profileImg }} />
                             <Text style={styles.infoUserName}>{user.nickname}</Text>
-                            <Text style={styles.infoDate}>{asset[0].DATE}</Text>
+                            <Text style={styles.infoDate}>{asset[0].DATE.substring(0, 10)}</Text>
                         </View>
                         <Text style={styles.infoAssetsName}>{asset[0].COMPANY} {asset[0].MODEL} {asset[0].MORE} {asset[0].COLOR}</Text>
                         <View style={styles.stateContainer}>
                             <Text style={styles.stateText}>상태</Text>
-                            <Text style={styles.stateDescription}>외판 손상</Text>
+                            <Text style={styles.firststateDescription}>외판 손상,</Text>
                             <Text style={styles.stateDescription}>버튼 고장</Text>
                         </View>
                     </View>
 
-                    {/* AI가 작성해주는 글 세션 */}
-                    <View style={styles.AiSection}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 0, marginTop: 20 }}>
-                            <Image
-                                source={require('../assets/icons/Robot.png')}
-                                style={styles.illustration}
-                            />
-                            <Text style={styles.AiTitle}>AI가 작성해주는 판매글</Text>
-                            <TouchableOpacity onPress={handleCopyText}>
-                                <Text style={styles.copyText}>복사하기</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={styles.AiTextView}>
-                            {data.map((item, index) => (
-                                <Text key={index} style={[item.style, { paddingRight: 20 }]}>{item.text}</Text>
-                            ))}
-                        </View>
-
-                    </View>
-
-                    {/* 중고 거래 플랫폼 시세 차트 세션 */}
-                    <View style={styles.priceChartSection}>
-                        <Image
-                            source={require('../assets/icons/GraphImage.png')}
-                            style={styles.totalGraphImage}
-                        />
-                        <Text style={styles.totalText}>가격 그래프</Text>
-                        <Linechart ptData={prices}/>
-                    </View>
 
                     {/* 중고 거래 플랫폼 시세 세션 */}
                     <View style={styles.priceSection}>
                         <View style={{ flexDirection: 'row' }}>
+                            <Image
+                                source={require('../assets/icons/bungae Icon.png')}
+                                style={styles.flatformImage}
+                            />
                             <Text style={styles.flatformText}>번개장터</Text>
-                            <Text style={styles.flatformPrice}>{average} 원</Text>
+                            <Text style={styles.flatformPrice}>{average.toLocaleString()} 원</Text>
 
                         </View>
                         <View style={{ flexDirection: 'row' }}>
@@ -208,10 +195,59 @@ const AssetsInfo = (props) => {
 
                     </View>
 
+
+                    {/* 중고 거래 플랫폼 시세 차트 세션 */}
+                    <View style={styles.priceChartSection}>
+                        <Image
+                            source={require('../assets/icons/Graph.png')}
+                            style={styles.totalGraphImage}
+                        />
+                        <Text style={styles.totalText}>가격 그래프</Text>
+                        <Linechart ptData={prices} />
+                    </View>
+
+                    <View style={{ width: '100%', height: 1, backgroundColor: '#f5f5f5', marginTop: 16 }}></View>
+
                     {/* 삭제 버튼 */}
-                    <TouchableOpacity style={styles.DeleteBtn}>
+                    {/* <TouchableOpacity
+                        onPressIn={handleDeleteButtonPressIn}
+                        onPressOut={handleDeleteButtonPressOut}
+                        style={[styles.DeleteBtn, { transform: [{ scale: isDeleteButtonPressed ? 0.95 : 1 }], backgroundColor: isDeleteButtonPressed ? '#C1AFFF' : '#967DFB' }]}
+                        activeOpacity={1}
+                    >
                         <Text style={styles.DeleteText}>삭제 하기</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
+
+                    {/* AI가 작성해주는 글 세션 */}
+                    <View style={styles.AiSection}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 0, marginTop: 16 }}>
+                            <Image
+                                source={require('../assets/icons/AI Write.png')}
+                                style={styles.illustration}
+                            />
+                            <Text style={styles.AiTitle}>AI가 작성해주는 판매글</Text>
+
+                        </View>
+
+                        <View style={styles.AiTextView}>
+                            {data.map((item, index) => (
+                                <Text key={index} style={[item.style, { paddingRight: 20 }]}>{item.text}</Text>
+                            ))}
+                        </View>
+
+                        <TouchableOpacity
+                            onPressIn={() => setIsCopyButtonPressed(true)}
+                            onPressOut={() => setIsCopyButtonPressed(false)}
+                            onPress={handleCopyText} // 수정된 부분
+                            style={[styles.copyBtn, { backgroundColor: buttonBackgroundColor, transform: [{ scale: isCopyButtonPressed ? 0.95 : 1 }] }]}
+                            activeOpacity={1}
+                        >
+                            <Text style={styles.copyText}>복사하기</Text>
+                        </TouchableOpacity>
+
+
+                    </View>
+
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -227,7 +263,7 @@ const styles = StyleSheet.create({
     //자산 이미지 세션
     imageSection: {
         width: '100%',
-        backgroundColor: '#767676',
+        backgroundColor: '#f5f5f5',
     },
     assetImage: {
         width: Dimensions.get('window').width,
@@ -239,18 +275,20 @@ const styles = StyleSheet.create({
         top: 30,
     },
     illustration: {
-        marginLeft: 20
+        marginLeft: 20,
+        width: 40,
+        height: 40,
     },
 
     //자산 정보 세션
     infoSection: {
         width: '91%',
-        marginTop: 20,
+        marginTop: 30,
     },
     infoUserName: {
         color: '#767676',
         fontSize: 18,
-        fontFamily: 'Pretendard-Regular',
+        fontFamily: 'Pretendard-SemiBold',
         flex: 1,
     },
     infoUserImage: {
@@ -263,7 +301,7 @@ const styles = StyleSheet.create({
     infoAssetsName: {
         fontSize: 18,
         fontFamily: 'Pretendard-SemiBold',
-        marginTop: 12,
+        marginTop: 20,
         marginBottom: 20,
     },
     infoDate: {
@@ -276,14 +314,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     stateText: {
-        fontSize: 14,
-        fontFamily: 'Pretendard-Light',
+        fontSize: 16,
+        fontFamily: 'Pretendard-Regular',
         color: '#767676',
     },
-    stateDescription: {
-        marginLeft: 5,
+    firststateDescription: {
+        marginLeft: 14,
         fontSize: 16,
-        fontFamily: 'Pretendard-Light',
+        fontFamily: 'Pretendard-Regular',
+        color: '#111111',
+    },
+    stateDescription: {
+        marginLeft: 4,
+        fontSize: 16,
+        fontFamily: 'Pretendard-Regular',
         color: '#111111',
     },
 
@@ -291,21 +335,23 @@ const styles = StyleSheet.create({
     //중고 거래 플랫폼 시세 차트 세션
     priceChartSection: {
         width: '91%',
-        height: 313,
-        marginTop: 20,
+        height: 320,
         borderRadius: 20,
-        backgroundColor: '#F5F5F5',
+        backgroundColor: '#f5f5f5',
+        marginTop: 12,
     },
     totalText: {
         fontSize: 18,
-        fontFamily: 'Pretendard-Regular',
-        left: 50,
-        top: 0,
+        fontFamily: 'Pretendard-SemiBold',
+        left: 56,
+        top: -18,
     },
 
     totalGraphImage: {
-        top: 20,
-        left: 20,
+        top: 10,
+        left: 10,
+        width: 40,
+        height: 40,
     },
 
 
@@ -313,31 +359,38 @@ const styles = StyleSheet.create({
     //중고 거래 플랫폼 시세 세션
     priceSection: {
         width: '91%',
-        height: 83,
+        height: 86,
         borderRadius: 20,
+        backgroundColor: '#f5f5f5',
         marginTop: 20,
-        backgroundColor: '#F5F5F5',
+    },
+
+    flatformImage: {
+        top: 15,
+        left: 20,
+        width: 24,
+        height: 24,
     },
     flatformText: {
         fontSize: 18,
-        fontFamily: 'Pretendard-Regular',
-        marginLeft: 20,
-        marginTop: 20,
+        fontFamily: 'Pretendard-SemiBold',
+        marginLeft: 26,
+        marginTop: 18,
         color: '#111111',
     },
     flatformPrice: {
         fontSize: 18,
-        fontFamily: 'Pretendard-Regular',
+        fontFamily: 'Pretendard-SemiBold',
         marginLeft: 'auto',
         marginRight: 20,
-        marginTop: 20,
+        marginTop: 18,
         color: '#111111',
     },
     liveDateText: {
         fontSize: 14,
         fontFamily: 'Pretendard-Regular',
         marginLeft: 20,
-        marginTop: 12,
+        marginTop: 14,
         color: '#767676',
     },
     updownText: {
@@ -345,7 +398,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Pretendard-Regular',
         marginLeft: 'auto',
         marginRight: 20,
-        marginTop: 12,
+        marginTop: 14,
         color: 'blue',
     },
 
@@ -353,42 +406,47 @@ const styles = StyleSheet.create({
 
     //Ai 세션
     AiSection: {
-        width: '91%',
-        height: 305,
-        borderRadius: 20,
-        marginTop: 20,
-        backgroundColor: '#F5F5F5',
+        width: '100%',
+        height: 330,
     },
     AiTitle: {
         fontSize: 18,
-        fontFamily: 'Pretendard-Regular',
+        fontFamily: 'Pretendard-SemiBold',
         marginLeft: 8
     },
     AiTextView: {
-
+        height: 210,
     },
     AiText: {
         fontSize: 14,
         fontFamily: 'Pretendard-Regular',
         marginLeft: 20,
         marginTop: 12,
-        color: '#767676',
+        color: '#111111',
+    },
+    copyBtn: {
+        width: '91%',
+        height: 51,
+        backgroundColor: '#967DFB',
+        borderRadius: 16,
+        justifyContent: 'center',
+        alignSelf: 'center',
     },
     copyText: {
-        color: '#6C60F1',
-        fontSize: 14,
+        color: '#ffffff',
+        fontSize: 18,
         fontFamily: 'Pretendard-Regular',
-        left: 100
+        alignSelf: 'center',
     },
 
     //삭제 버튼
     DeleteBtn: {
         width: '91%',
         height: 51,
-        borderRadius: 20,
+        borderRadius: 10,
         marginTop: 20,
         marginBottom: 20,
-        backgroundColor: '#6C60F1',
+        backgroundColor: '#967DFB',
         alignItems: 'center',
         justifyContent: 'center',
     },

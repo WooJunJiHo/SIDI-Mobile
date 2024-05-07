@@ -20,6 +20,8 @@ import Icon from 'react-native-vector-icons/Entypo'; // Entypo 아이콘 import
 //패치 데이터
 import { fetchUserAssets } from '../components/Fetch/FetchData';
 import { totalPrices } from '../components/utils/filterPriceList';
+import { Line } from 'react-native-svg';
+import Linechart from '../components/Linechart/LineChart'
 
 const Home = (props) => {
 	const isFocused = useIsFocused();
@@ -48,6 +50,7 @@ const Home = (props) => {
 				setNickname(JSON.parse(user).nickname);
 
 				const priceData = await fetchUserAssets(JSON.parse(user))
+				
 				if (priceData != 0) {
 					const totalValue = totalPrices(priceData)
 					if (totalValue != null) {
@@ -99,7 +102,7 @@ const Home = (props) => {
 										onTouchStart={() => {
 											setButtonScale(0.95);
 											// 스케일이 줄어들 때 배경색 변경
-											setButtonColor('#423A7A'); // 어두운 색상으로 변경
+											setButtonColor('#745FC6'); 
 										}}
 										onTouchEnd={() => {
 											setButtonScale(1);
@@ -128,7 +131,7 @@ const Home = (props) => {
 										onTouchStart={() => {
 											setButtonScale(0.95);
 											// 스케일이 줄어들 때 배경색 변경
-											setButtonColor('#423A7A'); // 어두운 색상으로 변경
+											setButtonColor('#745FC6'); 
 										}}
 										onTouchEnd={() => {
 											setButtonScale(1);
@@ -397,7 +400,7 @@ const styles = StyleSheet.create({
 	},
 	totalText: {
 		fontSize: 18,
-		fontFamily: 'Pretendard-Regular',
+		fontFamily: 'Pretendard-SemiBold',
 		left: 54,
 		top: -18,
 	},
