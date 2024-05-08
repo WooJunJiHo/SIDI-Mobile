@@ -43,7 +43,10 @@ const TabBar = ({ state, descriptors, navigation }) => {
             if (user == null) {
                 navigation.navigate('MyPage', { screen: 'Login' });
             } else {
-                navigation.navigate('MyPage');
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'MyPage' }],
+                });
             }
         } else if (routeName === 'Home') {
             navigation.reset({
