@@ -8,8 +8,6 @@ import {
 	ScrollView,
 	StyleSheet,
 	Image,
-	Dimensions,
-	Button,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
@@ -20,8 +18,6 @@ import Icon from 'react-native-vector-icons/Entypo'; // Entypo 아이콘 import
 //패치 데이터
 import { fetchUserAssets } from '../components/Fetch/FetchData';
 import { totalPrices } from '../components/utils/filterPriceList';
-import { Line } from 'react-native-svg';
-import Linechart from '../components/Linechart/LineChart'
 
 const Home = (props) => {
 	const isFocused = useIsFocused();
@@ -29,17 +25,15 @@ const Home = (props) => {
 	const [totalPrice, setTotalPrice] = useState(0)
 	const [buttonScale, setButtonScale] = useState(1);
 	const [totalScale, setTotalScale] = useState(1);
-	const [animateToNumber, setAnimateToNumber] = useState(1000000 - 64732);
 	const [initialAnimationCompleted, setInitialAnimationCompleted] = useState(true); // 초기 애니메이션 완료 상태로 설정
 	const [buttonColor, setButtonColor] = useState('#967DFB'); // 초기 버튼 색상 설정
-
-	const increase = () => {
-		setAnimateToNumber(animateToNumber + 64732);
-	};
 
 
 	const handleTotalPress = () => {
 		props.navigation.navigate('MyPage');
+	};
+	const handleTotalPress1 = () => {
+		props.navigation.navigate('Explanation');
 	};
 
 	useEffect(() => {
@@ -50,7 +44,7 @@ const Home = (props) => {
 				setNickname(JSON.parse(user).nickname);
 
 				const priceData = await fetchUserAssets(JSON.parse(user))
-				
+
 				if (priceData != 0) {
 					const totalValue = totalPrices(priceData)
 					if (totalValue != null) {
@@ -70,7 +64,13 @@ const Home = (props) => {
 			<ScrollView>
 				<View style={styles.container}>
 					<View style={styles.userSection}>
-						<Text style={styles.userText}>{nickname}</Text>
+						<TouchableOpacity
+							onPress={() => {
+								AsyncStorage.removeItem('@user');
+							}}
+						>
+							<Text style={styles.userText}>{nickname}</Text>
+						</TouchableOpacity>
 					</View>
 
 					<View style={[styles.section, { height: 200, backgroundColor: 'rgba(255, 255, 255, 0)' }]}>
@@ -97,22 +97,25 @@ const Home = (props) => {
 										source={require('../assets/icons/Man.png')}
 										style={styles.illustration}
 									/>
+									<TouchableWithoutFeedback onPress={handleTotalPress1} >
 
-									<View
-										onTouchStart={() => {
-											setButtonScale(0.95);
-											// 스케일이 줄어들 때 배경색 변경
-											setButtonColor('#745FC6'); 
-										}}
-										onTouchEnd={() => {
-											setButtonScale(1);
-											// 스케일이 다시 원래대로 돌아올 때 배경색 원래 색상으로 변경
-											setButtonColor('#967DFB'); // 원래 색상으로 변경
-										}}
-										style={[styles.howButton, { transform: [{ scale: buttonScale }], backgroundColor: buttonColor }]}
-									>
-										<Text style={styles.howText}>방법 보러가기</Text>
-									</View>
+										<View
+											onTouchStart={() => {
+												setButtonScale(0.95);
+												// 스케일이 줄어들 때 배경색 변경
+												setButtonColor('#745FC6');
+											}}
+											onTouchEnd={() => {
+												setButtonScale(1);
+												// 스케일이 다시 원래대로 돌아올 때 배경색 원래 색상으로 변경
+												setButtonColor('#967DFB'); // 원래 색상으로 변경
+											}}
+											style={[styles.howButton, { transform: [{ scale: buttonScale }], backgroundColor: buttonColor }]}
+										>
+											<Text style={styles.howText}>방법 보러가기</Text>
+										</View>
+									</TouchableWithoutFeedback>
+
 								</View>
 							</View>
 
@@ -131,7 +134,7 @@ const Home = (props) => {
 										onTouchStart={() => {
 											setButtonScale(0.95);
 											// 스케일이 줄어들 때 배경색 변경
-											setButtonColor('#745FC6'); 
+											setButtonColor('#745FC6');
 										}}
 										onTouchEnd={() => {
 											setButtonScale(1);
@@ -184,11 +187,6 @@ const Home = (props) => {
 										)}
 										<Text style={{ marginLeft: 5, fontSize: 18, fontFamily: 'Pretendard-SemiBold' }}>원</Text>
 
-										{/* increase 버튼이 없으면 돌아가지 않아서 화면에 나오지 않게만 처리 */}
-										<View style={{ width: 1, height: 20 }}>
-											<Button title="increase" onPress={increase} />
-										</View>
-
 									</View>
 								</View>
 
@@ -202,7 +200,7 @@ const Home = (props) => {
 						</TouchableWithoutFeedback>
 					</View>
 
-					<View style={[styles.section, { height: 300 }]}>
+					<View style={[styles.section, { height: 330 }]}>
 						<Image
 							source={require('../assets/icons/Graph.png')}
 							style={styles.totalGraphImage}

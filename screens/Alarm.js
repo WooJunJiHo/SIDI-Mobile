@@ -1,16 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
   View,
   Text,
   ScrollView,
   StyleSheet,
+  Image,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Alarm = (props) => {
   const [list, setList] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
 
   const [pressedIndex, setPressedIndex] = useState(null); // 눌린 알림의 인덱스
+
+  const [userInfo, setUserInfo] = useState({});
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const userData = await AsyncStorage.getItem("@user");
+        if (userData !== null) {
+          const user = JSON.parse(userData);
+          setUserInfo(user);
+        } else {
+          // 사용자 정보가 없을 때 처리할 부분
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
@@ -31,9 +53,9 @@ const Alarm = (props) => {
               <View>
 
               </View>
-              <View style={styles.alarmImage}></View>
+              <Image style={styles.alarmImage} source={{ uri: userInfo.profileImg }} />
               <Text style={styles.alarmText}>
-                <Text style={styles.highlightText}>백지환</Text> 님이 <Text style={styles.highlightText}>아이폰 12</Text> 자산을 추가했습니다.
+              <Text style={styles.highlightText}>{userInfo.nickname}</Text> 님이 <Text style={styles.highlightText}>아이폰 12</Text> 자산을 추가했습니다.
               </Text>
               <Text style={styles.alarmDate}>17시간</Text>
             </View>

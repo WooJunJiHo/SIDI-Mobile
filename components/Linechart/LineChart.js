@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { LineChart } from "react-native-gifted-charts";
 import { Dimensions } from 'react-native';
 
@@ -8,12 +8,14 @@ const { width } = Dimensions.get('window');
 const Chart = (props) => {
     const ptData = props.ptData
 
-    const [selectedPeriod, setSelectedPeriod] = useState('1일');
+    const [selectedPeriod, setSelectedPeriod] = useState('번개장터');
     const [chartData, setChartData] = useState([]);
     const [chartSpacing, setChartSpacing] = useState((width / ptData.length) - 4.4);
+    const [isPressedBungae, setIsPressedBungae] = useState(false);
+    const [isPressedJoongna, setIsPressedJoongna] = useState(false);
 
     useEffect(() => {
-        handlePeriodSelect('1일');
+        handlePeriodSelect('번개장터');
     }, []);
 
     const handlePeriodSelect = (period) => {
@@ -22,17 +24,13 @@ const Chart = (props) => {
         let newSpacing = 0;
 
         switch (period) {
-            case '1일':
+            case '번개장터':
                 newData = ptData.slice(0, 8);
                 newSpacing = (width / newData.length) - 13.0;
                 break;
-            case '1주':
+            case '중고나라':
                 newData = ptData.slice(0, 16);
-                newSpacing = (width / newData.length) - 8.0;
-                break;
-            case '1달':
-                newData = ptData;
-                newSpacing = (width / newData.length) - 4.4;
+                newSpacing = (width / newData.length) - 16.0;
                 break;
             default:
                 newData = ptData;
@@ -41,6 +39,26 @@ const Chart = (props) => {
 
         setChartData(newData);
         setChartSpacing(newSpacing);
+    };
+
+    const handlePressInBungae = () => {
+        // 번개장터 버튼이 눌렸을 때 스케일을 줄입니다.
+        setIsPressedBungae(true);
+    };
+
+    const handlePressOutBungae = () => {
+        // 번개장터 버튼에서 손을 뗐을 때 스케일을 원래대로 돌려놓습니다.
+        setIsPressedBungae(false);
+    };
+
+    const handlePressInJoongna = () => {
+        // 중고나라 버튼이 눌렸을 때 스케일을 줄입니다.
+        setIsPressedJoongna(true);
+    };
+
+    const handlePressOutJoongna = () => {
+        // 중고나라 버튼에서 손을 뗐을 때 스케일을 원래대로 돌려놓습니다.
+        setIsPressedJoongna(false);
     };
 
     return (
@@ -60,7 +78,7 @@ const Chart = (props) => {
                 endOpacity={0}
                 initialSpacing={36}
                 noOfSections={6}
-                maxValue={800000}
+                maxValue={1500000}
                 yAxisThickness={0}
                 rulesColor="#fafafa"
                 xAxisThickness={0}
@@ -100,15 +118,32 @@ const Chart = (props) => {
                     },
                 }}
             />
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10, bottom: 34, right: 10 }}>
-                <TouchableOpacity onPress={() => handlePeriodSelect('1일')} style={[styles.dayBt, selectedPeriod === '1일' ? styles.selectedButton : styles.unselectedButton]} activeOpacity={1}>
-                    <Text style={[styles.btText, selectedPeriod === '1일' ? styles.selectedButtonText : styles.unselectedButtonText]}>1일</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 28, bottom: 34, right: 10 }}>
+                <TouchableOpacity
+                    onPress={() => handlePeriodSelect('번개장터')}
+                    onPressIn={handlePressInBungae}
+                    onPressOut={handlePressOutBungae}
+                    style={[styles.dayBt, selectedPeriod === '번개장터' ? styles.selectedButton : styles.unselectedButton, { transform: [{ scale: isPressedBungae ? 0.95 : 1 }] }]}
+                    activeOpacity={1}
+                >
+                    <Image
+                        source={require('../../assets/icons/bungaeIcon.png')}
+                        style={styles.flatformImage}
+                    />
+                    <Text style={[styles.btText, selectedPeriod === '번개장터' ? styles.selectedButtonText : styles.unselectedButtonText]}>번개장터</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => handlePeriodSelect('1주')} style={[styles.dayBt, selectedPeriod === '1주' ? styles.selectedButton : styles.unselectedButton]} activeOpacity={1}>
-                    <Text style={[styles.btText, selectedPeriod === '1주' ? styles.selectedButtonText : styles.unselectedButtonText]}>1주</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => handlePeriodSelect('1달')} style={[styles.dayBt, selectedPeriod === '1달' ? styles.selectedButton : styles.unselectedButton]} activeOpacity={1}>
-                    <Text style={[styles.btText, selectedPeriod === '1달' ? styles.selectedButtonText : styles.unselectedButtonText]}>1달</Text>
+                <TouchableOpacity
+                    onPress={() => handlePeriodSelect('중고나라')}
+                    onPressIn={handlePressInJoongna}
+                    onPressOut={handlePressOutJoongna}
+                    style={[styles.dayBt, selectedPeriod === '중고나라' ? styles.selectedButton : styles.unselectedButton, { transform: [{ scale: isPressedJoongna ? 0.95 : 1 }] }]}
+                    activeOpacity={1}
+                >
+                    <Image
+                        source={require('../../assets/icons/joongna Icon.png')}
+                        style={styles.flatformImage2}
+                    />
+                    <Text style={[styles.btText, selectedPeriod === '중고나라' ? styles.selectedButtonText : styles.unselectedButtonText]}>중고나라</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -122,15 +157,16 @@ const styles = StyleSheet.create({
         overflow: 'visible',
     },
     dayBt: {
-        width: 76,
-        height: 36,
-        borderRadius: 10,
+        width: 120,
+        height: 44,
+        borderRadius: 12,
         justifyContent: 'center',
         alignItems: 'center',
+        flexDirection: 'row',
     },
     btText: {
         fontSize: 16,
-        fontWeight: 'medium',
+        fontFamily: 'Pretendard-SemiBold',
     },
     selectedButton: {
         backgroundColor: '#967DFB',
@@ -143,5 +179,15 @@ const styles = StyleSheet.create({
     },
     unselectedButtonText: {
         color: '#767676',
+    },
+    flatformImage: {
+        width: 22,
+        height: 22,
+        marginRight: 6,
+    },
+    flatformImage2: {
+        width: 20,
+        height: 20,
+        marginRight: 6,
     },
 });

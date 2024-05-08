@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Dimensions, Animated, ActivityIndicator, useFonts, Button } from 'react-native';
+import {
+    SafeAreaView,
+    View,
+    Text,
+    TouchableOpacity,
+    ScrollView,
+    Image,
+    StyleSheet,
+    Dimensions,
+    Animated,
+    ActivityIndicator,
+} from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from '../components/styles/Icons'; // Icon 컴포넌트 import 추가
@@ -23,17 +34,12 @@ const MyPage = (props) => {
     const [loading, setLoading] = useState(true);
     const [slideAnimation] = useState(new Animated.Value(0)); // 막대기 위치를 조절할 애니메이션 값
 
-    const [animateToNumber, setAnimateToNumber] = useState(1000000 - 64732);
     const [initialAnimationCompleted, setInitialAnimationCompleted] = useState(true); // 초기 애니메이션 완료 상태로 설정
 
     const [button1Scale, setButton1Scale] = useState(1);
     const [button2Scale, setButton2Scale] = useState(1);
     const [button1Color, setButton1Color] = useState('#CAC5FF');
     const [button2Color, setButton2Color] = useState('#967DFB');
-
-    const increase = () => {
-        setAnimateToNumber(animateToNumber + 64732);
-    };
 
     const handleButton1Press = () => {
         // 버튼1이 눌렸을 때 스케일 줄이기
@@ -80,12 +86,12 @@ const MyPage = (props) => {
                 const assetData = await AsyncStorage.getItem("@assetData");
                 setList(JSON.parse(assetData))
                 const priceData = await fetchUserAssets(JSON.parse(user))
-				if (priceData != 0) {
-					const totalValue = totalPrices(priceData)
-					if (totalValue != null) {
-						setTotalPrice(totalValue)
-					}
-				}
+                if (priceData != 0) {
+                    const totalValue = totalPrices(priceData)
+                    if (totalValue != null) {
+                        setTotalPrice(totalValue)
+                    }
+                }
                 setLoading(false);
             } else {
                 // props.navigation.navigate('Login')
@@ -205,9 +211,9 @@ const MyPage = (props) => {
 
                 {/* person-outline 부분은 setting으로 병합해서 사용자 이름 부분 섹션 클릭하면 로그인 될 수 있도록 구현하게 변경할 것 */}
 
-                <TouchableOpacity style={styles.userBtn} onPress={() => { props.navigation.navigate('Login') }}>
+                {/* <TouchableOpacity style={styles.userBtn} onPress={() => { props.navigation.navigate('Login') }}>
                     <Icon name='person-outline' size={24} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
                 <TouchableOpacity style={styles.settingBtn} onPress={() => { props.navigation.navigate('Setting') }}>
                     <Icon name='settings-sharp' size={24} color={'#767676'} />
@@ -226,11 +232,6 @@ const MyPage = (props) => {
                         />
                     )}
                     <Text style={{ left: 4, fontSize: 18, fontFamily: 'Pretendard-SemiBold', alignSelf: 'center' }}>원</Text>
-                </View>
-
-                {/* increase 버튼이 없으면 돌아가지 않아서 화면에 나오지 않게만 처리 */}
-                <View style={{ width: 1, height: 20 }}>
-                    <Button title="increase" onPress={increase} />
                 </View>
 
                 <View style={styles.btnView}>
@@ -326,7 +327,7 @@ const styles = StyleSheet.create({
     btnView: {
         flexDirection: 'row',
         alignSelf: 'center',
-        top: 12,
+        top: 36,
     },
     btn: {
         width: '48%',

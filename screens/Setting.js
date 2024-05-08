@@ -6,8 +6,9 @@ import {
     Image,
     TouchableWithoutFeedback,
 } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/Entypo'; // Entypo 아이콘 import
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Setting = (props) => {
     const [pressedBtn, setPressedBtn] = useState(null);
@@ -19,6 +20,27 @@ const Setting = (props) => {
     const handlePressOut = () => {
         setPressedBtn(null);
     };
+
+    const [userInfo, setUserInfo] = useState({});
+
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            try {
+                const userData = await AsyncStorage.getItem("@user");
+                if (userData !== null) {
+                    const user = JSON.parse(userData);
+                    setUserInfo(user);
+                } else {
+                    props.navigation.navigate('Login');
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        fetchUserInfo();
+
+    }, []);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -36,8 +58,8 @@ const Setting = (props) => {
 
                 {/* 내 정보 세션 */}
                 <View style={styles.infoSection}>
-                    <View style={styles.infoImage}></View>
-                    <Text style={styles.infoName}>백지환</Text>
+                    <Image style={styles.infoImage} source={{ uri: userInfo.profileImg }} />
+                    <Text style={styles.infoName}>{userInfo.nickname}</Text>
                 </View>
             </View>
 

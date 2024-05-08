@@ -33,33 +33,29 @@ const TabBar = ({ state, descriptors, navigation }) => {
         setSelectedIcon(null); // 아이콘에서 손을 뗐을 때 선택된 아이콘 해제
     };
 
-    const handleTabPress = (routeName) => {
+    const handleTabPress = async (routeName) => {
         if (selectedIcon === routeName) {
             setSelectedIcon(null); // 이미 선택된 아이콘을 다시 누를 경우 선택 해제
         }
 
         if (routeName === 'MyPage') {
-            const fetchLogin = async() => {
-                const user = await AsyncStorage.getItem("@user");
-                if (user == null) {
-                    navigation.navigate('MyPage', {screen: 'Login'});
-                } else {
-                    navigation.navigate('MyPage');
-                }
+            const user = await AsyncStorage.getItem("@user");
+            if (user == null) {
+                navigation.navigate('MyPage', { screen: 'Login' });
+            } else {
+                navigation.navigate('MyPage');
             }
-            fetchLogin()
+        } else if (routeName === 'Home') {
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Home' }],
+            });
         } else {
-            const fetchLogin = async() => {
-                const user = await AsyncStorage.getItem("@user");
-                if (user == null) {
-                    navigation.navigate('MyPage', {screen: 'Login'});
-                } else {
-                    navigation.navigate(routeName);
-                }
-            }
-            fetchLogin() 
+            navigation.navigate(routeName);
         }
     };
+
+
 
     return (
         <View style={styles.container}>
@@ -115,7 +111,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
                                             source={iconName}
                                             style={{
                                                 width: 24,
-                                                height: 24.5,
+                                                height: 24.4,
                                             }}
                                         />
                                     </Animated.View>

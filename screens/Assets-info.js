@@ -104,7 +104,7 @@ const AssetsInfo = (props) => {
 
     // 데이터 예시 (텍스트와 스타일을 포함하는 배열)
     const data = [
-        { text: '조서진 박유빈 김수민 주서진 레츠고', style: styles.AiText },
+        { text: '복사가 되나요? 테스트용입니당', style: styles.AiText },
     ];
 
     const getCurrentDateTime = () => {
@@ -181,7 +181,7 @@ const AssetsInfo = (props) => {
                     <View style={styles.priceSection}>
                         <View style={{ flexDirection: 'row' }}>
                             <Image
-                                source={require('../assets/icons/bungae Icon.png')}
+                                source={require('../assets/icons/bungaeIcon.png')}
                                 style={styles.flatformImage}
                             />
                             <Text style={styles.flatformText}>번개장터</Text>
@@ -335,7 +335,7 @@ const styles = StyleSheet.create({
     //중고 거래 플랫폼 시세 차트 세션
     priceChartSection: {
         width: '91%',
-        height: 320,
+        height: 330,
         borderRadius: 20,
         backgroundColor: '#f5f5f5',
         marginTop: 12,
@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
     },
 
     flatformImage: {
-        top: 15,
+        top: 16,
         left: 20,
         width: 24,
         height: 24,
@@ -374,7 +374,7 @@ const styles = StyleSheet.create({
     flatformText: {
         fontSize: 18,
         fontFamily: 'Pretendard-SemiBold',
-        marginLeft: 26,
+        marginLeft: 28,
         marginTop: 18,
         color: '#111111',
     },

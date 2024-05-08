@@ -22,7 +22,7 @@ import MyPage from './screens/MyPage';
 import Login from './screens/Login';
 import Setting from './screens/Setting';
 import Scanner from './screens/BarCodeScanner';
-
+import Explanation from './screens/Explanation';
 
 
 //탭바 스타일
@@ -39,6 +39,7 @@ const Stack = createStackNavigator();
 const MainStack = () => (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Main" component={Main} />
+        <Stack.Screen name="Explanation" component={Explanation} />
     </Stack.Navigator>
 );
 
