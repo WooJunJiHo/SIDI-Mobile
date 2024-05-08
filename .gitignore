@@ -5,3 +5,6 @@ node_modules
 env.js
 
 assets/icons/icon.png
+
+ios
+android
