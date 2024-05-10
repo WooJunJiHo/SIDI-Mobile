@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
 	explanationSubText: {
 		position: 'absolute',
 		color: '#767676',
-		fontFamily: 'Pretendard-light',
+		fontFamily: 'Pretendard-Light',
 		fontSize: 14,
 		left: 20,
 		top: 20,

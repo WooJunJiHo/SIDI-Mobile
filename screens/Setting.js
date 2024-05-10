@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     btnText: {
         fontSize: 18,
         fontFamily: 'Pretendard-Regular',
-        left: 12,
+        left: 16,
     },
     btnIcon: {
         position: 'absolute',

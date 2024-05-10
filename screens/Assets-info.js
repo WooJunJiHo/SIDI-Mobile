@@ -121,7 +121,7 @@ const AssetsInfo = (props) => {
     if (loading == true) {
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Image style={{ width: 300, height: 300 }} source={require('../assets/icons/SIDI Logo.gif')} />
+                <Image style={{ width: '100%', height: '100%' }} source={require('../assets/icons/SIDI Logo.gif')} />
             </View>
 
         )
@@ -302,11 +302,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontFamily: 'Pretendard-SemiBold',
         marginTop: 20,
-        marginBottom: 20,
+        marginBottom: 10,
     },
     infoDate: {
         fontSize: 14,
-        fontFamily: 'Pretendar-Light',
+        fontFamily: 'Pretendard-Light',
         color: '#767676',
     },
     stateContainer: {
@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
         height: 86,
         borderRadius: 20,
         backgroundColor: '#f5f5f5',
-        marginTop: 20,
+        marginTop: 30,
     },
 
     flatformImage: {

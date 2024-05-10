@@ -41,6 +41,9 @@ const MyPage = (props) => {
     const [button1Color, setButton1Color] = useState('#CAC5FF');
     const [button2Color, setButton2Color] = useState('#967DFB');
 
+    const [deletionMode, setDeletionMode] = useState(false); // 삭제 모드를 추적하는 상태
+    const [selectedImages, setSelectedImages] = useState([]); // 선택한 이미지를 추적하는 상태
+    
     const handleButton1Press = () => {
         // 버튼1이 눌렸을 때 스케일 줄이기
         setButton1Scale(0.95);
@@ -75,14 +78,48 @@ const MyPage = (props) => {
         setButton2Color('#967DFB');
     };
 
+    const toggleDeletionMode = () => {
+        setDeletionMode(prevMode => !prevMode); // 삭제 모드를 토글
+
+        // 버튼 텍스트를 동적으로 변경
+        if (!deletionMode) {
+            // 삭제 모드로 전환되면 "삭제 취소"로 변경
+            setButtonText("삭제 취소");
+        } else {
+            // 삭제 모드에서 다시 일반 모드로 변경되면 "자산 삭제"로 변경
+            setButtonText("자산 삭제");
+        }
+    };
+
+    const [buttonText, setButtonText] = useState("자산 삭제");
+
+    const handleImagePress = (assetID) => {
+        if (deletionMode) {
+            // 삭제 모드에서 이미지를 선택하거나 해제합니다.
+            setSelectedImages(prevSelected => {
+                if (prevSelected.includes(assetID)) {
+                    // 이미 선택된 이미지를 선택 해제합니다.
+                    return prevSelected.filter(id => id !== assetID);
+                } else {
+                    // 이미지를 선택합니다.
+                    return [...prevSelected, assetID];
+                }
+            });
+        } else {
+            // 삭제 모드가 아닌 경우, 이미지 클릭은 기존과 같이 처리됩니다.
+            props.navigation.navigate('MyAssetsInfo', { assetID });
+        }
+    };
 
     useEffect(() => {
         const fetchUser = async () => {
             setLoading(true);
             const user = await AsyncStorage.getItem("@user");
             if (user !== null) {
+                setLoading(true);
                 const imageData = await AsyncStorage.getItem("@imageData");
                 setImage(JSON.parse(imageData))
+                setLoading(false);
                 const assetData = await AsyncStorage.getItem("@assetData");
                 setList(JSON.parse(assetData))
                 const priceData = await fetchUserAssets(JSON.parse(user))
@@ -128,9 +165,6 @@ const MyPage = (props) => {
     });
 
 
-
-
-
     const AssetList = () => {
         return (
             <>
@@ -149,10 +183,8 @@ const MyPage = (props) => {
                         return (
                             <TouchableOpacity
                                 key={idx}
-                                style={styles.listView}
-                                onPress={() => {
-                                    props.navigation.navigate('MyAssetsInfo', { assetID: item.AssetsID })
-                                }}
+                                style={[styles.listView, deletionMode && selectedImages.includes(item.AssetsID) && styles.selectedImage]} // 삭제 모드이고 선택된 이미지인 경우에만 스타일을 적용합니다.
+                                onPress={() => handleImagePress(item.AssetsID)}
                             >
                                 <Image
                                     source={{ uri: imageURL }}
@@ -175,10 +207,8 @@ const MyPage = (props) => {
                         return (
                             <TouchableOpacity
                                 key={idx}
-                                style={styles.listView}
-                                onPress={() => {
-                                    props.navigation.navigate('MyAssetsInfo', { assetID: item.AssetsID })
-                                }}
+                                style={[styles.listView, deletionMode && selectedImages.includes(item.AssetsID) && styles.selectedImage]} // 삭제 모드이고 선택된 이미지인 경우에만 스타일을 적용합니다.
+                                onPress={() => handleImagePress(item.AssetsID)}
                             >
                                 <Image
                                     source={{ uri: imageURL }}
@@ -192,13 +222,6 @@ const MyPage = (props) => {
         )
     }
 
-
-
-
-
-
-
-
     if (loading == true) {
         return (
             <ActivityIndicator size={'large'} />
@@ -208,13 +231,6 @@ const MyPage = (props) => {
         <SafeAreaView style={[styles.container]}>
             <View style={styles.titleSection}>
                 <Text style={styles.mainTitle}>내 자산</Text>
-
-                {/* person-outline 부분은 setting으로 병합해서 사용자 이름 부분 섹션 클릭하면 로그인 될 수 있도록 구현하게 변경할 것 */}
-
-                {/* <TouchableOpacity style={styles.userBtn} onPress={() => { props.navigation.navigate('Login') }}>
-                    <Icon name='person-outline' size={24} />
-                </TouchableOpacity> */}
-
                 <TouchableOpacity style={styles.settingBtn} onPress={() => { props.navigation.navigate('Setting') }}>
                     <Icon name='settings-sharp' size={24} color={'#767676'} />
                 </TouchableOpacity>
@@ -222,7 +238,6 @@ const MyPage = (props) => {
 
             <View style={styles.priceSection}>
                 <Text style={styles.priceSubText}>총 자산</Text>
-                {/* <Text style={styles.priceMainText}>{totalPrice} 원</Text> */}
                 <View style={{ flexDirection: 'row', top: 8 }}>
                     {initialAnimationCompleted && (
                         <AnimatedNumbers
@@ -237,11 +252,12 @@ const MyPage = (props) => {
                 <View style={styles.btnView}>
                     <TouchableOpacity
                         style={[styles.btn, { transform: [{ scale: button1Scale }], backgroundColor: button1Color }]}
+                        onPress={toggleDeletionMode}
                         onPressIn={handleButton1Press}
                         onPressOut={handleButton1Release}
                         activeOpacity={1}
                     >
-                        <Text style={styles.btnText}>뭐 넣지</Text>
+                        <Text style={styles.btnText}>{buttonText}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[styles.btn1, { transform: [{ scale: button2Scale }], backgroundColor: button2Color }]}
@@ -315,7 +331,7 @@ const styles = StyleSheet.create({
     },
     priceSubText: {
         color: '#111111',
-        fontFamily: 'Pretendard-light',
+        fontFamily: 'Pretendard-Light',
         fontSize: 18,
     },
     priceMainText: {
@@ -400,6 +416,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#f5f5f5',
+    },
+    selectedImage: {
+        borderWidth: 3,
+        borderColor: '#5B40C4',
     },
 });
 
