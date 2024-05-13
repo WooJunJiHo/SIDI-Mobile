@@ -5,14 +5,25 @@ import { Dimensions } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
+//데이터 필터링 
+import { subtractMaxValue } from '../utils/filterPriceList';
+
 const Chart = (props) => {
     const ptData = props.ptData
 
+    const maxValue = subtractMaxValue(ptData);
+
     const [selectedPeriod, setSelectedPeriod] = useState('번개장터');
     const [chartData, setChartData] = useState([]);
-    const [chartSpacing, setChartSpacing] = useState((width / ptData.length) - 4.4);
+    const [chartSpacing, setChartSpacing] = useState(0);
     const [isPressedBungae, setIsPressedBungae] = useState(false);
     const [isPressedJoongna, setIsPressedJoongna] = useState(false);
+
+
+    const onLayout = (event) => {
+        const { width } = event.nativeEvent.layout;
+        setChartSpacing((width / chartData.length));
+      };
     
     const selectedPlatform = props.selectedPlatform;
 
@@ -82,7 +93,7 @@ const Chart = (props) => {
                 endOpacity={0}
                 initialSpacing={36}
                 noOfSections={6}
-                maxValue={500000}
+                maxValue={maxValue + (maxValue * 1)}
                 yAxisThickness={0}
                 rulesColor="#fafafa"
                 xAxisThickness={0}

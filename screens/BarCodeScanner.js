@@ -71,6 +71,7 @@ const Scanner = (props) => {
                                 const imageData = await fetchAssetsImages(user.userID)
                                 await AsyncStorage.setItem("@imageData", JSON.stringify(imageData));
                                 const assetData = await fetchUserAssets(user)
+                                console.log(assetData)
                                 await AsyncStorage.setItem("@assetData", JSON.stringify(assetData));
                                 setLoad(false)
                                 props.navigation.navigate('MyPage')

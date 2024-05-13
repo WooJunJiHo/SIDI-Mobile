@@ -8,6 +8,7 @@ import {
 	ScrollView,
 	StyleSheet,
 	Image,
+	RefreshControl,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
@@ -22,12 +23,14 @@ import { totalPrices } from '../components/utils/filterPriceList';
 //라인 그래프
 import Linechart from '../components/Linechart/LineChart';
 
+// import PTRView from 'react-native-pull-to-refresh';
+
 //테스트 밸류
 const testValue = [
-	{ date : '2024-05-05', value : 100000 }, 
-	{ date : '2024-05-06', value : 300000 }, 
-	{ date : '2024-05-07', value : 300000 }, 
-	{ date : '2024-05-08', value : 200000 }, 
+	{ date: '2024-05-05', value: 100000 },
+	{ date: '2024-05-06', value: 300000 },
+	{ date: '2024-05-07', value: 300000 },
+	{ date: '2024-05-08', value: 200000 },
 ]
 
 const Home = (props) => {
@@ -38,6 +41,33 @@ const Home = (props) => {
 	const [totalScale, setTotalScale] = useState(1);
 	const [initialAnimationCompleted, setInitialAnimationCompleted] = useState(true); // 초기 애니메이션 완료 상태로 설정
 	const [buttonColor, setButtonColor] = useState('#967DFB'); // 초기 버튼 색상 설정
+
+	const [refreshing, setRefreshing] = useState(false);
+
+	const handleRefresh = async () => {
+		setRefreshing(true);
+		try {
+			// 사용자 정보를 다시 불러옵니다.
+			const user = await AsyncStorage.getItem('@user');
+
+			if (user !== null) {
+				setNickname(JSON.parse(user).nickname);
+
+				const priceData = await fetchUserAssets(JSON.parse(user));
+
+				if (priceData != 0) {
+					const totalValue = totalPrices(priceData);
+					if (totalValue != null) {
+						setTotalPrice(totalValue);
+					}
+				}
+			}
+		} catch (error) {
+			console.error('Error refreshing data:', error);
+		}
+		console.log('새로고침');
+		setRefreshing(false);
+	};
 
 	const handleTotalPress = () => {
 		props.navigation.navigate('MyPage');
@@ -70,8 +100,16 @@ const Home = (props) => {
 	}, [isFocused]);
 
 	return (
-		<SafeAreaView style={{ flex: 1 }}>
-			<ScrollView>
+
+		<SafeAreaView style={{ flex: 1 }} >
+			<ScrollView
+				refreshControl={
+					<RefreshControl
+						refreshing={refreshing}
+						onRefresh={handleRefresh}
+					/>
+				}
+			>
 				<View style={styles.container}>
 					<View style={styles.userSection}>
 						<TouchableOpacity
@@ -253,11 +291,9 @@ const Home = (props) => {
 							<Text style={styles.smallsectionText}>중고 거래글 {'\n'}작성 AI</Text>
 						</View>
 					</ScrollView>
-
 				</View>
-
 			</ScrollView>
-		</SafeAreaView>
+		</SafeAreaView >
 	);
 };
 
