@@ -28,7 +28,6 @@ const Home = (props) => {
 	const [initialAnimationCompleted, setInitialAnimationCompleted] = useState(true); // 초기 애니메이션 완료 상태로 설정
 	const [buttonColor, setButtonColor] = useState('#967DFB'); // 초기 버튼 색상 설정
 
-
 	const handleTotalPress = () => {
 		props.navigation.navigate('MyPage');
 	};

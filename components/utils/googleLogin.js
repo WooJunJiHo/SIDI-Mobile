@@ -6,6 +6,9 @@ import {
     Button,
     Image,
     View,
+    TouchableOpacity,
+    StyleSheet,
+    Text,
 } from 'react-native'
 import { useState, useEffect } from 'react';
 
@@ -67,7 +70,7 @@ export const GoogleLogin = (props) => {
                     headers: { Authorization: `Bearer ${token}` },
                 }
             );
-            
+
             const userInfoResponse = await response.json();
             // 유저 정보를 AsyncStorage에 저장, 상태업뎃
             const data = {
@@ -75,7 +78,7 @@ export const GoogleLogin = (props) => {
                 email: userInfoResponse.email,
                 profileImg: userInfoResponse.picture,
             }
-            
+
 
             const userData = await fetchLogin(data)
             await AsyncStorage.setItem("@user", JSON.stringify(userData));
@@ -101,16 +104,48 @@ export const GoogleLogin = (props) => {
 
     if (loading == true) {
         return (
-            <Image style={{ width: 300, height: 300 }} source={require('../../assets/icons/SIDI Logo.gif')} />
+            <Image style={{ width: '100%', height: '100%' }} source={require('../../assets/icons/SIDI Logo.gif')} />
         )
     }
     return (
-        <Button
-            disabled={!request}
-            title="Google Login"
-            onPress={() => {
-                promptAsync();
-            }}
-        />
+        <View>
+            <TouchableOpacity
+                disabled={!request}
+                onPress={() => {
+                    promptAsync();
+                }}
+                style={styles.buttonStyle}
+            >
+                <Image
+                    source={require('../../assets/icons/Google Icon.png')}
+                    style={styles.googleImage}
+                />
+                <Text style={styles.loginText}>Google 로그인</Text>
+            </TouchableOpacity>
+        </View>
+
     )
 }
+
+const styles = StyleSheet.create({
+    buttonStyle: {
+        width: 320,
+        height: 60,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 16,
+        borderColor: '#DBDBDB',
+        backgroundColor: '#F5F5F5',
+        flexDirection: 'row',
+    },
+    loginText: {
+        fontFamily: 'Pretendard-SemiBold',
+        fontSize: 16,
+        marginLeft: 8,
+        marginRight: 8,
+    },
+    googleImage: {
+        width: 34,
+        height: 34,
+    }
+})

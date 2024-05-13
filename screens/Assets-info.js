@@ -35,6 +35,12 @@ const AssetsInfo = (props) => {
     const [prices, setPrices] = useState(null);
     const [average, setAverage] = useState('');
 
+    const [selectedPlatform, setSelectedPlatform] = useState("번개장터"); // 선택된 플랫폼 상태
+
+    // 번개장터 또는 중고나라 선택 시 해당 정보를 저장하고, Chart 컴포넌트에 전달
+    const handlePlatformSelect = (platform) => {
+        setSelectedPlatform(platform);
+    };
 
     // 로딩 상태
     const [loading, setLoading] = useState(true);
@@ -178,23 +184,44 @@ const AssetsInfo = (props) => {
 
 
                     {/* 중고 거래 플랫폼 시세 세션 */}
-                    <View style={styles.priceSection}>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Image
-                                source={require('../assets/icons/bungaeIcon.png')}
-                                style={styles.flatformImage}
-                            />
-                            <Text style={styles.flatformText}>번개장터</Text>
-                            <Text style={styles.flatformPrice}>{average.toLocaleString()} 원</Text>
+                    {selectedPlatform === '번개장터' && (
+                        <View style={styles.priceSection}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Image
+                                    source={require('../assets/icons/bungaeIcon.png')}
+                                    style={styles.flatformImage}
+                                />
+                                <Text style={styles.flatformText}>번개장터</Text>
+                                <Text style={styles.flatformPrice}>{average.toLocaleString()} 원</Text>
+
+                            </View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={styles.liveDateText}>{currentDateTimeString} 기준</Text>
+                                <Text style={styles.updownText}>%</Text>
+                            </View>
 
                         </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={styles.liveDateText}>{currentDateTimeString} 기준</Text>
-                            <Text style={styles.updownText}>%</Text>
+                    )}
+
+                    {selectedPlatform === '중고나라' && (
+                        <View style={styles.priceSection}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Image
+                                    source={require('../assets/icons/joongna Icon.png')}
+                                    style={styles.flatformImage}
+                                />
+                                <Text style={styles.flatformText}>중고나라</Text>
+                                <Text style={styles.flatformPrice}>{average.toLocaleString()} 원</Text>
+
+                            </View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={styles.liveDateText}>{currentDateTimeString} 기준</Text>
+                                <Text style={styles.updownText}>%</Text>
+                            </View>
+
                         </View>
 
-                    </View>
-
+                    )}
 
                     {/* 중고 거래 플랫폼 시세 차트 세션 */}
                     <View style={styles.priceChartSection}>
@@ -203,11 +230,10 @@ const AssetsInfo = (props) => {
                             style={styles.totalGraphImage}
                         />
                         <Text style={styles.totalText}>가격 그래프</Text>
-                        <Linechart ptData={prices} />
+                        <Linechart ptData={prices} selectedPlatform={selectedPlatform} onPlatformSelect={handlePlatformSelect} />
                     </View>
 
                     <View style={{ width: '100%', height: 1, backgroundColor: '#f5f5f5', marginTop: 16 }}></View>
-
 
                     {/* AI가 작성해주는 글 세션 */}
                     <View style={styles.AiSection}>
@@ -241,7 +267,7 @@ const AssetsInfo = (props) => {
 
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaView >
     );
 };
 

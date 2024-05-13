@@ -13,6 +13,8 @@ const Chart = (props) => {
     const [chartSpacing, setChartSpacing] = useState((width / ptData.length) - 4.4);
     const [isPressedBungae, setIsPressedBungae] = useState(false);
     const [isPressedJoongna, setIsPressedJoongna] = useState(false);
+    
+    const selectedPlatform = props.selectedPlatform;
 
     useEffect(() => {
         handlePeriodSelect('번개장터');
@@ -49,6 +51,7 @@ const Chart = (props) => {
     const handlePressOutBungae = () => {
         // 번개장터 버튼에서 손을 뗐을 때 스케일을 원래대로 돌려놓습니다.
         setIsPressedBungae(false);
+        props.onPlatformSelect('번개장터');
     };
 
     const handlePressInJoongna = () => {
@@ -59,6 +62,7 @@ const Chart = (props) => {
     const handlePressOutJoongna = () => {
         // 중고나라 버튼에서 손을 뗐을 때 스케일을 원래대로 돌려놓습니다.
         setIsPressedJoongna(false);
+        props.onPlatformSelect('중고나라');
     };
 
     return (
@@ -120,7 +124,10 @@ const Chart = (props) => {
             />
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 28, bottom: 34, right: 10 }}>
                 <TouchableOpacity
-                    onPress={() => handlePeriodSelect('번개장터')}
+                    onPress={() => {
+                        handlePeriodSelect('번개장터');
+                        props.onPlatformSelect('번개장터'); // 버튼 클릭 시 번개장터를 선택한 것으로 전달
+                    }}
                     onPressIn={handlePressInBungae}
                     onPressOut={handlePressOutBungae}
                     style={[styles.dayBt, selectedPeriod === '번개장터' ? styles.selectedButton : styles.unselectedButton, { transform: [{ scale: isPressedBungae ? 0.95 : 1 }] }]}
@@ -133,7 +140,10 @@ const Chart = (props) => {
                     <Text style={[styles.btText, selectedPeriod === '번개장터' ? styles.selectedButtonText : styles.unselectedButtonText]}>번개장터</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => handlePeriodSelect('중고나라')}
+                    onPress={() => {
+                        handlePeriodSelect('중고나라');
+                        props.onPlatformSelect('중고나라'); // 버튼 클릭 시 번개장터를 선택한 것으로 전달
+                    }}
                     onPressIn={handlePressInJoongna}
                     onPressOut={handlePressOutJoongna}
                     style={[styles.dayBt, selectedPeriod === '중고나라' ? styles.selectedButton : styles.unselectedButton, { transform: [{ scale: isPressedJoongna ? 0.95 : 1 }] }]}

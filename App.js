@@ -27,6 +27,7 @@ import Explanation from './screens/Explanation';
 
 //탭바 스타일
 import TabBar from './components/styles/TabBar';
+import Home from './screens/Main';
 
 
 

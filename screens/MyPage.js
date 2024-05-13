@@ -62,7 +62,14 @@ const MyPage = (props) => {
         // 버튼1 스케일과 색상 초기화
         setButton1Scale(1);
         setButton1Color('#CAC5FF');
+    
+        if (deletionMode) {
+            
+        } else {
+            props.navigation.navigate('Scan');
+        }
     };
+    
 
     const handleButton1Release = () => {
         // 버튼1을 뗄 때 원래 스케일로 돌리기
@@ -85,13 +92,16 @@ const MyPage = (props) => {
         if (!deletionMode) {
             // 삭제 모드로 전환되면 "삭제 취소"로 변경
             setButtonText("삭제 취소");
+            setButtonText1("삭제 하기");
         } else {
             // 삭제 모드에서 다시 일반 모드로 변경되면 "자산 삭제"로 변경
             setButtonText("자산 삭제");
+            setButtonText1("자산 추가");
         }
     };
 
     const [buttonText, setButtonText] = useState("자산 삭제");
+    const [buttonText1, setButtonText1] = useState("자산 추가");
 
     const handleImagePress = (assetID) => {
         if (deletionMode) {
@@ -134,7 +144,7 @@ const MyPage = (props) => {
                 // props.navigation.navigate('Login')
             }
         };
-
+ 
         fetchUser();
     }, [isFocused]);
 
@@ -261,12 +271,11 @@ const MyPage = (props) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[styles.btn1, { transform: [{ scale: button2Scale }], backgroundColor: button2Color }]}
-                        onPress={() => { props.navigation.navigate('Scan') }}
                         onPressIn={handleButton2Press}
                         onPressOut={handleButton2Release}
                         activeOpacity={1}
                     >
-                        <Text style={styles.btnText1}>자산 추가</Text>
+                        <Text style={styles.btnText1}>{buttonText1}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
