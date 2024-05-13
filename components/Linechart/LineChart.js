@@ -125,7 +125,7 @@ const Chart = (props) => {
                                 </Text>
                                 <View style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 16, backgroundColor: '#6C60F1', width: 70 }}>
                                     <Text style={{ fontWeight: 'bold', textAlign: 'center', color: '#FFFFFF' }}>
-                                        {'$' + items[0].value + '.0'}
+                                        {items[0].value}
                                     </Text>
                                 </View>
                             </View>
