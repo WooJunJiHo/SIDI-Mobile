@@ -78,7 +78,7 @@ const Chart = (props) => {
                 endOpacity={0}
                 initialSpacing={36}
                 noOfSections={6}
-                maxValue={1500000}
+                maxValue={500000}
                 yAxisThickness={0}
                 rulesColor="#fafafa"
                 xAxisThickness={0}
