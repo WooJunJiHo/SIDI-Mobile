@@ -12,9 +12,13 @@ export const filterPriceList = (list, asset) => {
 
     let currentDate = new Date(earliestDate);
 
+
+    //오류
     while (currentDate <= latestDate) {
-        const currentDateISO = currentDate.toISOString();
+        const currentDateISO = currentDate.toISOString().substring(0, 10);
         const existingData = modelList.find(item => item.DATE === currentDateISO);
+
+        modelList.map((item, idx) => console.log(item.DATE))
 
         if (existingData) {
             filledData.push(existingData);
@@ -33,6 +37,7 @@ export const filterPriceList = (list, asset) => {
         currentDate.setDate(currentDate.getDate() + 1);
     }
 
+
     // 같은 날짜의 데이터를 합산하고 개수로 나누어 평균을 계산한 후, 평균 값을 가지고 있는 배열 생성
     const transformedData = filledData.reduce((acc, item) => {
         const dateKey = new Date(item.DATE).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -50,6 +55,7 @@ export const filterPriceList = (list, asset) => {
         value: transformedData[dateKey].totalPrice / transformedData[dateKey].count,
         date: dateKey
     }));
+
 
     return averagedData;
 };

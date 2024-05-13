@@ -208,15 +208,6 @@ const AssetsInfo = (props) => {
 
                     <View style={{ width: '100%', height: 1, backgroundColor: '#f5f5f5', marginTop: 16 }}></View>
 
-                    {/* 삭제 버튼 */}
-                    {/* <TouchableOpacity
-                        onPressIn={handleDeleteButtonPressIn}
-                        onPressOut={handleDeleteButtonPressOut}
-                        style={[styles.DeleteBtn, { transform: [{ scale: isDeleteButtonPressed ? 0.95 : 1 }], backgroundColor: isDeleteButtonPressed ? '#C1AFFF' : '#967DFB' }]}
-                        activeOpacity={1}
-                    >
-                        <Text style={styles.DeleteText}>삭제 하기</Text>
-                    </TouchableOpacity> */}
 
                     {/* AI가 작성해주는 글 세션 */}
                     <View style={styles.AiSection}>
