@@ -18,8 +18,6 @@ export const filterPriceList = (list, asset) => {
         const currentDateISO = currentDate.toISOString().substring(0, 10);
         const existingData = modelList.find(item => item.DATE === currentDateISO);
 
-        modelList.map((item, idx) => console.log(item.DATE))
-
         if (existingData) {
             filledData.push(existingData);
         } else {
@@ -77,10 +75,14 @@ export const priceAverage = (list) => {
 
 export const totalPrices = (list) => {
     // 모든 가격을 합산
-    const totalPrice = list.reduce((acc, item) => {
+    const totalPrice = list.r1educe((acc, item) => {
         // 가격이 존재하는 경우에만 합산
         if (item.PRICE !== null && typeof item.PRICE === 'number') {
             acc += item.PRICE;
+        }
+        if (acc === 0 || acc === null || acc === undefined) {
+            acc = 0;
+            return acc;
         }
         return acc;
     }, 0);

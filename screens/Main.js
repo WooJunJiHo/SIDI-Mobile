@@ -217,7 +217,7 @@ const Home = (props) => {
 							style={styles.totalGraphImage}
 						/>
 						<Text style={styles.totalText}>총 자산 그래프</Text>
-						<Linechart ptData={testValue} />
+						<Linechart maxValue={1000000} ptData={testValue} />
 					</View>
 				</View>
 				<View style={{ width: '100%', alignSelf: 'center', flexDirection: 'row' }}>
