@@ -19,6 +19,17 @@ import Icon from 'react-native-vector-icons/Entypo'; // Entypo 아이콘 import
 import { fetchUserAssets } from '../components/Fetch/FetchData';
 import { totalPrices } from '../components/utils/filterPriceList';
 
+//라인 그래프
+import Linechart from '../components/Linechart/LineChart';
+
+//테스트 밸류
+const testValue = [
+	{ date : '2024-05-05', value : 100000 }, 
+	{ date : '2024-05-06', value : 300000 }, 
+	{ date : '2024-05-07', value : 300000 }, 
+	{ date : '2024-05-08', value : 200000 }, 
+]
+
 const Home = (props) => {
 	const isFocused = useIsFocused();
 	const [nickname, setNickname] = useState('로그인 해주세요!');
@@ -206,6 +217,7 @@ const Home = (props) => {
 							style={styles.totalGraphImage}
 						/>
 						<Text style={styles.totalText}>총 자산 그래프</Text>
+						<Linechart ptData={testValue} />
 					</View>
 				</View>
 				<View style={{ width: '100%', alignSelf: 'center', flexDirection: 'row' }}>

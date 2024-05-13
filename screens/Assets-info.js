@@ -87,6 +87,13 @@ const AssetsInfo = (props) => {
     }, [isFocused]);
 
 
+    // 데이터 예시 (텍스트와 스타일을 포함하는 배열)
+    const data = [
+        { text: `복사가 되나요? 테스트용입니당`, style: styles.AiText },
+        { text: `이것은 테스트용 텍스트입니다.`, style: styles.AiText },
+    ];
+
+
 
     // 복사하기 버튼 핸들러
     const handleCopyText = () => {
@@ -101,11 +108,6 @@ const AssetsInfo = (props) => {
         Clipboard.setString(copiedText.trim());
         // 복사 완료 메시지 또는 처리를 여기에 추가할 수 있습니다.
     };
-
-    // 데이터 예시 (텍스트와 스타일을 포함하는 배열)
-    const data = [
-        { text: '복사가 되나요? 테스트용입니당', style: styles.AiText },
-    ];
 
     const getCurrentDateTime = () => {
         // 현재 시간을 가져오기 위해 Date 객체 생성
