@@ -18,6 +18,7 @@ const Scanner = (props) => {
 
     const [user, setUser] = useState(null)
     const [priceList, setPriceList] = useState(null)
+    const [imageList, setImageList] = useState(null)
     const [load, setLoad] = useState(false)
 
     const [hasPermission, setHasPermission] = useState(null);
@@ -36,9 +37,11 @@ const Scanner = (props) => {
     useEffect(() => {
         const fetchLogin = async () => {
             const users = await AsyncStorage.getItem("@user");
+            const imageData = await AsyncStorage.getItem("@imageData");
             const priceData = await AsyncStorage.getItem("@priceData");
             setUser(JSON.parse(users))
             setPriceList(JSON.parse(priceData))
+            setImageList(JSON.parse(imageData))
         }
         fetchLogin()
     }, [isFocused])
@@ -66,12 +69,11 @@ const Scanner = (props) => {
                                 })
                                 for (i = 1; i <= 4; i++) {
                                     await updateAssetImage(`${keys.flaskURL}/image_${i}`, user.userID, i, JSON.parse(data).id)
+                                    await imageList.push({url: `${keys.flaskURL}/image_${i}`, name: `${JSON.parse(data).id}_${i}.jpeg`, assetID: `${JSON.parse(data).id}`, imageNumber: `${i}`})
                                 }
 
-                                const imageData = await fetchAssetsImages(user.userID)
-                                await AsyncStorage.setItem("@imageData", JSON.stringify(imageData));
+                                await AsyncStorage.setItem("@imageData", JSON.stringify(imageList));
                                 const assetData = await fetchUserAssets(user)
-                                console.log(assetData)
                                 await AsyncStorage.setItem("@assetData", JSON.stringify(assetData));
                                 setLoad(false)
                                 props.navigation.navigate('MyPage')

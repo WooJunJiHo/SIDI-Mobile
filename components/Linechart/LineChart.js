@@ -20,11 +20,12 @@ const Chart = (props) => {
     const [isPressedJoongna, setIsPressedJoongna] = useState(false);
 
 
+    //차트 넓이 구하는 함수
     const onLayout = (event) => {
         const { width } = event.nativeEvent.layout;
         setChartSpacing((width / chartData.length));
-      };
-    
+    };
+
     const selectedPlatform = props.selectedPlatform;
 
     useEffect(() => {
@@ -77,7 +78,10 @@ const Chart = (props) => {
     };
 
     return (
-        <View style={{ marginTop: 10, marginLeft: 18 }}>
+        <View 
+            onLayout={onLayout}
+            style={{ marginTop: 10, marginLeft: 18 }}
+        >
             <LineChart
                 style={styles.chart}
                 areaChart
