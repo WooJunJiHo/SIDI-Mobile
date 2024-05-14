@@ -60,7 +60,7 @@ export const filterPriceList = (list, asset) => {
 
 
 
-
+//금일 가격 구하기
 export const priceAverage = (list) => {
     // 평균 가격 구하기
     const totalValue = list.reduce((acc, cur) => acc + cur.value, 0);
@@ -73,6 +73,7 @@ export const priceAverage = (list) => {
 }
 
 
+//총 금액 계산
 export const totalPrices = (list) => {
     // 모든 가격을 합산
     const totalPrice = list.reduce((acc, item) => {
@@ -96,4 +97,14 @@ export function subtractMaxValue(data) {
     const maxValue = Math.max(...values);
     
     return maxValue;
+}
+
+
+
+//전일 기준 변동 퍼센테이지
+export const todayPersent = (data) => {
+    return {
+        BJ: Math.round(((data.BJPrice[data.BJPrice.length-1].value - data.BJPrice[data.BJPrice.length-2].value) / data.BJPrice[data.BJPrice.length-2].value) * 100),
+        JN: Math.round(((data.JNPrice[data.JNPrice.length-1].value - data.JNPrice[data.JNPrice.length-2].value) / data.JNPrice[data.JNPrice.length-2].value) * 100),
+    }
 }

@@ -19,7 +19,7 @@ import * as Clipboard from 'expo-clipboard';
 import Linechart from '../components/Linechart/LineChart'
 
 //크롤링 데이터 전처리
-import { filterPriceList, priceAverage } from '../components/utils/filterPriceList'
+import { filterPriceList, priceAverage, todayPersent } from '../components/utils/filterPriceList'
 
 const AssetsInfo = (props) => {
     const isFocused = useIsFocused();
@@ -33,7 +33,8 @@ const AssetsInfo = (props) => {
     const [asset, setAsset] = useState();
     const [image, setImage] = useState();
     const [prices, setPrices] = useState(null);
-    const [average, setAverage] = useState('');
+    const [chart, setChart] = useState(null);
+    const [persent, setPersent] = useState(0);
 
     const [selectedPlatform, setSelectedPlatform] = useState("번개장터"); // 선택된 플랫폼 상태
 
@@ -73,14 +74,20 @@ const AssetsInfo = (props) => {
                 const imageList = JSON.parse(imageData).filter(item => item.assetID == assetID);
                 const assetList = JSON.parse(assetData).filter(item => item.AssetsID == assetID);
 
-                const filteredList = filterPriceList(JSON.parse(priceData), `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`)
-                setPrices(filteredList)
-                const avgResult = priceAverage(filteredList)
-                setAverage(avgResult)
+                const BJFilteredList = JSON.parse(priceData).filter((item) => item.PLATFORM == "번개장터")
+                const JNFilteredList = JSON.parse(priceData).filter((item) => item.PLATFORM == "중고나라")
+
+                const BJPrice = filterPriceList(BJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`)
+                const JNPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`)
+                setPrices({BJPrice, JNPrice})
+                setChart(BJPrice)
 
                 setUser(JSON.parse(userData))
                 setImage(imageList)
                 setAsset(assetList)
+
+                const persentRes = await todayPersent({BJPrice, JNPrice})
+                setPersent(persentRes)
 
 
                 setLoading(false);
@@ -91,6 +98,24 @@ const AssetsInfo = (props) => {
 
         fetchUser();
     }, [isFocused]);
+
+
+    useEffect(() => {
+        if(prices && selectedPlatform) {
+            if (selectedPlatform == "번개장터") {
+                setChart(prices.BJPrice)
+            } else {
+                setChart(prices.JNPrice)
+            }    
+        }
+    }, [prices, selectedPlatform])
+
+
+
+    
+
+
+
 
 
 
@@ -192,12 +217,12 @@ const AssetsInfo = (props) => {
                                     style={styles.flatformImage}
                                 />
                                 <Text style={styles.flatformText}>번개장터</Text>
-                                <Text style={styles.flatformPrice}>{average.toLocaleString()} 원</Text>
+                                <Text style={styles.flatformPrice}>{prices.BJPrice[prices.BJPrice.length-1].value.toLocaleString()} 원</Text>
 
                             </View>
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={styles.liveDateText}>{currentDateTimeString} 기준</Text>
-                                <Text style={styles.updownText}>%</Text>
+                                <Text style={styles.updownText}>{persent.BJ}%</Text>
                             </View>
 
                         </View>
@@ -211,12 +236,12 @@ const AssetsInfo = (props) => {
                                     style={styles.flatformImage}
                                 />
                                 <Text style={styles.flatformText}>중고나라</Text>
-                                <Text style={styles.flatformPrice}>{average.toLocaleString()} 원</Text>
+                                <Text style={styles.flatformPrice}>{prices.JNPrice[prices.JNPrice.length-1].value.toLocaleString()} 원</Text>
 
                             </View>
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={styles.liveDateText}>{currentDateTimeString} 기준</Text>
-                                <Text style={styles.updownText}>%</Text>
+                                <Text style={styles.updownText}>{persent.JN}%</Text>
                             </View>
 
                         </View>
@@ -230,7 +255,7 @@ const AssetsInfo = (props) => {
                             style={styles.totalGraphImage}
                         />
                         <Text style={styles.totalText}>가격 그래프</Text>
-                        <Linechart ptData={prices} selectedPlatform={selectedPlatform} onPlatformSelect={handlePlatformSelect} />
+                        <Linechart ptData={chart} selectedPlatform={selectedPlatform} onPlatformSelect={handlePlatformSelect} />
                     </View>
 
                     <View style={{ width: '100%', height: 1, backgroundColor: '#f5f5f5', marginTop: 16 }}></View>

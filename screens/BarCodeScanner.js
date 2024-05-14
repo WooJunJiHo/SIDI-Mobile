@@ -108,7 +108,12 @@ const Scanner = (props) => {
 
     if (load == true) {
         return (
-            <ActivityIndicator size={'large'} />
+            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                <Image 
+                    source={require('../assets/icons/SIDI Logo.gif')}
+                    style={{height: '100%', width: '100%'}}
+                />
+            </View>
         )
     }
     return (
