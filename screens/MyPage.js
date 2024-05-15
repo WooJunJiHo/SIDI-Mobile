@@ -40,7 +40,7 @@ const MyPage = (props) => {
 
     const [button1Scale, setButton1Scale] = useState(1);
     const [button2Scale, setButton2Scale] = useState(1);
-    const [button1Color, setButton1Color] = useState('#CAC5FF');
+    const [button1Color, setButton1Color] = useState('#E4DDFF');
     const [button2Color, setButton2Color] = useState('#967DFB');
 
     const [deletionMode, setDeletionMode] = useState(false); // 삭제 모드를 추적하는 상태
@@ -51,7 +51,7 @@ const MyPage = (props) => {
         // 버튼1이 눌렸을 때 스케일 줄이기
         setButton1Scale(0.95);
         // 버튼1이 눌렸을 때 색상 변경
-        setButton1Color('#B5AEFF');
+        setButton1Color('#CBC2F0');
         // 버튼2 스케일과 색상 초기화
         setButton2Scale(1);
         setButton2Color('#967DFB');
@@ -64,7 +64,22 @@ const MyPage = (props) => {
         setButton2Color('#866FE4');
         // 버튼1 스케일과 색상 초기화
         setButton1Scale(1);
-        setButton1Color('#CAC5FF');
+        setButton1Color('#E4DDFF');
+    };
+
+
+    const handleButton1Release = () => {
+        // 버튼1을 뗄 때 원래 스케일로 돌리기
+        setButton1Scale(1);
+        // 버튼1의 색상 원래대로 돌리기
+        setButton1Color('#E4DDFF');
+    };
+
+    const handleButton2Release = () => {
+        // 버튼2를 뗄 때 원래 스케일로 돌리기
+        setButton2Scale(1);
+        // 버튼2의 색상 원래대로 돌리기
+        setButton2Color('#967DFB');
 
         if (deletionMode) {
 
@@ -83,21 +98,6 @@ const MyPage = (props) => {
                 { cancelable: true }
             );
         }
-    };
-
-
-    const handleButton1Release = () => {
-        // 버튼1을 뗄 때 원래 스케일로 돌리기
-        setButton1Scale(1);
-        // 버튼1의 색상 원래대로 돌리기
-        setButton1Color('#CAC5FF');
-    };
-
-    const handleButton2Release = () => {
-        // 버튼2를 뗄 때 원래 스케일로 돌리기
-        setButton2Scale(1);
-        // 버튼2의 색상 원래대로 돌리기
-        setButton2Color('#967DFB');
     };
 
     const toggleDeletionMode = () => {
