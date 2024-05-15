@@ -107,7 +107,13 @@ const Setting = (props) => {
                 </TouchableWithoutFeedback>
 
                 <TouchableWithoutFeedback
-                    onPress={() => { }}
+                    onPress={() => { 
+                        const logout = async () => {
+                            await AsyncStorage.removeItem("@user");
+                        }
+                        logout();
+                        props.navigation.navigate('Home', {screen: 'Main'});
+                    }}
                     onPressIn={() => handlePressIn('로그아웃')}
                     onPressOut={handlePressOut}
                 >

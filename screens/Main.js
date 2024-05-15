@@ -31,6 +31,9 @@ const testValue = [
 	{ date: '2024-05-06', value: 300000 },
 	{ date: '2024-05-07', value: 300000 },
 	{ date: '2024-05-08', value: 200000 },
+	{ date: '2024-05-09', value: 100000 },
+	{ date: '2024-05-10', value: 1000000 },
+	{ date: '2024-05-11', value: 600000 },
 ]
 
 const Home = (props) => {
@@ -46,25 +49,9 @@ const Home = (props) => {
 
 	const handleRefresh = async () => {
 		setRefreshing(true);
-		try {
-			// 사용자 정보를 다시 불러옵니다.
-			const user = await AsyncStorage.getItem('@user');
-
-			if (user !== null) {
-				setNickname(JSON.parse(user).nickname);
-
-				const priceData = await fetchUserAssets(JSON.parse(user));
-
-				if (priceData != 0) {
-					const totalValue = totalPrices(priceData);
-					if (totalValue != null) {
-						setTotalPrice(totalValue);
-					}
-				}
-			}
-		} catch (error) {
-			console.error('Error refreshing data:', error);
-		}
+		
+		//새로고침 로직 구현
+		
 		console.log('새로고침');
 		setRefreshing(false);
 	};

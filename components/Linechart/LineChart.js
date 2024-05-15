@@ -9,9 +9,16 @@ const { width } = Dimensions.get('window');
 import { subtractMaxValue } from '../utils/filterPriceList';
 
 const Chart = (props) => {
-    const ptData = props.ptData
+    const ptData = props.ptData ? props.ptData : null;
+    const ptDatas = props.ptDatas ? props.ptDatas : null;
 
-    const maxValue = subtractMaxValue(ptData);
+    let maxValue;
+    if (ptData != null) {
+        maxValue = subtractMaxValue(ptData);
+    } else {
+        maxValue = subtractMaxValue(ptDatas.BJPrice);
+    }
+
 
     const [selectedPeriod, setSelectedPeriod] = useState('번개장터');
     const [chartData, setChartData] = useState([]);
@@ -19,14 +26,6 @@ const Chart = (props) => {
     const [isPressedBungae, setIsPressedBungae] = useState(false);
     const [isPressedJoongna, setIsPressedJoongna] = useState(false);
 
-
-    //차트 넓이 구하는 함수
-    const onLayout = (event) => {
-        const { width } = event.nativeEvent.layout;
-        setChartSpacing((width / chartData.length));
-    };
-
-    const selectedPlatform = props.selectedPlatform;
 
     useEffect(() => {
         handlePeriodSelect('번개장터');
@@ -39,16 +38,30 @@ const Chart = (props) => {
 
         switch (period) {
             case '번개장터':
-                newData = ptData.slice(0, 8);
-                newSpacing = (width / newData.length) - 13.0;
+                if (ptDatas != null) {
+                    newData = ptDatas.BJPrice;
+                    newSpacing = ((width * 0.9) / newData.length);
+                    maxValue = subtractMaxValue(ptDatas.BJPrice);
+                } else {
+                    newData = ptData;
+                    newSpacing = ((width * 0.9) / newData.length);
+                    maxValue = subtractMaxValue(ptData);
+                }
                 break;
             case '중고나라':
-                newData = ptData.slice(0, 16);
-                newSpacing = (width / newData.length) - 16.0;
+                if (ptDatas != null) {
+                    newData = ptDatas.JNPrice;
+                    newSpacing = ((width * 0.9) / newData.length);
+                    maxValue = subtractMaxValue(ptDatas.JNPrice);
+                }
                 break;
             default:
-                newData = ptData;
-                newSpacing = (width / newData.length) - 4.4;
+                if (ptData != null) {
+                    newData = ptData;
+                } else {
+                    newData = ptDatas.BJPrice;
+                }
+                newSpacing = ((width * 0.9) / newData.length);
         }
 
         setChartData(newData);
@@ -78,9 +91,8 @@ const Chart = (props) => {
     };
 
     return (
-        <View 
-            onLayout={onLayout}
-            style={{ marginTop: 10, marginLeft: 18 }}
+        <View
+            style={{ flex: 1, }}
         >
             <LineChart
                 style={styles.chart}
@@ -123,11 +135,11 @@ const Chart = (props) => {
 
                     pointerLabelComponent: items => {
                         return (
-                            <View style={{ height: 150, width: 80, justifyContent: 'center', marginTop: -50, marginLeft: -25 }}>
-                                <Text style={{ color: '#111111', fontSize: 14, marginBottom: 10, textAlign: 'center', left: -5 }}>
+                            <View style={{ height: 150, width: 90, justifyContent: 'center', marginTop: -50, marginLeft: -35 }}>
+                                <Text style={{ color: '#111111', fontSize: 14, marginBottom: 10, textAlign: 'center', left: 0 }}>
                                     {items[0].date}
                                 </Text>
-                                <View style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 16, backgroundColor: '#6C60F1', width: 70 }}>
+                                <View style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 16, backgroundColor: '#6C60F1', width: 90 }}>
                                     <Text style={{ fontWeight: 'bold', textAlign: 'center', color: '#FFFFFF' }}>
                                         {items[0].value}
                                     </Text>
@@ -137,40 +149,42 @@ const Chart = (props) => {
                     },
                 }}
             />
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 28, bottom: 34, right: 10 }}>
-                <TouchableOpacity
-                    onPress={() => {
-                        handlePeriodSelect('번개장터');
-                        props.onPlatformSelect('번개장터'); // 버튼 클릭 시 번개장터를 선택한 것으로 전달
-                    }}
-                    onPressIn={handlePressInBungae}
-                    onPressOut={handlePressOutBungae}
-                    style={[styles.dayBt, selectedPeriod === '번개장터' ? styles.selectedButton : styles.unselectedButton, { transform: [{ scale: isPressedBungae ? 0.95 : 1 }] }]}
-                    activeOpacity={1}
-                >
-                    <Image
-                        source={require('../../assets/icons/bungaeIcon.png')}
-                        style={styles.flatformImage}
-                    />
-                    <Text style={[styles.btText, selectedPeriod === '번개장터' ? styles.selectedButtonText : styles.unselectedButtonText]}>번개장터</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => {
-                        handlePeriodSelect('중고나라');
-                        props.onPlatformSelect('중고나라'); // 버튼 클릭 시 번개장터를 선택한 것으로 전달
-                    }}
-                    onPressIn={handlePressInJoongna}
-                    onPressOut={handlePressOutJoongna}
-                    style={[styles.dayBt, selectedPeriod === '중고나라' ? styles.selectedButton : styles.unselectedButton, { transform: [{ scale: isPressedJoongna ? 0.95 : 1 }] }]}
-                    activeOpacity={1}
-                >
-                    <Image
-                        source={require('../../assets/icons/joongna Icon.png')}
-                        style={styles.flatformImage2}
-                    />
-                    <Text style={[styles.btText, selectedPeriod === '중고나라' ? styles.selectedButtonText : styles.unselectedButtonText]}>중고나라</Text>
-                </TouchableOpacity>
-            </View>
+            {!ptData ?
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 28, bottom: 34, right: 10 }}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            handlePeriodSelect('번개장터');
+                            props.onPlatformSelect('번개장터'); // 버튼 클릭 시 번개장터를 선택한 것으로 전달
+                        }}
+                        onPressIn={handlePressInBungae}
+                        onPressOut={handlePressOutBungae}
+                        style={[styles.dayBt, selectedPeriod === '번개장터' ? styles.selectedButton : styles.unselectedButton, { transform: [{ scale: isPressedBungae ? 0.95 : 1 }] }]}
+                        activeOpacity={1}
+                    >
+                        <Image
+                            source={require('../../assets/icons/bungaeIcon.png')}
+                            style={styles.flatformImage}
+                        />
+                        <Text style={[styles.btText, selectedPeriod === '번개장터' ? styles.selectedButtonText : styles.unselectedButtonText]}>번개장터</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            handlePeriodSelect('중고나라');
+                            props.onPlatformSelect('중고나라'); // 버튼 클릭 시 번개장터를 선택한 것으로 전달
+                        }}
+                        onPressIn={handlePressInJoongna}
+                        onPressOut={handlePressOutJoongna}
+                        style={[styles.dayBt, selectedPeriod === '중고나라' ? styles.selectedButton : styles.unselectedButton, { transform: [{ scale: isPressedJoongna ? 0.95 : 1 }] }]}
+                        activeOpacity={1}
+                    >
+                        <Image
+                            source={require('../../assets/icons/joongna Icon.png')}
+                            style={styles.flatformImage2}
+                        />
+                        <Text style={[styles.btText, selectedPeriod === '중고나라' ? styles.selectedButtonText : styles.unselectedButtonText]}>중고나라</Text>
+                    </TouchableOpacity>
+                </View>: <></>
+            }
         </View>
     );
 };

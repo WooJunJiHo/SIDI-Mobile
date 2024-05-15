@@ -80,7 +80,6 @@ const AssetsInfo = (props) => {
                 const BJPrice = filterPriceList(BJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`)
                 const JNPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`)
                 setPrices({BJPrice, JNPrice})
-                setChart(BJPrice)
 
                 setUser(JSON.parse(userData))
                 setImage(imageList)
@@ -222,7 +221,10 @@ const AssetsInfo = (props) => {
                             </View>
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={styles.liveDateText}>{currentDateTimeString} 기준</Text>
-                                <Text style={styles.updownText}>{persent.BJ}%</Text>
+                                {persent.BJ >= 0 ? 
+                                    <Text style={[styles.updownText, {color: 'red'}]}>{persent.BJ}%</Text> : 
+                                    <Text style={styles.updownText}>{persent.BJ}%</Text> 
+                                }
                             </View>
 
                         </View>
@@ -241,7 +243,11 @@ const AssetsInfo = (props) => {
                             </View>
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={styles.liveDateText}>{currentDateTimeString} 기준</Text>
-                                <Text style={styles.updownText}>{persent.JN}%</Text>
+                                {persent.JN >= 0 ? 
+                                    <Text style={[styles.updownText, {color: 'red'}]}>{persent.JN}%</Text> : 
+                                    <Text style={styles.updownText}>{persent.JN}%</Text> 
+                                }
+                                
                             </View>
 
                         </View>
@@ -255,7 +261,7 @@ const AssetsInfo = (props) => {
                             style={styles.totalGraphImage}
                         />
                         <Text style={styles.totalText}>가격 그래프</Text>
-                        <Linechart ptData={chart} selectedPlatform={selectedPlatform} onPlatformSelect={handlePlatformSelect} />
+                        <Linechart ptDatas={prices} selectedPlatform={selectedPlatform} onPlatformSelect={handlePlatformSelect} />
                     </View>
 
                     <View style={{ width: '100%', height: 1, backgroundColor: '#f5f5f5', marginTop: 16 }}></View>
