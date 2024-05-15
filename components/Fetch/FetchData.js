@@ -16,9 +16,9 @@ import { keys } from '../../env'
 //Mysql
 
 // /getInfo에 GET 요청 보내기 
-export const getInfos = async () => {
+export const getInfos = async (data) => {
     try {
-        const response = await axios.get(`${keys.nodeURL}/getInfo`);
+        const response = await axios.post(`${keys.nodeURL}/getInfo`, data);
         return response.data;
     } catch (error) {
         console.error('Error:', error);
@@ -84,7 +84,73 @@ export const fetchQR = async (data) => {
     }
 }
 
+//자산 추가
+export const addAsset = async (data) => {
+    try {
+        const response = await axios.post(`${keys.nodeURL}/addAsset`, data);
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error; // 에러를 상위로 다시 던지기
+    }
+}
 
+
+
+
+
+
+
+//flask
+//flask
+//flask
+
+export const uploadImage = async (img) => {
+    const formData = new FormData();
+    formData.append('photo', {
+        uri: img,
+        type: 'image/jpeg', // 변경 가능
+        name: 'photo.jpg',
+    });
+
+    try {
+        const response = await fetch(`${keys.flaskURL}/imageUpload`, {
+            method: 'POST', // POST 요청 설정
+            body: formData
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json(); // 서버 응답을 JSON으로 파싱
+        return data;
+    } catch (error) {
+        console.error('Error fetching images:', error);
+        throw error; // 예외를 다시 던져서 호출하는 쪽에서 처리할 수 있도록 함
+    }
+}
+
+
+
+// 서버로부터 이미지를 색상 패치
+export const fetchColor = async (imageData) => {
+    try {
+        const response = await fetch(`${keys.flaskURL}/color`, {
+            method: 'POST', // POST 요청 설정
+            headers: {
+                'Content-Type': 'application/json' // JSON 형식의 데이터 전송
+            },
+            body: JSON.stringify(imageData) // 빈 객체를 JSON 문자열로 변환하여 전송 (필요에 따라 데이터 추가 가능)
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json(); // 서버 응답을 JSON으로 파싱
+        return data;
+    } catch (error) {
+        console.error('Error fetching images:', error);
+        throw error; // 예외를 다시 던져서 호출하는 쪽에서 처리할 수 있도록 함
+    }
+}
 
 
 
@@ -114,12 +180,12 @@ export const fetchAssetsImages = async (data) => {
                 const assetID = match[1]; // 첫 번째 그룹에는 자산 ID가 있습니다.
                 const imageNumber = match[2]; // 두 번째 그룹에는 이미지 번호가 있습니다.
 
-                imageUrls.push({ url, name: item.name, assetID: assetID, imageNumber: imageNumber});
+                imageUrls.push({ url, name: item.name, assetID: assetID, imageNumber: imageNumber });
             } else {
                 console.log('파일 이름에서 자산 ID와 이미지 번호를 찾을 수 없습니다.');
             }
 
-            
+
         }
     } catch (error) {
         console.error('이미지 로딩 오류:', error);

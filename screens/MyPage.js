@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
     SafeAreaView,
     View,
@@ -145,32 +146,34 @@ const MyPage = (props) => {
     };
 
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            setLoading(true);
-            const user = await AsyncStorage.getItem("@user");
-            if (user !== null) {
+    useFocusEffect(
+        React.useCallback(() => {
+            const fetchUser = async () => {
                 setLoading(true);
-                const imageData = await AsyncStorage.getItem("@imageData");
-                setImage(JSON.parse(imageData))
-                setLoading(false);
-                const assetData = await AsyncStorage.getItem("@assetData");
-                setList(JSON.parse(assetData))
-                const priceData = await fetchUserAssets(JSON.parse(user))
-                if (priceData != 0) {
-                    const totalValue = totalPrices(priceData)
-                    if (totalValue != null) {
-                        setTotalPrice(totalValue)
+                const user = await AsyncStorage.getItem("@user");
+                if (user !== null) {
+                    setLoading(true);
+                    const imageData = await AsyncStorage.getItem("@imageData");
+                    setImage(JSON.parse(imageData))
+                    setLoading(false);
+                    const assetData = await AsyncStorage.getItem("@assetData");
+                    setList(JSON.parse(assetData))
+                    const priceData = await fetchUserAssets(JSON.parse(user))
+                    if (priceData != 0) {
+                        const totalValue = totalPrices(priceData)
+                        if (totalValue != null) {
+                            setTotalPrice(totalValue)
+                        }
                     }
+                    setLoading(false);
+                } else {
+                    // props.navigation.navigate('Login')
                 }
-                setLoading(false);
-            } else {
-                // props.navigation.navigate('Login')
-            }
-        };
+            };
 
-        fetchUser();
-    }, [isFocused]);
+            fetchUser();
+        }, [])
+    );
 
     useEffect(() => {
         if (category === 1) {
@@ -320,7 +323,7 @@ const MyPage = (props) => {
                                     >
                                         <Image
                                             source={{ uri: imageURL }}
-                                            style={{ width: '100%', height: '100%', opacity: deletionMode && selectedImages.includes(item.AssetsID) ? 0.5 : 1  }}
+                                            style={{ width: '100%', height: '100%', opacity: deletionMode && selectedImages.includes(item.AssetsID) ? 0.5 : 1 }}
                                         />
                                         {deletionMode && selectedImageOrder[item.AssetsID] && (
                                             <View style={styles.selectedNumber}>
