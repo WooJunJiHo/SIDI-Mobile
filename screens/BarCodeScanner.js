@@ -21,6 +21,7 @@ const Scanner = (props) => {
     const [imageList, setImageList] = useState(null)
     const [load, setLoad] = useState(false)
 
+    //카메라
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
     const [cameraRef, setCameraRef] = useState(null);

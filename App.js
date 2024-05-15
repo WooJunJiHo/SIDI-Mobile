@@ -23,6 +23,7 @@ import Login from './screens/Login';
 import Setting from './screens/Setting';
 import Scanner from './screens/BarCodeScanner';
 import Explanation from './screens/Explanation';
+import AssetsAdd from './screens/Assets-add'
 
 
 //탭바 스타일
@@ -65,6 +66,7 @@ const MyPageStack = () => (
         <Stack.Screen name="MyAssetsInfo" component={AssetsInfo} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name='Setting' component={Setting} />
+        <Stack.Screen name='AssetsAdd' component={AssetsAdd}/>
     </Stack.Navigator>
 )
 

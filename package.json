@@ -28,6 +28,7 @@
     "expo-clipboard": "~5.0.1",
     "expo-crypto": "~12.8.1",
     "expo-font": "^11.10.3",
+    "expo-image-picker": "^15.0.4",
     "expo-random": "~13.6.0",
     "expo-status-bar": "~1.11.1",
     "expo-web-browser": "~12.8.2",

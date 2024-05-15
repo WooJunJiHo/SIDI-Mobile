@@ -9,6 +9,7 @@ import {
     StyleSheet,
     Dimensions,
     Animated,
+    Alert,
     ActivityIndicator,
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
@@ -43,7 +44,7 @@ const MyPage = (props) => {
 
     const [deletionMode, setDeletionMode] = useState(false); // 삭제 모드를 추적하는 상태
     const [selectedImages, setSelectedImages] = useState([]); // 선택한 이미지를 추적하는 상태
-    
+
     const handleButton1Press = () => {
         // 버튼1이 눌렸을 때 스케일 줄이기
         setButton1Scale(0.95);
@@ -62,14 +63,26 @@ const MyPage = (props) => {
         // 버튼1 스케일과 색상 초기화
         setButton1Scale(1);
         setButton1Color('#CAC5FF');
-    
+
         if (deletionMode) {
-            
+
         } else {
-            props.navigation.navigate('Scan');
+            Alert.alert(
+                '자산 등록을 시작합니다!',
+                `방식을 선택해주세요`,
+                [
+                    {
+                        text: 'QR Scan', onPress: () => {
+                            props.navigation.navigate('Scan')
+                        }
+                    },
+                    { text: '사진 촬영', onPress: () => props.navigation.navigate('AssetsAdd') },
+                ],
+                { cancelable: true }
+            );
         }
     };
-    
+
 
     const handleButton1Release = () => {
         // 버튼1을 뗄 때 원래 스케일로 돌리기
@@ -144,7 +157,7 @@ const MyPage = (props) => {
                 // props.navigation.navigate('Login')
             }
         };
- 
+
         fetchUser();
     }, [isFocused]);
 
