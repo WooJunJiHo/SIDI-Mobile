@@ -5,6 +5,7 @@ import {
     TouchableOpacity,
     Button,
     StyleSheet,
+    Image,
 } from 'react-native'
 import { useState, useEffect } from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -12,30 +13,20 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //소셜 로그인
 import { GoogleLogin } from '../components/utils/googleLogin';
-
-//다크 모드
-import DarkMode from '../components/styles/DarkMode'
-
-//아이콘
-import Icon from '../components/styles/Icons';
+import Icon from 'react-native-vector-icons/Entypo'; // Entypo 아이콘 import
 
 
 
 
 const Login = (props) => {
-    // 다크 모드
-    const [ui, setUI] = useState(true);
-
-    
-
 
     return (
         <SafeAreaView
             style={[
-                ui != false ? DarkMode.lightPriceView : DarkMode.darkPriceView,
                 {
                     flex: 1,
                     alignItems: 'center',
+                    backgroundColor: '#FFFFFF',
                 }
             ]}
         >
@@ -45,7 +36,6 @@ const Login = (props) => {
             >
                 <Text
                     style={[
-                        ui != false ? DarkMode.lightMainText : DarkMode.darkMainText,
                         styles.titleText
                     ]}
                 >
@@ -58,9 +48,10 @@ const Login = (props) => {
                     }}
                 >
                     <Icon
-                        name='arrow-back-outline'
-                        size={24}
-                        color={ui != false ? 'black' : 'white'}
+                        name='chevron-small-left'
+                        size={30}
+                        color={'#111111'}
+                        top={-4}
                     />
                 </TouchableOpacity>
             </View>

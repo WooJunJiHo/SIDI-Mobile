@@ -104,9 +104,12 @@ export const GoogleLogin = (props) => {
 
     if (loading == true) {
         return (
-            <Image style={{ width: '100%', height: '100%' }} source={require('../../assets/icons/SIDI Logo.gif')} />
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',}}>
+                <Image style={{width: 300, height: '100%'}} source={require('../../assets/icons/SIDI Logo.gif')} />
+            </View>
         )
     }
+
     return (
         <View>
             <TouchableOpacity
@@ -135,7 +138,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 16,
         borderColor: '#DBDBDB',
-        backgroundColor: '#F5F5F5',
+        backgroundColor: '#F9F9F9',
         flexDirection: 'row',
     },
     loginText: {

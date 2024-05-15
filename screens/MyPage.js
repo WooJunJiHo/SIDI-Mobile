@@ -43,7 +43,8 @@ const MyPage = (props) => {
 
     const [deletionMode, setDeletionMode] = useState(false); // 삭제 모드를 추적하는 상태
     const [selectedImages, setSelectedImages] = useState([]); // 선택한 이미지를 추적하는 상태
-    
+    const [selectedImageOrder, setSelectedImageOrder] = useState({}); // 선택된 이미지의 순서를 추적하는 상태
+
     const handleButton1Press = () => {
         // 버튼1이 눌렸을 때 스케일 줄이기
         setButton1Scale(0.95);
@@ -62,14 +63,14 @@ const MyPage = (props) => {
         // 버튼1 스케일과 색상 초기화
         setButton1Scale(1);
         setButton1Color('#CAC5FF');
-    
+
         if (deletionMode) {
-            
+
         } else {
             props.navigation.navigate('Scan');
         }
     };
-    
+
 
     const handleButton1Release = () => {
         // 버튼1을 뗄 때 원래 스케일로 돌리기
@@ -86,6 +87,11 @@ const MyPage = (props) => {
     };
 
     const toggleDeletionMode = () => {
+        if (!deletionMode) {
+            // 삭제 모드로 전환되면 선택된 이미지 리스트 초기화
+            setSelectedImages([]);
+            setSelectedImageOrder({});
+        }
         setDeletionMode(prevMode => !prevMode); // 삭제 모드를 토글
 
         // 버튼 텍스트를 동적으로 변경
@@ -105,13 +111,17 @@ const MyPage = (props) => {
 
     const handleImagePress = (assetID) => {
         if (deletionMode) {
-            // 삭제 모드에서 이미지를 선택하거나 해제합니다.
+            // 이미지를 선택 또는 선택 해제할 때마다 선택된 이미지의 순서 업데이트
             setSelectedImages(prevSelected => {
-                if (prevSelected.includes(assetID)) {
-                    // 이미 선택된 이미지를 선택 해제합니다.
+                const alreadySelected = prevSelected.includes(assetID);
+                if (alreadySelected) {
+                    // 이미 선택된 이미지를 선택 해제할 때 해당 이미지의 순서도 삭제
+                    const { [assetID]: deleted, ...remainingOrders } = selectedImageOrder;
+                    setSelectedImageOrder(remainingOrders);
                     return prevSelected.filter(id => id !== assetID);
                 } else {
-                    // 이미지를 선택합니다.
+                    // 이미지를 선택할 때 이미지의 순서를 추가
+                    setSelectedImageOrder(prevOrders => ({ ...prevOrders, [assetID]: prevSelected.length + 1 }));
                     return [...prevSelected, assetID];
                 }
             });
@@ -120,6 +130,7 @@ const MyPage = (props) => {
             props.navigation.navigate('MyAssetsInfo', { assetID });
         }
     };
+
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -144,7 +155,7 @@ const MyPage = (props) => {
                 // props.navigation.navigate('Login')
             }
         };
- 
+
         fetchUser();
     }, [isFocused]);
 
@@ -158,6 +169,9 @@ const MyPage = (props) => {
         } else if (category === 3) {
             const filteredList = list.filter(item => item.CategoryID === 3);
             setSelectList(filteredList);
+        } else {
+            // 전체 카테고리인 경우 모든 리스트를 보여줍니다.
+            setSelectList(list);
         }
     }, [list, category]);
 
@@ -173,64 +187,6 @@ const MyPage = (props) => {
         inputRange: [0, 1, 2, 3],
         outputRange: [0, Dimensions.get('window').width / 4, 2 * Dimensions.get('window').width / 4, 3 * Dimensions.get('window').width / 4]
     });
-
-
-    const AssetList = () => {
-        return (
-            <>
-                {category == 0 ?
-                    list.map((item, idx) => {
-                        // 현재 list 항목과 일치하는 첫 번째 이미지 찾기
-                        const matchedImage = image.find(imageItem => imageItem.assetID == item.AssetsID && imageItem.imageNumber == 1);
-
-                        // 이미지가 없는 경우
-                        if (!matchedImage) {
-                            return null;
-                        }
-                        // 이미지가 있는 경우, 이미지의 URL을 가져오기
-                        const imageURL = matchedImage.url;
-
-                        return (
-                            <TouchableOpacity
-                                key={idx}
-                                style={[styles.listView, deletionMode && selectedImages.includes(item.AssetsID) && styles.selectedImage]} // 삭제 모드이고 선택된 이미지인 경우에만 스타일을 적용합니다.
-                                onPress={() => handleImagePress(item.AssetsID)}
-                            >
-                                <Image
-                                    source={{ uri: imageURL }}
-                                    style={{ width: '100%', height: '100%' }}
-                                />
-                            </TouchableOpacity>
-                        )
-                    }) :
-                    selectList.map((item, idx) => {
-                        // 현재 list 항목과 일치하는 첫 번째 이미지 찾기
-                        const matchedImage = image.find(imageItem => imageItem.assetID == item.AssetsID && imageItem.imageNumber == 1);
-
-                        // 이미지가 없는 경우
-                        if (!matchedImage) {
-                            return null;
-                        }
-                        // 이미지가 있는 경우, 이미지의 URL을 가져오기
-                        const imageURL = matchedImage.url;
-
-                        return (
-                            <TouchableOpacity
-                                key={idx}
-                                style={[styles.listView, deletionMode && selectedImages.includes(item.AssetsID) && styles.selectedImage]} // 삭제 모드이고 선택된 이미지인 경우에만 스타일을 적용합니다.
-                                onPress={() => handleImagePress(item.AssetsID)}
-                            >
-                                <Image
-                                    source={{ uri: imageURL }}
-                                    style={{ width: '100%', height: '100%' }}
-                                />
-                            </TouchableOpacity>
-                        )
-                    })
-                }
-            </>
-        )
-    }
 
     if (loading == true) {
         return (
@@ -300,7 +256,69 @@ const MyPage = (props) => {
 
             <ScrollView>
                 <View style={styles.listSection}>
-                    {list != [] ? <AssetList /> : <></>}
+
+                    {list.length > 0 && (
+                        category === 0 ?
+                            list.map((item, idx) => {
+                                // 현재 list 항목과 일치하는 첫 번째 이미지 찾기
+                                const matchedImage = image.find(imageItem => imageItem.assetID == item.AssetsID && imageItem.imageNumber == 1);
+
+                                // 이미지가 없는 경우
+                                if (!matchedImage) {
+                                    return null;
+                                }
+                                // 이미지가 있는 경우, 이미지의 URL을 가져오기
+                                const imageURL = matchedImage.url;
+
+                                return (
+                                    <TouchableOpacity
+                                        key={idx}
+                                        style={[styles.listView, deletionMode && selectedImages.includes(item.AssetsID) && styles.selectedImage]} // 삭제 모드이고 선택된 이미지인 경우에만 스타일을 적용합니다.
+                                        onPress={() => handleImagePress(item.AssetsID)}
+                                    >
+                                        <Image
+                                            source={{ uri: imageURL }}
+                                            style={{ width: '100%', height: '100%', opacity: deletionMode && selectedImages.includes(item.AssetsID) ? 0.5 : 1 }}
+                                        />
+                                        {deletionMode && selectedImageOrder[item.AssetsID] && (
+                                            <View style={styles.selectedNumber}>
+                                                <Icon name='checkmark' size={16} color={'#ffffff'} />
+                                            </View>
+                                        )}
+                                    </TouchableOpacity>
+                                )
+                            }) :
+                            selectList.map((item, idx) => {
+                                // 현재 list 항목과 일치하는 첫 번째 이미지 찾기
+                                const matchedImage = image.find(imageItem => imageItem.assetID == item.AssetsID && imageItem.imageNumber == 1);
+
+                                // 이미지가 없는 경우
+                                if (!matchedImage) {
+                                    return null;
+                                }
+                                // 이미지가 있는 경우, 이미지의 URL을 가져오기
+                                const imageURL = matchedImage.url;
+
+                                return (
+                                    <TouchableOpacity
+                                        key={idx}
+                                        style={[styles.listView, deletionMode && selectedImages.includes(item.AssetsID) && styles.selectedImage]} // 삭제 모드이고 선택된 이미지인 경우에만 스타일을 적용합니다.
+                                        onPress={() => handleImagePress(item.AssetsID)}
+                                    >
+                                        <Image
+                                            source={{ uri: imageURL }}
+                                            style={{ width: '100%', height: '100%', opacity: deletionMode && selectedImages.includes(item.AssetsID) ? 0.5 : 1  }}
+                                        />
+                                        {deletionMode && selectedImageOrder[item.AssetsID] && (
+                                            <View style={styles.selectedNumber}>
+                                                <Icon name='checkmark' size={16} color={'#ffffff'} />
+                                            </View>
+                                        )}
+                                    </TouchableOpacity>
+                                )
+                            })
+                    )}
+
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -427,8 +445,19 @@ const styles = StyleSheet.create({
         backgroundColor: '#f5f5f5',
     },
     selectedImage: {
-        borderWidth: 3,
-        borderColor: '#5B40C4',
+    },
+    selectedNumber: {
+        position: 'absolute',
+        width: 26,
+        height: 26,
+        bottom: 6,
+        right: 6,
+        backgroundColor: '#967DFB',
+        borderRadius: 100,
+        borderWidth: 2.5,
+        borderColor: '#ffffff',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });
 

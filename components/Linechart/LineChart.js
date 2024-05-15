@@ -52,7 +52,7 @@ const Chart = (props) => {
         }
 
         setChartData(newData);
-        setChartSpacing(newSpacing);
+        // setChartSpacing(newSpacing);
     };
 
     const handlePressInBungae = () => {
