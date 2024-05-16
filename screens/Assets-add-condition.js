@@ -9,7 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from '@react-navigation/native';
 
 //db로드
-import { addAsset, fetchQR, updateAssetImage } from '../components/Fetch/FetchData'
+import { addAsset, fetchQR, updateAssetImage, fetchAssetsImages } from '../components/Fetch/FetchData'
 
 //keys
 import { keys } from '../env';
@@ -39,6 +39,8 @@ const AssetsAddCondition = (props) => {
         const fetchLogin = async () => {
             setLoad(true)
             const users = await AsyncStorage.getItem("@user");
+            const imageData1 = await fetchAssetsImages(JSON.parse(users).userID)
+            await AsyncStorage.setItem("@imageData", JSON.stringify(imageData1));
             const imageData = await AsyncStorage.getItem("@imageData");
             const priceData = await AsyncStorage.getItem("@priceData");
             const assetData = await AsyncStorage.getItem("@assetData");
@@ -78,6 +80,7 @@ const AssetsAddCondition = (props) => {
                             RGB: rgb.RGB,
                             COLOR: rgb.color
                         });
+                        //console.log(`${asset.COMPANY} ${asset.MODEL} ${asset.MORE}`)
                         const filteredList = filterPriceList(priceList, `${asset.COMPANY} ${asset.MODEL} ${asset.MORE}`)
                         await fetchQR({
                             userID: user.userID,
@@ -87,7 +90,7 @@ const AssetsAddCondition = (props) => {
                         await updateAssetImage(`${keys.flaskURL}/image_m`, user.userID, 1, addResult.id)
                         await imageList.push({ url: `${keys.flaskURL}/image_m`, name: `${addResult.id}_1.jpeg`, assetID: `${addResult.id}`, imageNumber: `1` })
                         await AsyncStorage.setItem("@imageData", JSON.stringify(imageList));
-                        await assetList.push({AssetsID: addResult.id, COMPANY: asset.COMPANY, MODEL: asset.MODEL, MORE: asset.MORE, COLOR: rgb.color, GPTCONTENT: null, UserID: user.userID, CategoryID: asset.CATEGORY, PRICE: filteredList[filteredList.length - 1].value})
+                        await assetList.push({AssetsID: addResult.id, COMPANY: asset.COMPANY, MODEL: asset.MODEL, MORE: asset.MORE, COLOR: rgb.color, GPTCONTENT: null, UserID: user.userID, CategoryID: asset.CATEGORY, PRICE: filteredList[filteredList.length - 1].value, DATE: new Date()})
                         await AsyncStorage.setItem("@assetData", JSON.stringify(assetList));
                         setLoad(false)
                         props.navigation.navigate('MyPageMain')

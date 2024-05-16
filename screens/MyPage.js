@@ -13,7 +13,6 @@ import {
     Alert,
     ActivityIndicator,
 } from 'react-native';
-import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from '../components/styles/Icons'; // Icon 컴포넌트 import 추가
 import AnimatedNumbers from 'react-native-animated-numbers';
@@ -25,8 +24,6 @@ import { fetchUserAssets } from '../components/Fetch/FetchData'
 import { totalPrices } from '../components/utils/filterPriceList';
 
 const MyPage = (props) => {
-
-    const isFocused = useIsFocused();
 
     const [category, setCategory] = useState(0);
     const [list, setList] = useState([]);
