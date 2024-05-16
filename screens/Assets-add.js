@@ -13,7 +13,7 @@ import * as ImagePicker from 'expo-image-picker';
 //서버 요청
 import { uploadImage, getInfos, fetchColor } from '../components/Fetch/FetchData';
 
-import Icon from 'react-native-vector-icons/Entypo'; 
+import Icon from 'react-native-vector-icons/Entypo';
 
 
 
@@ -105,74 +105,104 @@ const AssetsAdd = (props) => {
         )
     } else if (load == 'model') {
         return (
-            <View style={{ flex: 1, alignItems: 'center' }}>
-                <View style={{ alignItems: 'center', marginTop: 60, marginBottom: 60, }}>
-                    <Text>모델을 선택해주세요</Text>
+            <SafeAreaView style={[styles.safecontainer]}>
+                <View style={{ width: '91%' }}>
+                    <View style={{ alignItems: 'center', marginBottom: 30, marginTop: 30, }}>
+                        <Text style={styles.selectmodelText}>모델을 선택해주세요</Text>
+                    </View>
+                    <ScrollView
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
+                        style={{ height: '90%' }}
+                    >
+                        {info.map((item, idx) => {
+                            return (
+                                <TouchableOpacity
+                                    key={idx}
+                                    style={{ marginBottom: 20 }}
+                                    onPress={() => {
+                                        const fetchFlask = async () => {
+                                            setLoad(true)
+                                            const result = await fetchColor({ index: item.AssetsMoreInfoID, name: `${item.COMPANY} ${item.MODEL} ${item.MORE}` })
+                                            setRGB(result)
+                                            setAsset({
+                                                index: item.AssetsMoreInfoID,
+                                                COMPANY: item.COMPANY,
+                                                MODEL: item.MODEL,
+                                                MORE: item.MORE,
+                                                CATEGORY: preAsset.category,
+                                            })
+                                            setLoad('colorResult')
+                                        }
+                                        fetchFlask()
+                                    }}
+                                >
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', height: 50 }}>
+                                        <View style={styles.modelCheck}>
+                                            {item.COMPANY === 'Apple' ? (
+                                                <Image source={require('../assets/icons/Apple Logo.png')} style={styles.LogoImage} />
+                                            ) : item.COMPANY === 'Samsung' ? (
+                                                <Image source={require('../assets/icons/Samsung Logo.png')} style={styles.LogoImage} />
+                                            ) : (
+                                                <Image source={require('../assets/icons/Apple Logo.png')} style={styles.LogoImage} />
+                                            )}
+                                        </View>
+                                        <View>
+                                            <Text style={styles.modelsubText}>기종</Text>
+                                            <Text style={styles.modelText}>{item.COMPANY} {item.MODEL} {item.MORE}</Text>
+                                        </View>
+
+                                    </View>
+
+                                </TouchableOpacity>
+                            )
+                        })}
+                    </ScrollView>
                 </View>
-                <ScrollView
-                    showsVerticalScrollIndicator={false}
-                    showsHorizontalScrollIndicator={false}
-                >
-                    {info.map((item, idx) => {
-                        return (
-                            <TouchableOpacity
-                                key={idx}
-                                style={{ flexDirection: 'row' }}
-                                onPress={() => {
-                                    const fetchFlask = async () => {
-                                        setLoad(true)
-                                        const result = await fetchColor({ index: item.AssetsMoreInfoID, name: `${item.COMPANY} ${item.MODEL} ${item.MORE}` })
-                                        setRGB(result)
-                                        setAsset({
-                                            index: item.AssetsMoreInfoID,
-                                            COMPANY: item.COMPANY,
-                                            MODEL: item.MODEL,
-                                            MORE: item.MORE,
-                                            CATEGORY: preAsset.category,
-                                        })
-                                        setLoad('colorResult')
-                                    }
-                                    fetchFlask()
-                                }}
-                            >
-                                <View style={styles.modelCheck}>
-                                    <Image source={require('../assets/icons/Vector.png')} style={{ width: 20, height: 15 }} />
-                                </View>
-                                <Text style={styles.modelText}>{item.COMPANY} {item.MODEL} {item.MORE}</Text>
-                            </TouchableOpacity>
-                        )
-                    })}
-                </ScrollView>
-            </View>
+            </SafeAreaView>
         )
     } else if (load == 'colorResult') {
         return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={styles.colorResultTitle}>색상을 확인해주세요</Text>
-                <View style={styles.colorView}>
-                    <View style={[styles.rgbBox, { backgroundColor: rgb.RGB }]}></View>
-                    <Text style={{ fontSize: 30 }}>{rgb.color}</Text>
+            <SafeAreaView style={[styles.safecontainer]}>
+
+                <View style={{ width: '91%', height: '84%', alignItems: 'center', marginTop: 30, }}>
+                    <Text style={styles.colorResultTitle}>색상</Text>
+                    <View style={styles.pleaseView}>
+                        <Text style={styles.pleasecolorText}>색상이 정확하지 않을 수도 있어요</Text>
+                        <Text style={styles.subpleasecolorText}>다른 색상이 나오면 다시 선택을 눌러주세요</Text>
+                    </View>
+                    <View style={styles.colorView}>
+                        <View style={[styles.rgbBox, { backgroundColor: rgb.RGB }]}></View>
+                        <Text style={styles.colorText}>{rgb.color}</Text>
+                    </View>
+
                 </View>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={styles.btnView1}>
                     <TouchableOpacity
-                        style={[styles.nextBtn, { borderWidth: 2 }]}
+                        style={[styles.nextBtn1, , { transform: [{ scale: button1Scale }], backgroundColor: button1Color }]}
                         onPress={() => {
                             setLoad('model')
                         }}
+                        onPressIn={handleButton1Press}
+                        onPressOut={handleButton1Release}
+                        activeOpacity={1}
                     >
-                        <Text style={styles.nextBtnText}>다시 선택</Text>
-                    </TouchableOpacity> 
+                        <Text style={styles.nextBtnText1}>다시 선택</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity
-                        style={[styles.nextBtn, { backgroundColor: '#6C60F1' }]}
+                        style={[styles.nextBtn2, , { transform: [{ scale: button2Scale }], backgroundColor: button2Color }]}
                         onPress={() => {
                             props.navigation.navigate('AssetsAddCondition', { rgb: rgb, asset: asset })
                         }}
+                        onPressIn={handleButton2Press}
+                        onPressOut={handleButton2Release}
+                        activeOpacity={1}
                     >
-                        <Text style={[styles.nextBtnText, { color: 'white' }]}>완료하기</Text>
+                        <Text style={[styles.nextBtnText2]}>완료하기</Text>
                     </TouchableOpacity>
                 </View>
 
-            </View>
+            </SafeAreaView>
         )
     }
     return (
@@ -191,8 +221,8 @@ const AssetsAdd = (props) => {
                     <Text style={styles.inforText}>
                         디바이스를 이용하면 {'\n'}더 정확하게 가격을 측정할 수 있어요
                     </Text>
-                    <TouchableOpacity style={{position:'absolute', bottom: 10, left: 20}} onPress={() => { props.navigation.navigate('Scan') }}>
-                        <View style={{ flexDirection: 'row'}}>
+                    <TouchableOpacity style={{ position: 'absolute', bottom: 10, left: 20 }} onPress={() => { props.navigation.navigate('Scan') }}>
+                        <View style={{ flexDirection: 'row' }}>
                             <Text style={styles.subinforText}>
                                 QR 코드 등록하러 가기
                             </Text>
@@ -218,28 +248,30 @@ const AssetsAdd = (props) => {
 
                 </View>
                 <View style={styles.mainView}>
+                    <View style={{height:'73%'}}>
+                        <View style={styles.container}>
+                            <Image
+                                source={require('../assets/icons/Phone3D.png')}
+                                style={styles.iphone}
+                            />
+                            <Text style={styles.phoneText}>핸드폰은 뒷면이 보이게 찍어주세요</Text>
+                        </View>
+                        <View style={styles.container}>
+                            <Image
+                                source={require('../assets/icons/Wallet.png')}
+                                style={styles.iphone}
+                            />
+                            <Text style={styles.phoneText}>악세서리는 모두 때주세요</Text>
+                        </View>
+                        <View style={styles.container}>
+                            <Image
+                                source={require('../assets/icons/Ruler.png')}
+                                style={styles.ruler}
+                            />
+                            <Text style={styles.phoneText}>기기가 가운데로 오게 촬영해주세요</Text>
+                        </View>
+                    </View>
 
-                    <View style={styles.container}>
-                        <Image
-                            source={require('../assets/icons/Phone3D.png')}
-                            style={styles.iphone}
-                        />
-                        <Text style={styles.phoneText}>핸드폰은 뒷면이 보이게 찍어주세요</Text>
-                    </View>
-                    <View style={styles.container}>
-                        <Image
-                            source={require('../assets/icons/Wallet.png')}
-                            style={styles.iphone}
-                        />
-                        <Text style={styles.phoneText}>악세서리는 모두 때주세요</Text>
-                    </View>
-                    <View style={styles.container}>
-                        <Image
-                            source={require('../assets/icons/Ruler.png')}
-                            style={styles.ruler}
-                        />
-                        <Text style={styles.phoneText}>기기가 가운데로 오게 촬영해주세요</Text>
-                    </View>
 
 
 
@@ -340,16 +372,16 @@ const styles = StyleSheet.create({
     //촬영 버튼
     btnView: {
         flexDirection: 'row',
-        marginTop: 10
+        marginTop: 20,
     },
     takePictureBtn1: {
-        width: '47%',
-        height: 51,
+        width: '48%',
+        height: 50,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#866FE4',
-        borderRadius: 20,
-        margin: 5,
+        borderRadius: 14,
+        marginRight: 12,
     },
     takePictureBtnText1: {
         color: '#5B40C4',
@@ -357,13 +389,12 @@ const styles = StyleSheet.create({
         fontFamily: 'Pretendard-SemiBold',
     },
     takePictureBtn2: {
-        width: '47%',
-        height: 51,
+        width: '48%',
+        height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#866FE4',
-        borderRadius: 20,
-        margin: 5,
+        backgroundColor: '#967DFB',
+        borderRadius: 14,
     },
     takePictureBtnText2: {
         color: 'white',
@@ -373,57 +404,114 @@ const styles = StyleSheet.create({
 
 
 
-
-    modelText: {
+    selectmodelText: {
+        fontSize: 20,
+        fontFamily: 'Pretendard-SemiBold',
+        color: '#111111',
+    },
+    modelsubText: {
         fontSize: 14,
-        fontWeight: 'bold',
-        color: 'gray',
-        marginBottom: 60,
-        marginTop: 10,
-        marginLeft: 20,
+        fontFamily: 'Pretendard-SemiBold',
+        color: '#767676',
+        marginLeft: 16,
+        marginBottom: 6,
+    },
+    modelText: {
+        fontSize: 16,
+        fontFamily: 'Pretendard-SemiBold',
+        color: '#111111',
+        marginLeft: 16,
     },
     modelCheck: {
-        width: 35,
-        height: 35,
-        borderRadius: 100,
-        backgroundColor: 'gray',
+        width: 44,
+        height: 44,
+        borderRadius: 22,
+        borderColor: '#f1f1f1',
+        backgroundColor: '#f1f1f1',
         alignItems: 'center',
         justifyContent: 'center',
     },
+    LogoImage: {
+        width: '95%',
+        height: '95%',
+        resizeMode: 'cover',
+        borderRadius: 22,
+    },
 
 
-
-
+    btnView1: {
+        flexDirection: 'row',
+        marginTop: 20,
+        width: '91%'
+    },
     colorResultTitle: {
-        margin: 60,
-        fontSize: 20
+        fontSize: 20,
+        fontFamily: 'Pretendard-SemiBold',
+        color: '#111111',
+        marginBottom: 30,
     },
     colorView: {
-        width: '90%',
-        height: 300,
-        borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 20,
+        width: '100%',
+        height: 80,
         alignItems: 'center',
-        justifyContent: 'center',
+        flexDirection: 'row',
+        borderRadius: 20,
+        marginTop: 30,
+        borderWidth: 1,
+        borderColor: '#f1f1f1',
+    },
+    colorText: {
+        fontSize: 16,
+        fontFamily: 'Pretendard-SemiBold',
+        color: '#111111',
+        marginLeft: 12,
+    },
+    pleasecolorText: {
+        fontSize: 26,
+        fontFamily: 'Pretendard-SemiBold',
+        textAlign: 'left'
+    },
+    subpleasecolorText: {
+        fontSize: 16,
+        marginTop: 10,
+        fontFamily: 'Pretendard-Regular',
+        textAlign: 'left',
+        color: '#767676'
     },
     rgbBox: {
-        width: 150,
-        height: 150,
+        width: 44,
+        height: 44,
         borderRadius: 200,
-        borderColor: 'black',
-        borderWidth: 1
+        borderColor: '#f1f1f1',
+        borderWidth: 1,
+        marginLeft: 20,
     },
-    nextBtn: {
-        width: 150,
+    nextBtn1: {
+        width: '48%',
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 10,
-        margin: 5,
+        borderRadius: 14,
+        backgroundColor: '#E4DDFF',
+        marginRight: 12,
     },
-    nextBtnText: {
+    nextBtn2: {
+        width: '48%',
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 14,
+        backgroundColor: '#967DFB',
+    },
+    nextBtnText1: {
         fontSize: 16,
+        fontFamily: 'Pretendard-SemiBold',
+        color: '#5B40C4',
+    },
+    nextBtnText2: {
+        fontSize: 16,
+        fontFamily: 'Pretendard-SemiBold',
+        color: '#ffffff',
     },
 
 
