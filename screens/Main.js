@@ -18,27 +18,20 @@ import Icon from 'react-native-vector-icons/Entypo'; // Entypo 아이콘 import
 
 //패치 데이터
 import { fetchUserAssets } from '../components/Fetch/FetchData';
-import { totalPrices } from '../components/utils/filterPriceList';
+import { filterPriceList, totalPrices, mixPlatformData } from '../components/utils/filterPriceList';
 
 //라인 그래프
 import Linechart from '../components/Linechart/LineChart';
 
 // import PTRView from 'react-native-pull-to-refresh';
 
-//테스트 밸류
-const testValue = [
-	{ date: '2024-05-05', value: 100000 },
-	{ date: '2024-05-06', value: 300000 },
-	{ date: '2024-05-07', value: 300000 },
-	{ date: '2024-05-08', value: 200000 },
-	{ date: '2024-05-09', value: 100000 },
-	{ date: '2024-05-10', value: 1000000 },
-	{ date: '2024-05-11', value: 600000 },
-]
 
 const Home = (props) => {
 	const isFocused = useIsFocused();
+
 	const [nickname, setNickname] = useState('로그인 해주세요!');
+
+	const [priceLoad, setPriceLoad]	= useState(true);
 	const [totalPrice, setTotalPrice] = useState(0)
 	const [buttonScale, setButtonScale] = useState(1);
 	const [totalScale, setTotalScale] = useState(1);
@@ -46,6 +39,10 @@ const Home = (props) => {
 	const [buttonColor, setButtonColor] = useState('#967DFB'); // 초기 버튼 색상 설정
 
 	const [refreshing, setRefreshing] = useState(false);
+
+	//그래프 데이터
+	const [mixedData, setMixedData] = useState();
+
 
 	const handleRefresh = async () => {
 		setRefreshing(true);
@@ -65,7 +62,28 @@ const Home = (props) => {
 
 	useEffect(() => {
 		const fetchUser = async () => {
+
 			const user = await AsyncStorage.getItem('@user');
+
+			if(user !== null) {
+				const assetData = await AsyncStorage.getItem('@assetData');
+				const scrapData = await AsyncStorage.getItem('@priceData');
+
+				const assetList = JSON.parse(assetData)
+
+				const BJFilteredList = JSON.parse(scrapData).filter((item) => item.PLATFORM == "번개장터")
+                const JNFilteredList = JSON.parse(scrapData).filter((item) => item.PLATFORM == "중고나라")
+
+                const BJPrice = filterPriceList(BJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`)
+                const JNPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`)
+
+				const platformMix = await mixPlatformData(BJPrice, JNPrice)
+
+				setMixedData(platformMix)
+
+				setPriceLoad(false)
+
+			}
 
 			if (user !== null) {
 				setNickname(JSON.parse(user).nickname);
@@ -85,6 +103,7 @@ const Home = (props) => {
 		fetchUser();
 
 	}, [isFocused]);
+
 
 	return (
 
@@ -241,7 +260,7 @@ const Home = (props) => {
 							style={styles.totalGraphImage}
 						/>
 						<Text style={styles.totalText}>총 자산 그래프</Text>
-						<Linechart ptData={testValue} />
+						{priceLoad == false ? <Linechart ptData={mixedData} /> : <></>}
 					</View>
 				</View>
 				<View style={{ width: '100%', alignSelf: 'center', flexDirection: 'row' }}>

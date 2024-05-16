@@ -108,3 +108,23 @@ export const todayPersent = (data) => {
         JN: Math.round(((data.JNPrice[data.JNPrice.length-1].value - data.JNPrice[data.JNPrice.length-2].value) / data.JNPrice[data.JNPrice.length-2].value) * 100),
     }
 }
+
+
+//플랫폼 합산 평균
+export const mixPlatformData = async (data1, data2) => {
+    
+    let mixedData = [];
+    const averageData = data1.map((item, index) => {
+        // 두 배열의 같은 날짜의 데이터를 합산
+        const mixedValue = (item.value + data2[index].value) / 2;
+
+        // 합산한 데이터를 새로운 배열에 추가
+        mixedData.push({
+            value: mixedValue,
+            date: item.date
+        });
+    })
+    averageData;
+    return mixedData;
+
+}

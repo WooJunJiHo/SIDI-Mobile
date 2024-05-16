@@ -9,8 +9,9 @@ const { width } = Dimensions.get('window');
 import { subtractMaxValue } from '../utils/filterPriceList';
 
 const Chart = (props) => {
-    const ptData = props.ptData ? props.ptData : null;
+    let ptData = props.ptData ? props.ptData : null;
     const ptDatas = props.ptDatas ? props.ptDatas : null;
+
 
     let maxValue;
     if (ptData != null) {
@@ -25,6 +26,7 @@ const Chart = (props) => {
     const [chartSpacing, setChartSpacing] = useState(0);
     const [isPressedBungae, setIsPressedBungae] = useState(false);
     const [isPressedJoongna, setIsPressedJoongna] = useState(false);
+
 
 
     useEffect(() => {
