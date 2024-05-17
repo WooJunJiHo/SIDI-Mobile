@@ -208,95 +208,89 @@ const AssetsAdd = (props) => {
     return (
         <SafeAreaView style={[styles.safecontainer]}>
             <ScrollView style={{ width: '91%' }}>
-                <View style={styles.titleSection}>
-                    <Text style={styles.mainTitle}></Text>
-                </View>
 
-                <View style={styles.pleaseView}>
-                    <Text style={styles.pleaseText}>아래 사항을 꼭 지켜주세요!</Text>
-                    <Text style={styles.subpleaseText}>지켜지지 않으면 결과가 제대로 나오지 않을 수도 있어요</Text>
-                </View>
+                <View style={{ height: '92%' }}>
+                    <View style={styles.pleaseView}>
+                        <Text style={styles.colorResultTitle}></Text>
+                        <Text style={styles.pleasecolorText}>아래 사항을 꼭 지켜주세요!</Text>
+                        <Text style={styles.subpleasecolorText}>지켜지지 않으면 결과가 제대로 나오지 않을 수도 있어요</Text>
+                    </View>
 
-                <View style={styles.inforView}>
-                    <Text style={styles.inforText}>
-                        디바이스를 이용하면 {'\n'}더 정확하게 가격을 측정할 수 있어요
-                    </Text>
-                    <TouchableOpacity style={{ position: 'absolute', bottom: 10, left: 20 }} onPress={() => { props.navigation.navigate('Scan') }}>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={styles.subinforText}>
-                                QR 코드 등록하러 가기
-                            </Text>
-                            <Icon
-                                name='chevron-small-right'
-                                size={28}
-                                color={'#ffffff'}
-                                right={2}
+                    <View style={styles.inforView}>
+                        <Text style={styles.inforText}>
+                            디바이스를 이용하면 {'\n'}더 정확하게 가격을 측정할 수 있어요
+                        </Text>
+                        <TouchableOpacity style={{ position: 'absolute', bottom: 10, left: 20 }} onPress={() => { props.navigation.navigate('Scan') }}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={styles.subinforText}>
+                                    QR 코드 등록하러 가기
+                                </Text>
+                                <Icon
+                                    name='chevron-small-right'
+                                    size={28}
+                                    color={'#ffffff'}
+                                    right={2}
+                                />
+                            </View>
+                        </TouchableOpacity>
+
+                        <View style={styles.graphContainer}>
+                            <Image
+                                source={require('../assets/icons/Inside.png')}
+                                style={styles.Inside}
                             />
                         </View>
-                    </TouchableOpacity>
+                    </View>
 
+                    <View style={{ width: '100%', height: 1, backgroundColor: '#f5f5f5', marginTop: 20 }}>
 
-                    <View style={styles.graphContainer}>
+                    </View>
+
+                    <View style={styles.container1}>
                         <Image
-                            source={require('../assets/icons/Inside.png')}
-                            style={styles.Inside}
+                            source={require('../assets/icons/Phone3D.png')}
+                            style={styles.iphone}
                         />
+                        <Text style={styles.phoneText}>핸드폰은 뒷면이 보이게 찍어주세요</Text>
                     </View>
+                    <View style={styles.container1}>
+                        <Image
+                            source={require('../assets/icons/Wallet.png')}
+                            style={styles.iphone}
+                        />
+                        <Text style={styles.phoneText}>악세서리는 모두 때주세요</Text>
+                    </View>
+                    <View style={styles.container1}>
+                        <Image
+                            source={require('../assets/icons/Ruler.png')}
+                            style={styles.ruler}
+                        />
+                        <Text style={styles.phoneText}>기기가 가운데로 오게 촬영해주세요</Text>
+                    </View>
+
                 </View>
 
-                <View style={{ width: '100%', height: 1, backgroundColor: '#f5f5f5', marginTop: 20 }}>
-
-                </View>
-                <View style={styles.mainView}>
-                    <View style={{height:'73%'}}>
-                        <View style={styles.container}>
-                            <Image
-                                source={require('../assets/icons/Phone3D.png')}
-                                style={styles.iphone}
-                            />
-                            <Text style={styles.phoneText}>핸드폰은 뒷면이 보이게 찍어주세요</Text>
-                        </View>
-                        <View style={styles.container}>
-                            <Image
-                                source={require('../assets/icons/Wallet.png')}
-                                style={styles.iphone}
-                            />
-                            <Text style={styles.phoneText}>악세서리는 모두 때주세요</Text>
-                        </View>
-                        <View style={styles.container}>
-                            <Image
-                                source={require('../assets/icons/Ruler.png')}
-                                style={styles.ruler}
-                            />
-                            <Text style={styles.phoneText}>기기가 가운데로 오게 촬영해주세요</Text>
-                        </View>
-                    </View>
-
-
-
-
-                    <View style={styles.btnView}>
-                        <TouchableOpacity
-                            style={[styles.takePictureBtn1, { transform: [{ scale: button1Scale }], backgroundColor: button1Color }]}
-                            onPress={() => {
-                                props.navigation.navigate('MyPageMain')
-                            }}
-                            onPressIn={handleButton1Press}
-                            onPressOut={handleButton1Release}
-                            activeOpacity={1}
-                        >
-                            <Text style={[styles.takePictureBtnText1]}>돌아가기</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[styles.takePictureBtn2, { transform: [{ scale: button2Scale }], backgroundColor: button2Color }]}
-                            onPress={takePicture}
-                            onPressIn={handleButton2Press}
-                            onPressOut={handleButton2Release}
-                            activeOpacity={1}
-                        >
-                            <Text style={styles.takePictureBtnText2}>촬영하기</Text>
-                        </TouchableOpacity>
-                    </View>
+                <View style={styles.btnView}>
+                    <TouchableOpacity
+                        style={[styles.takePictureBtn1, { transform: [{ scale: button1Scale }], backgroundColor: button1Color }]}
+                        onPress={() => {
+                            props.navigation.navigate('MyPageMain')
+                        }}
+                        onPressIn={handleButton1Press}
+                        onPressOut={handleButton1Release}
+                        activeOpacity={1}
+                    >
+                        <Text style={[styles.takePictureBtnText1]}>돌아가기</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.takePictureBtn2, { transform: [{ scale: button2Scale }], backgroundColor: button2Color }]}
+                        onPress={takePicture}
+                        onPressIn={handleButton2Press}
+                        onPressOut={handleButton2Release}
+                        activeOpacity={1}
+                    >
+                        <Text style={styles.takePictureBtnText2}>촬영하기</Text>
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -329,6 +323,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         left: '1%',
     },
+    container1: {
+        height: 50,
+        alignItems: 'center',
+        flexDirection: 'row',
+        left: '1%',
+        marginTop: 12
+    },
     pleaseView: {
         alignItems: 'flex-start',
         width: '100%',
@@ -348,7 +349,7 @@ const styles = StyleSheet.create({
     },
     inforView: {
         width: '100%',
-        height: '54%',
+        height: 280,
         backgroundColor: '#866FE4',
         borderRadius: 20,
         marginTop: 30,
