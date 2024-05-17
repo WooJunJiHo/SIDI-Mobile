@@ -207,9 +207,8 @@ const AssetsAdd = (props) => {
     }
     return (
         <SafeAreaView style={[styles.safecontainer]}>
-            <ScrollView style={{ width: '91%' }}>
 
-                <View style={{ height: '92%' }}>
+                <View style={{ width: '91%', height: '92%' }}>
                     <View style={styles.pleaseView}>
                         <Text style={styles.colorResultTitle}></Text>
                         <Text style={styles.pleasecolorText}>아래 사항을 꼭 지켜주세요!</Text>
@@ -292,7 +291,6 @@ const AssetsAdd = (props) => {
                         <Text style={styles.takePictureBtnText2}>촬영하기</Text>
                     </TouchableOpacity>
                 </View>
-            </ScrollView>
         </SafeAreaView>
     );
 
@@ -373,7 +371,8 @@ const styles = StyleSheet.create({
     //촬영 버튼
     btnView: {
         flexDirection: 'row',
-        marginTop: 20,
+        width:'91%',
+        bottom: 10
     },
     takePictureBtn1: {
         width: '48%',

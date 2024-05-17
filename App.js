@@ -25,6 +25,7 @@ import Scanner from './screens/BarCodeScanner';
 import AssetsAdd from './screens/Assets-add';
 import AssetsAddCondition from './screens/Assets-add-condition';
 import ModelList from './screens/ModelList';
+import Check from './screens/Check';
 
 
 //탭바 스타일
@@ -68,6 +69,7 @@ const MyPageStack = () => (
         <Stack.Screen name='Setting' component={Setting} />
         <Stack.Screen name='AssetsAdd' component={AssetsAdd}/>
         <Stack.Screen name='AssetsAddCondition' component={AssetsAddCondition}/>
+        <Stack.Screen name='Check' component={Check}/>
     </Stack.Navigator>
 )
 
