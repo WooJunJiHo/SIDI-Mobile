@@ -40,7 +40,7 @@ const AssetsAddCondition = (props) => {
     const [button2Scale, setButton2Scale] = useState(1);
     const [button1Color, setButton1Color] = useState('#AABAF4');
     const [button2Color, setButton2Color] = useState('#F2B500');
-
+    
     const handleButton1Press = () => {
         // 버튼1이 눌렸을 때 스케일 줄이기
         setButton1Scale(0.95);
@@ -117,6 +117,7 @@ const AssetsAddCondition = (props) => {
 
                 <TouchableOpacity
                     style={[styles.checkView, , { transform: [{ scale: button1Scale }], backgroundColor: button1Color }]}
+                    onPress={() => { props.navigation.navigate('Check') }}
                     onPressIn={handleButton1Press}
                     onPressOut={handleButton1Release}
                     activeOpacity={1}
@@ -166,7 +167,7 @@ const AssetsAddCondition = (props) => {
                         fetchPrice()
                     }}
                 >
-                    <Text style={styles.registrationText}>등록하기</Text>
+                    <Text style={styles.registrationText}>바로 등록하기</Text>
                     <Text style={styles.subregistrationText}>자산을 바로 등록할게요</Text>
                     <Image
                         source={require('../assets/icons/Money.png')}
