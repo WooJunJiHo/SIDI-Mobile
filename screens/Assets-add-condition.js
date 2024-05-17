@@ -146,7 +146,8 @@ const AssetsAddCondition = (props) => {
                                 MORE: asset.MORE,
                                 CATEGORY: asset.CATEGORY,
                                 RGB: rgb.RGB,
-                                COLOR: rgb.color
+                                COLOR: rgb.color,
+                                CONDITIONS: '이상 없음' //상태 로직 구현해야함
                             });
                             //console.log(`${asset.COMPANY} ${asset.MODEL} ${asset.MORE}`)
                             const filteredList = filterPriceList(priceList, `${asset.COMPANY} ${asset.MODEL} ${asset.MORE}`)
