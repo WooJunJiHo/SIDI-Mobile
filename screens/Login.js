@@ -7,13 +7,11 @@ import {
     StyleSheet,
     Image,
 } from 'react-native'
-import { useState, useEffect } from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 //소셜 로그인
 import { GoogleLogin } from '../components/utils/googleLogin';
-import Icon from 'react-native-vector-icons/Entypo'; // Entypo 아이콘 import
 
 
 
@@ -41,19 +39,6 @@ const Login = (props) => {
                 >
                     로그인
                 </Text>
-                <TouchableOpacity
-                    style={styles.titleIcon}
-                    onPress={() => {
-                        props.navigation.navigate('MyPageMain')
-                    }}
-                >
-                    <Icon
-                        name='chevron-small-left'
-                        size={30}
-                        color={'#111111'}
-                        top={-4}
-                    />
-                </TouchableOpacity>
             </View>
             <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                 {/* 로그인 버튼 세션 */}
