@@ -22,14 +22,13 @@ import MyPage from './screens/MyPage';
 import Login from './screens/Login';
 import Setting from './screens/Setting';
 import Scanner from './screens/BarCodeScanner';
-import Explanation from './screens/Explanation';
 import AssetsAdd from './screens/Assets-add';
 import AssetsAddCondition from './screens/Assets-add-condition';
+import ModelList from './screens/ModelList';
 
 
 //탭바 스타일
 import TabBar from './components/styles/TabBar';
-import Home from './screens/Main';
 
 
 
@@ -42,7 +41,7 @@ const Stack = createStackNavigator();
 const MainStack = () => (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Main" component={Main} />
-        <Stack.Screen name="Explanation" component={Explanation} />
+        <Stack.Screen name='ModelList' component={ModelList} />
     </Stack.Navigator>
 );
 

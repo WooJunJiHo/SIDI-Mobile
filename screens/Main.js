@@ -268,7 +268,21 @@ const Home = (props) => {
 						horizontal={true}
 						showsHorizontalScrollIndicator={false}
 					>
-						<View style={styles.firstSmallSection}>
+						<TouchableOpacity
+							onPress={() => {
+								props.navigation.navigate('ModelList');
+							}}
+						>
+							<View style={styles.firstSmallSection}>
+								<Image
+									source={require('../assets/icons/QRcode-Hand.png')}
+									style={styles.BottomImage}
+								/>
+								<Text style={styles.smallsectionText}>지원 가능 {'\n'}기종 보기</Text>
+							</View>	
+						</TouchableOpacity>
+						
+						<View style={styles.smallSection}>
 							<Image
 								source={require('../assets/icons/QRcode-Hand.png')}
 								style={styles.BottomImage}

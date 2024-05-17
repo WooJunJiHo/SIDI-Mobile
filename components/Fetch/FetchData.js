@@ -26,6 +26,19 @@ export const getInfos = async (data) => {
     }
 }
 
+
+// 지원 가능 자산 로드
+export const getModelList = async () => {
+    try {
+        const response = await axios.get(`${keys.nodeURL}/getModelList`);
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error; // 에러를 상위로 다시 던지기
+    }
+}
+
+
 // /getColor에 GET 요청 보내기
 export const getColors = async () => {
     try {

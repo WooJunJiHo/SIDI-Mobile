@@ -132,6 +132,7 @@ const Chart = (props) => {
                     radius: 6,
                     pointerLabelWidth: 100,
                     pointerLabelHeight: 90,
+                    alignItems: 'center',
                     activatePointersOnLongPress: true,
                     autoAdjustPointerLabelPosition: false,
 
@@ -143,7 +144,7 @@ const Chart = (props) => {
                                 </Text>
                                 <View style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 16, backgroundColor: '#6C60F1', width: 90 }}>
                                     <Text style={{ fontWeight: 'bold', textAlign: 'center', color: '#FFFFFF' }}>
-                                        {items[0].value}
+                                        {items[0].value + '원'}
                                     </Text>
                                 </View>
                             </View>
