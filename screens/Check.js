@@ -30,7 +30,6 @@ const Check = (props) => {
     const rgb = params ? params.rgb : null;
 
     const [load, setLoad] = useState(false)
-    const [addID, setAddID] = useState(null)
     const [user, setUser] = useState(null)
     const [priceList, setPriceList] = useState(null)
     const [imageList, setImageList] = useState(null)
@@ -218,6 +217,20 @@ const Check = (props) => {
                         onPress={() => {
                             setLoad(true)
                             const fetchPrice = async () => {
+                                let condition
+                                if (isChecked[1] == true) {
+                                    condition = '새상품'
+                                } else if (isChecked[2] == true) {
+                                    condition = '이상 없음'
+                                } else if (isChecked[3] == true) {
+                                    condition = '기스'
+                                } else if (isChecked[4] == true) {
+                                    condition = '액정 파손'
+                                } else if (isChecked[5] == true) {
+                                    condition = '외판 손상'
+                                } else if (isChecked[6] == true) {
+                                    condition = '기능 고장'
+                                }
                                 const addResult = await addAsset({
                                     index: asset.index,
                                     COMPANY: asset.COMPANY,
@@ -225,10 +238,11 @@ const Check = (props) => {
                                     MORE: asset.MORE,
                                     CATEGORY: asset.CATEGORY,
                                     RGB: rgb.RGB,
-                                    COLOR: rgb.color
+                                    COLOR: rgb.color,
+                                    CONDITIONS: condition
                                 });
                                 //console.log(`${asset.COMPANY} ${asset.MODEL} ${asset.MORE}`)
-                                const filteredList = filterPriceList(priceList, `${asset.COMPANY} ${asset.MODEL} ${asset.MORE}`)
+                                const filteredList = filterPriceList(priceList, `${asset.COMPANY} ${asset.MODEL} ${asset.MORE}`, condition)
                                 await fetchQR({
                                     userID: user.userID,
                                     assetID: addResult.id,
@@ -237,7 +251,7 @@ const Check = (props) => {
                                 await updateAssetImage(`${keys.flaskURL}/image_m`, user.userID, 1, addResult.id)
                                 await imageList.push({ url: `${keys.flaskURL}/image_m`, name: `${addResult.id}_1.jpeg`, assetID: `${addResult.id}`, imageNumber: `1` })
                                 await AsyncStorage.setItem("@imageData", JSON.stringify(imageList));
-                                await assetList.push({ AssetsID: addResult.id, COMPANY: asset.COMPANY, MODEL: asset.MODEL, MORE: asset.MORE, COLOR: rgb.color, GPTCONTENT: null, UserID: user.userID, CategoryID: asset.CATEGORY, PRICE: filteredList[filteredList.length - 1].value, DATE: new Date() })
+                                await assetList.push({ AssetsID: addResult.id, COMPANY: asset.COMPANY, MODEL: asset.MODEL, MORE: asset.MORE, COLOR: rgb.color, GPTCONTENT: null, UserID: user.userID, CategoryID: asset.CATEGORY, PRICE: filteredList[filteredList.length - 1].value, CONDITIONS: condition, DATE: new Date() })
                                 await AsyncStorage.setItem("@assetData", JSON.stringify(assetList));
                                 setLoad(false)
                                 props.navigation.navigate('MyPageMain')

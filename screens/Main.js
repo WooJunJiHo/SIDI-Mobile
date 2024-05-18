@@ -79,8 +79,8 @@ const Home = (props) => {
 					const BJFilteredList = JSON.parse(scrapData).filter((item) => item.PLATFORM == "번개장터")
 					const JNFilteredList = JSON.parse(scrapData).filter((item) => item.PLATFORM == "중고나라")
 
-					const BJPrice = filterPriceList(BJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`)
-					const JNPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`)
+					const BJPrice = filterPriceList(BJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, assetList[0].CONDITIONS)
+					const JNPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, assetList[0].CONDITIONS)
 
 					const platformMix = await mixPlatformData(BJPrice, JNPrice)
 

@@ -19,7 +19,7 @@ import * as Clipboard from 'expo-clipboard';
 import Linechart from '../components/Linechart/LineChart'
 
 //크롤링 데이터 전처리
-import { filterPriceList, priceAverage, todayPersent } from '../components/utils/filterPriceList'
+import { filterPriceList, todayPersent } from '../components/utils/filterPriceList'
 
 const AssetsInfo = (props) => {
     const isFocused = useIsFocused();
@@ -28,11 +28,15 @@ const AssetsInfo = (props) => {
     const { params } = props.route;
     const assetID = params ? params.assetID : null;
 
+    const conditions = ['새상품', '이상 없음', '기스', '액정 파손', '외판 손상', '기능 고장']
+    const [conditionStat, setConditionStat] = useState(0)
+
     // 변수 리스트
     const [user, setUser] = useState()
     const [asset, setAsset] = useState();
     const [image, setImage] = useState();
     const [prices, setPrices] = useState(null);
+    const [priceOfCondition, setPriceOfCondition] = useState([])
     const [chart, setChart] = useState(null);
     const [persent, setPersent] = useState(0);
 
@@ -77,15 +81,28 @@ const AssetsInfo = (props) => {
                 const BJFilteredList = JSON.parse(priceData).filter((item) => item.PLATFORM == "번개장터")
                 const JNFilteredList = JSON.parse(priceData).filter((item) => item.PLATFORM == "중고나라")
 
-                const BJPrice = filterPriceList(BJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`)
-                const JNPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`)
-                setPrices({BJPrice, JNPrice})
+                const BJPrice = filterPriceList(BJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, assetList[0].CONDITIONS)
+                const JNPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, assetList[0].CONDITIONS)
+                setPrices({ BJPrice, JNPrice })
+
+                //그래프 상태 변수
+                setConditionStat(conditions.indexOf(assetList[0].CONDITIONS));
+
+
+                //상태별 값 로드
+                let temp = [];
+                for (i = 0; i < conditions.length; i++) {
+                    const BJPrice = filterPriceList(BJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, conditions[i])
+                    const JNPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, conditions[i])
+                    temp.push({ [i]: { BJPrice, JNPrice } })
+                }
+                setPriceOfCondition(temp)
 
                 setUser(JSON.parse(userData))
                 setImage(imageList)
                 setAsset(assetList)
 
-                const persentRes = await todayPersent({BJPrice, JNPrice})
+                const persentRes = todayPersent({ BJPrice, JNPrice })
                 setPersent(persentRes)
 
 
@@ -100,18 +117,18 @@ const AssetsInfo = (props) => {
 
 
     useEffect(() => {
-        if(prices && selectedPlatform) {
+        if (prices && selectedPlatform) {
             if (selectedPlatform == "번개장터") {
                 setChart(prices.BJPrice)
             } else {
                 setChart(prices.JNPrice)
-            }    
+            }
         }
     }, [prices, selectedPlatform])
 
 
 
-    
+
 
 
 
@@ -201,8 +218,7 @@ const AssetsInfo = (props) => {
                         <Text style={styles.infoAssetsName}>{asset[0].COMPANY} {asset[0].MODEL} {asset[0].MORE} {asset[0].COLOR}</Text>
                         <View style={styles.stateContainer}>
                             <Text style={styles.stateText}>상태</Text>
-                            <Text style={styles.firststateDescription}>외판 손상,</Text>
-                            <Text style={styles.stateDescription}>버튼 고장</Text>
+                            <Text style={styles.firststateDescription}>{asset[0].CONDITIONS}</Text>
                         </View>
                     </View>
 
@@ -216,14 +232,14 @@ const AssetsInfo = (props) => {
                                     style={styles.flatformImage}
                                 />
                                 <Text style={styles.flatformText}>번개장터</Text>
-                                <Text style={styles.flatformPrice}>{prices.BJPrice[prices.BJPrice.length-1].value.toLocaleString()} 원</Text>
+                                <Text style={styles.flatformPrice}>{prices.BJPrice[prices.BJPrice.length - 1].value.toLocaleString()} 원</Text>
 
                             </View>
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={styles.liveDateText}>{currentDateTimeString} 기준</Text>
-                                {persent.BJ >= 0 ? 
-                                    <Text style={[styles.updownText, {color: 'red'}]}>{persent.BJ}%</Text> : 
-                                    <Text style={styles.updownText}>{persent.BJ}%</Text> 
+                                {persent.BJ >= 0 ?
+                                    <Text style={[styles.updownText, { color: 'red' }]}>{persent.BJ}%</Text> :
+                                    <Text style={styles.updownText}>{persent.BJ}%</Text>
                                 }
                             </View>
 
@@ -238,16 +254,16 @@ const AssetsInfo = (props) => {
                                     style={styles.flatformImage}
                                 />
                                 <Text style={styles.flatformText}>중고나라</Text>
-                                <Text style={styles.flatformPrice}>{prices.JNPrice[prices.JNPrice.length-1].value.toLocaleString()} 원</Text>
+                                <Text style={styles.flatformPrice}>{prices.JNPrice[prices.JNPrice.length - 1].value.toLocaleString()} 원</Text>
 
                             </View>
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={styles.liveDateText}>{currentDateTimeString} 기준</Text>
-                                {persent.JN >= 0 ? 
-                                    <Text style={[styles.updownText, {color: 'red'}]}>{persent.JN}%</Text> : 
-                                    <Text style={styles.updownText}>{persent.JN}%</Text> 
+                                {persent.JN >= 0 ?
+                                    <Text style={[styles.updownText, { color: 'red' }]}>{persent.JN}%</Text> :
+                                    <Text style={styles.updownText}>{persent.JN}%</Text>
                                 }
-                                
+
                             </View>
 
                         </View>
@@ -261,6 +277,26 @@ const AssetsInfo = (props) => {
                             style={styles.totalGraphImage}
                         />
                         <Text style={styles.totalText}>가격 그래프</Text>
+                        <TouchableOpacity
+                            onPress={() => {
+                                if (conditionStat == 5) {
+                                    setConditionStat(0)
+                                } else {
+                                    setConditionStat(conditionStat + 1)
+                                }
+                                setPrices({
+                                    BJPrice: priceOfCondition[conditionStat][conditionStat].BJPrice,
+                                    JNPrice: priceOfCondition[conditionStat][conditionStat].JNPrice,
+                                })
+                                const persentRes = todayPersent({
+                                    BJPrice: priceOfCondition[conditionStat][conditionStat].BJPrice,
+                                    JNPrice: priceOfCondition[conditionStat][conditionStat].JNPrice,
+                                })
+                                setPersent(persentRes)
+                            }}
+                        >
+                            <Text>{conditions[conditionStat]}</Text>
+                        </TouchableOpacity>
                         <Linechart ptDatas={prices} selectedPlatform={selectedPlatform} onPlatformSelect={handlePlatformSelect} />
                     </View>
 
