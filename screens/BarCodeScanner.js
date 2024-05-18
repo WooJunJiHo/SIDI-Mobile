@@ -62,11 +62,11 @@ const Scanner = (props) => {
                         text: '등록', onPress: () => {
                             const updateQR = async () => {
                                 setLoad(true)
-                                const filteredList = filterPriceList(priceList, `${JSON.parse(data).asset.COMPANY} ${JSON.parse(data).asset.MODEL} ${JSON.parse(data).asset.MORE}`)
+                                const filteredList = filterPriceList(priceList, `${JSON.parse(data).asset.COMPANY} ${JSON.parse(data).asset.MODEL} ${JSON.parse(data).asset.MORE}`, JSON.parse(data).condition)
                                 await fetchQR({
                                     userID: user.userID,
                                     assetID: JSON.parse(data).id,
-                                    price: filteredList[filteredList.length - 1].value,
+                                    price: filteredList[filteredList.length - 1].value
                                 })
                                 for (i = 1; i <= 4; i++) {
                                     await updateAssetImage(`${keys.flaskURL}/image_${i}`, user.userID, i, JSON.parse(data).id)

@@ -1,14 +1,25 @@
-export const filterPriceList = (list, asset) => {
+export const filterPriceList = (list, asset, condition) => {
     // 예측된 모델 필터링   
     const modelList = list.filter((item) => item.AssetsName == asset);
+    
+    const conditionList = modelList.filter((item) => item.CONDITIONS == condition)
+
+
+    let statList;
+    if(conditionList.length == 0 || conditionList.length == 1){
+        statList = modelList;
+    } else {
+        statList = conditionList;
+    }
+
 
     // 날짜를 기준으로 오름차순으로 정렬
-    modelList.sort((a, b) => new Date(a.DATE) - new Date(b.DATE));
+    statList.sort((a, b) => new Date(a.DATE) - new Date(b.DATE));
 
     // 빈 날짜 채우기
     const filledData = [];
-    const earliestDate = new Date(modelList[0].DATE);
-    const latestDate = new Date(modelList[modelList.length - 1].DATE);
+    const earliestDate = new Date(statList[0].DATE);
+    const latestDate = new Date(statList[statList.length - 1].DATE);
 
     let currentDate = new Date(earliestDate);
 
@@ -16,7 +27,7 @@ export const filterPriceList = (list, asset) => {
     //오류
     while (currentDate <= latestDate) {
         const currentDateISO = currentDate.toISOString();
-        const existingData = modelList.find(item => item.DATE === currentDateISO);
+        const existingData = statList.find(item => item.DATE === currentDateISO);
 
         if (existingData) {
             filledData.push(existingData);

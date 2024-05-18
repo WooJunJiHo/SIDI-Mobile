@@ -117,7 +117,7 @@ const AssetsAddCondition = (props) => {
 
                 <TouchableOpacity
                     style={[styles.checkView, , { transform: [{ scale: button1Scale }], backgroundColor: button1Color }]}
-                    onPress={() => { props.navigation.navigate('Check') }}
+                    onPress={() => { props.navigation.navigate('Check', {asset: asset, rgb: rgb}) }}
                     onPressIn={handleButton1Press}
                     onPressOut={handleButton1Release}
                     activeOpacity={1}
@@ -151,7 +151,7 @@ const AssetsAddCondition = (props) => {
                                 CONDITIONS: '이상 없음' //상태 로직 구현해야함
                             });
                             //console.log(`${asset.COMPANY} ${asset.MODEL} ${asset.MORE}`)
-                            const filteredList = filterPriceList(priceList, `${asset.COMPANY} ${asset.MODEL} ${asset.MORE}`)
+                            const filteredList = filterPriceList(priceList, `${asset.COMPANY} ${asset.MODEL} ${asset.MORE}`, '이상 없음')
                             await fetchQR({
                                 userID: user.userID,
                                 assetID: addResult.id,
