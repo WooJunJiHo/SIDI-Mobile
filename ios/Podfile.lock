@@ -29,7 +29,7 @@ PODS:
     - ExpoModulesCore
   - ExpoFileSystem (16.0.6):
     - ExpoModulesCore
-  - ExpoImagePicker (14.7.1):
+  - ExpoImagePicker (15.0.4):
     - ExpoModulesCore
   - ExpoKeepAwake (12.8.2):
     - ExpoModulesCore
@@ -1394,7 +1394,7 @@ SPEC CHECKSUMS:
   ExpoClipboard: b597982124f067ff9f5b89093eb3d97898d5d877
   ExpoCrypto: b6428f48599c007676dc81a9b5f72c07e62fdccc
   ExpoFileSystem: a9273932e69a9a1e1a8d01b6ba895bb8294bbea2
-  ExpoImagePicker: 66970181d1c838f444e5e1f81b804ab2d5ff49bd
+  ExpoImagePicker: f6d9da49201ce201645366afc6be12cef47f24d7
   ExpoKeepAwake: 0f5cad99603a3268e50af9a6eb8b76d0d9ac956c
   ExpoModulesCore: 1391529545de72f7f64ecabc7adb912306ab4d34
   ExpoRandom: f0cd58e154e463d913462f3b445870b12d1c2f12
