@@ -31,7 +31,7 @@ const Home = (props) => {
 
 	const [nickname, setNickname] = useState('로그인 해주세요!');
 
-	const [priceLoad, setPriceLoad]	= useState(true);
+	const [priceLoad, setPriceLoad] = useState(true);
 	const [totalPrice, setTotalPrice] = useState(0)
 	const [buttonScale, setButtonScale] = useState(1);
 	const [totalScale, setTotalScale] = useState(1);
@@ -40,15 +40,30 @@ const Home = (props) => {
 
 	const [refreshing, setRefreshing] = useState(false);
 
+	const [button1Scale, setButton1Scale] = useState(1);
+	const [button1Color, setButton1Color] = useState('#FFFFFF');
 	//그래프 데이터
 	const [mixedData, setMixedData] = useState();
 
+	const handleButton1Press = () => {
+		// 버튼1이 눌렸을 때 스케일 줄이기
+		setButton1Scale(0.95);
+		// 버튼1이 눌렸을 때 색상 변경
+		setButton1Color('#f9f9f9');
+	};
 
+
+	const handleButton1Release = () => {
+		// 버튼1을 뗄 때 원래 스케일로 돌리기
+		setButton1Scale(1);
+		// 버튼1의 색상 원래대로 돌리기
+		setButton1Color('#FFFFFF');
+	};
 	const handleRefresh = async () => {
 		setRefreshing(true);
-		
+
 		//새로고침 로직 구현
-		
+
 		console.log('새로고침');
 		setRefreshing(false);
 	};
@@ -65,17 +80,17 @@ const Home = (props) => {
 
 			const user = await AsyncStorage.getItem('@user');
 
-			if(user !== null) {
+			if (user !== null) {
 				const assetData = await AsyncStorage.getItem('@assetData');
 				const scrapData = await AsyncStorage.getItem('@priceData');
 
 				const assetList = JSON.parse(assetData)
 
 				const BJFilteredList = JSON.parse(scrapData).filter((item) => item.PLATFORM == "번개장터")
-                const JNFilteredList = JSON.parse(scrapData).filter((item) => item.PLATFORM == "중고나라")
+				const JNFilteredList = JSON.parse(scrapData).filter((item) => item.PLATFORM == "중고나라")
 
-                const BJPrice = filterPriceList(BJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`)
-                const JNPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`)
+				const BJPrice = filterPriceList(BJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`)
+				const JNPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`)
 
 				const platformMix = await mixPlatformData(BJPrice, JNPrice)
 
@@ -272,16 +287,18 @@ const Home = (props) => {
 							onPress={() => {
 								props.navigation.navigate('ModelList');
 							}}
+							style={[styles.firstSmallSection, { transform: [{ scale: button1Scale }], backgroundColor: button1Color }]}
+							onPressIn={handleButton1Press}
+							onPressOut={handleButton1Release}
+							activeOpacity={1}
 						>
-							<View style={styles.firstSmallSection}>
-								<Image
-									source={require('../assets/icons/QRcode-Hand.png')}
-									style={styles.BottomImage}
-								/>
-								<Text style={styles.smallsectionText}>지원 가능 {'\n'}기종 보기</Text>
-							</View>	
+							<Image
+								source={require('../assets/icons/NoteBook.png')}
+								style={styles.BottomImage}
+							/>
+							<Text style={styles.smallsectionText}>지원 가능 {'\n'}기종 보기</Text>
 						</TouchableOpacity>
-						
+
 						<View style={styles.smallSection}>
 							<Image
 								source={require('../assets/icons/QRcode-Hand.png')}
