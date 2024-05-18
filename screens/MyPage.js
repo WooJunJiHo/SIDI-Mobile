@@ -152,7 +152,6 @@ const MyPage = (props) => {
                     setLoading(true);
                     const imageData = await AsyncStorage.getItem("@imageData");
                     setImage(JSON.parse(imageData))
-                    setLoading(false);
                     const assetData = await AsyncStorage.getItem("@assetData");
                     setList(JSON.parse(assetData))
                     const priceData = await fetchUserAssets(JSON.parse(user))

@@ -1,12 +1,12 @@
 export const filterPriceList = (list, asset, condition) => {
     // 예측된 모델 필터링   
     const modelList = list.filter((item) => item.AssetsName == asset);
-    
+
     const conditionList = modelList.filter((item) => item.CONDITIONS == condition)
 
 
     let statList;
-    if(conditionList.length == 0 || conditionList.length == 1){
+    if (conditionList.length == 0 || conditionList.length == 1) {
         statList = modelList;
     } else {
         statList = conditionList;
@@ -103,10 +103,10 @@ export const totalPrices = (list) => {
 export function subtractMaxValue(data) {
     // 데이터에서 value 속성만 추출하여 배열로 만듭니다.
     const values = data.map(item => item.value);
-    
+
     // 배열에서 최대값을 찾습니다.
     const maxValue = Math.max(...values);
-    
+
     return maxValue;
 }
 
@@ -114,16 +114,38 @@ export function subtractMaxValue(data) {
 
 //전일 기준 변동 퍼센테이지
 export const todayPersent = (data) => {
-    return {
-        BJ: Math.round(((data.BJPrice[data.BJPrice.length-1].value - data.BJPrice[data.BJPrice.length-2].value) / data.BJPrice[data.BJPrice.length-2].value) * 100),
-        JN: Math.round(((data.JNPrice[data.JNPrice.length-1].value - data.JNPrice[data.JNPrice.length-2].value) / data.JNPrice[data.JNPrice.length-2].value) * 100),
+    if (data.BJPrice.length == 0 || data.BJPrice.length == 1) {
+        if (data.JNPrice.length == 0 || data.JNPrice.length == 1) {
+            return {
+                BJ: 0,
+                JN: 0,
+            }
+        } else {
+            return {
+                BJ: 0,
+                JN: Math.round(((data.JNPrice[data.JNPrice.length - 1].value - data.JNPrice[data.JNPrice.length - 2].value) / data.JNPrice[data.JNPrice.length - 2].value) * 100),
+            }
+        }
+    } else {
+        if (data.JNPrice.length == 0 || data.JNPrice.length == 1) {
+            return {
+                BJ: Math.round(((data.BJPrice[data.BJPrice.length - 1].value - data.BJPrice[data.BJPrice.length - 2].value) / data.BJPrice[data.BJPrice.length - 2].value) * 100),
+                JN: 0,
+            }
+        } else {
+            return {
+                BJ: Math.round(((data.BJPrice[data.BJPrice.length - 1].value - data.BJPrice[data.BJPrice.length - 2].value) / data.BJPrice[data.BJPrice.length - 2].value) * 100),
+                JN: Math.round(((data.JNPrice[data.JNPrice.length - 1].value - data.JNPrice[data.JNPrice.length - 2].value) / data.JNPrice[data.JNPrice.length - 2].value) * 100),
+            }
+        }
     }
+
 }
 
 
 //플랫폼 합산 평균
 export const mixPlatformData = async (data1, data2) => {
-    
+
     let mixedData = [];
     const averageData = data1.map((item, index) => {
         // 두 배열의 같은 날짜의 데이터를 합산

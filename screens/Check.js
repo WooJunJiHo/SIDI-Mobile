@@ -78,8 +78,6 @@ const Check = (props) => {
         const fetchLogin = async () => {
             setLoad(true)
             const users = await AsyncStorage.getItem("@user");
-            const imageData1 = await fetchAssetsImages(JSON.parse(users).userID)
-            await AsyncStorage.setItem("@imageData", JSON.stringify(imageData1));
             const imageData = await AsyncStorage.getItem("@imageData");
             const priceData = await AsyncStorage.getItem("@priceData");
             const assetData = await AsyncStorage.getItem("@assetData");
