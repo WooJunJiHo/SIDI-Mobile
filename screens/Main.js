@@ -42,10 +42,25 @@ const Home = (props) => {
 
 	const [refreshing, setRefreshing] = useState(false);
 
+	const [button1Scale, setButton1Scale] = useState(1);
+	const [button1Color, setButton1Color] = useState('#FFFFFF');
 	//그래프 데이터
 	const [mixedData, setMixedData] = useState();
 
+	const handleButton1Press = () => {
+		// 버튼1이 눌렸을 때 스케일 줄이기
+		setButton1Scale(0.95);
+		// 버튼1이 눌렸을 때 색상 변경
+		setButton1Color('#f9f9f9');
+	};
 
+
+	const handleButton1Release = () => {
+		// 버튼1을 뗄 때 원래 스케일로 돌리기
+		setButton1Scale(1);
+		// 버튼1의 색상 원래대로 돌리기
+		setButton1Color('#FFFFFF');
+	};
 	const handleRefresh = async () => {
 		setRefreshing(true);
 
@@ -304,14 +319,16 @@ const Home = (props) => {
 							onPress={() => {
 								props.navigation.navigate('ModelList');
 							}}
+							style={[styles.firstSmallSection, { transform: [{ scale: button1Scale }], backgroundColor: button1Color }]}
+							onPressIn={handleButton1Press}
+							onPressOut={handleButton1Release}
+							activeOpacity={1}
 						>
-							<View style={styles.firstSmallSection}>
-								<Image
-									source={require('../assets/icons/QRcode-Hand.png')}
-									style={styles.BottomImage}
-								/>
-								<Text style={styles.smallsectionText}>지원 가능 {'\n'}기종 보기</Text>
-							</View>
+							<Image
+								source={require('../assets/icons/NoteBook.png')}
+								style={styles.BottomImage}
+							/>
+							<Text style={styles.smallsectionText}>지원 가능 {'\n'}기종 보기</Text>
 						</TouchableOpacity>
 
 						<View style={styles.smallSection}>

@@ -106,7 +106,7 @@ const Chart = (props) => {
                 spacing={chartSpacing}
                 rulesType="none"
                 color="#00FF80"
-                thickness={6}
+                thickness={4}
                 startOpacity={0}
                 endOpacity={0}
                 initialSpacing={36}
@@ -153,7 +153,7 @@ const Chart = (props) => {
                 }}
             />
             {!ptData ?
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 28, bottom: 34, right: 10 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 28, bottom: 34}}>
                     <TouchableOpacity
                         onPress={() => {
                             handlePeriodSelect('번개장터');

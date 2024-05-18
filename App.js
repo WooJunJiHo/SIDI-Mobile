@@ -26,7 +26,7 @@ import AssetsAdd from './screens/Assets-add';
 import AssetsAddCondition from './screens/Assets-add-condition';
 import ModelList from './screens/ModelList';
 import Check from './screens/Check';
-
+import Explanation from './screens/Explanation';
 
 //탭바 스타일
 import TabBar from './components/styles/TabBar';
@@ -43,6 +43,7 @@ const MainStack = () => (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Main" component={Main} />
         <Stack.Screen name='ModelList' component={ModelList} />
+        <Stack.Screen name='Explanation' component={Explanation} />
     </Stack.Navigator>
 );
 
