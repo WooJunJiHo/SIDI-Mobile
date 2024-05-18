@@ -8,6 +8,7 @@ import {
 	ScrollView,
 	StyleSheet,
 	Image,
+	Alert,
 	RefreshControl,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -31,7 +32,8 @@ const Home = (props) => {
 
 	const [nickname, setNickname] = useState('로그인 해주세요!');
 
-	const [priceLoad, setPriceLoad]	= useState(true);
+	const [priceLoad, setPriceLoad] = useState(true);
+	const [asset, setAsset] = useState(null)
 	const [totalPrice, setTotalPrice] = useState(0)
 	const [buttonScale, setButtonScale] = useState(1);
 	const [totalScale, setTotalScale] = useState(1);
@@ -46,9 +48,9 @@ const Home = (props) => {
 
 	const handleRefresh = async () => {
 		setRefreshing(true);
-		
+
 		//새로고침 로직 구현
-		
+
 		console.log('새로고침');
 		setRefreshing(false);
 	};
@@ -65,21 +67,26 @@ const Home = (props) => {
 
 			const user = await AsyncStorage.getItem('@user');
 
-			if(user !== null) {
+			if (user !== null) {
+				setPriceLoad(true)
 				const assetData = await AsyncStorage.getItem('@assetData');
 				const scrapData = await AsyncStorage.getItem('@priceData');
 
 				const assetList = JSON.parse(assetData)
+				setAsset(assetList)
 
-				const BJFilteredList = JSON.parse(scrapData).filter((item) => item.PLATFORM == "번개장터")
-                const JNFilteredList = JSON.parse(scrapData).filter((item) => item.PLATFORM == "중고나라")
+				if (assetList.length != 0) {
+					const BJFilteredList = JSON.parse(scrapData).filter((item) => item.PLATFORM == "번개장터")
+					const JNFilteredList = JSON.parse(scrapData).filter((item) => item.PLATFORM == "중고나라")
 
-                const BJPrice = filterPriceList(BJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`)
-                const JNPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`)
+					const BJPrice = filterPriceList(BJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`)
+					const JNPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`)
 
-				const platformMix = await mixPlatformData(BJPrice, JNPrice)
+					const platformMix = await mixPlatformData(BJPrice, JNPrice)
 
-				setMixedData(platformMix)
+					setMixedData(platformMix)
+				}
+
 
 				setPriceLoad(false)
 
@@ -103,6 +110,23 @@ const Home = (props) => {
 		fetchUser();
 
 	}, [isFocused]);
+
+
+	const handleButton2Release = () => {
+		Alert.alert(
+			'자산 등록을 시작합니다!',
+			`방식을 선택해주세요`,
+			[
+				{
+					text: 'QR Scan', onPress: () => {
+						props.navigation.navigate('Scan')
+					}
+				},
+				{ text: '사진 촬영', onPress: () => props.navigation.navigate('MyPage', {screen: 'AssetsAdd'}) },
+			],
+			{ cancelable: true }
+		);
+	};
 
 
 	return (
@@ -260,7 +284,15 @@ const Home = (props) => {
 							style={styles.totalGraphImage}
 						/>
 						<Text style={styles.totalText}>총 자산 그래프</Text>
-						{priceLoad == false ? <Linechart ptData={mixedData} /> : <></>}
+						{priceLoad == false && asset.length != 0 ?
+							<Linechart ptData={mixedData} /> :
+							<TouchableOpacity 
+								style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+								onPress={handleButton2Release}
+							>
+								<Text style={styles.userText}>자산 등록하러 가기!</Text>
+							</TouchableOpacity>
+						}
 					</View>
 				</View>
 				<View style={{ width: '100%', alignSelf: 'center', flexDirection: 'row' }}>
@@ -279,9 +311,9 @@ const Home = (props) => {
 									style={styles.BottomImage}
 								/>
 								<Text style={styles.smallsectionText}>지원 가능 {'\n'}기종 보기</Text>
-							</View>	
+							</View>
 						</TouchableOpacity>
-						
+
 						<View style={styles.smallSection}>
 							<Image
 								source={require('../assets/icons/QRcode-Hand.png')}
