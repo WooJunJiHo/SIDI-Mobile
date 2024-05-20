@@ -180,7 +180,7 @@ const Home = (props) => {
 								<View style={[styles.section1, { height: 200 }]}>
 									<View style={styles.explanation}>
 										<Text style={styles.explanationSubText}>
-											실물 자산을 편하게 관리하는 방법!
+											전자기기를 편하게 관리하는 방법!
 										</Text>
 										<Text style={styles.explanationMainText}>
 											SIDI 사용 방법을 알려드립니다

@@ -20,6 +20,10 @@ const Chart = (props) => {
         maxValue = subtractMaxValue(ptDatas.BJPrice);
     }
 
+    useEffect(() => {
+        handlePeriodSelect(selectedPeriod);
+    },[ptDatas])
+
 
     const [selectedPeriod, setSelectedPeriod] = useState('번개장터');
     const [chartData, setChartData] = useState([]);
@@ -111,7 +115,7 @@ const Chart = (props) => {
                 endOpacity={0}
                 initialSpacing={36}
                 noOfSections={6}
-                maxValue={maxValue + (maxValue * 1)}
+                maxValue={maxValue + (maxValue * 1.8)}
                 yAxisThickness={0}
                 rulesColor="#fafafa"
                 xAxisThickness={0}
@@ -135,7 +139,7 @@ const Chart = (props) => {
                     alignItems: 'center',
                     activatePointersOnLongPress: true,
                     autoAdjustPointerLabelPosition: false,
-
+                    
                     pointerLabelComponent: items => {
                         return (
                             <View style={{ height: 150, width: 90, justifyContent: 'center', marginTop: -50, marginLeft: -35 }}>
@@ -153,7 +157,7 @@ const Chart = (props) => {
                 }}
             />
             {!ptData ?
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 28, bottom: 34}}>
+                <View style={{ flexDirection: 'row', marginHorizontal: 28, bottom: 14, position:'absolute', alignSelf:'center'}}>
                     <TouchableOpacity
                         onPress={() => {
                             handlePeriodSelect('번개장터');
@@ -177,7 +181,7 @@ const Chart = (props) => {
                         }}
                         onPressIn={handlePressInJoongna}
                         onPressOut={handlePressOutJoongna}
-                        style={[styles.dayBt, selectedPeriod === '중고나라' ? styles.selectedButton : styles.unselectedButton, { transform: [{ scale: isPressedJoongna ? 0.95 : 1 }] }]}
+                        style={[styles.dayBt1, selectedPeriod === '중고나라' ? styles.selectedButton : styles.unselectedButton, { transform: [{ scale: isPressedJoongna ? 0.95 : 1 }] }]}
                         activeOpacity={1}
                     >
                         <Image
@@ -199,6 +203,15 @@ const styles = StyleSheet.create({
         overflow: 'visible',
     },
     dayBt: {
+        width: 120,
+        height: 44,
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        marginRight: 50,
+    },
+    dayBt1: {
         width: 120,
         height: 44,
         borderRadius: 12,
