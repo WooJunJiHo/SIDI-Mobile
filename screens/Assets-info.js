@@ -276,27 +276,32 @@ const AssetsInfo = (props) => {
                             source={require('../assets/icons/Graph.png')}
                             style={styles.totalGraphImage}
                         />
-                        <Text style={styles.totalText}>가격 그래프</Text>
-                        <TouchableOpacity
-                            onPress={() => {
-                                if (conditionStat == 5) {
-                                    setConditionStat(0)
-                                } else {
-                                    setConditionStat(conditionStat + 1)
-                                }
-                                setPrices({
-                                    BJPrice: priceOfCondition[conditionStat][conditionStat].BJPrice,
-                                    JNPrice: priceOfCondition[conditionStat][conditionStat].JNPrice,
-                                })
-                                const persentRes = todayPersent({
-                                    BJPrice: priceOfCondition[conditionStat][conditionStat].BJPrice,
-                                    JNPrice: priceOfCondition[conditionStat][conditionStat].JNPrice,
-                                })
-                                setPersent(persentRes)
-                            }}
-                        >
-                            <Text>{conditions[conditionStat]}</Text>
-                        </TouchableOpacity>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.totalText}>가격 그래프</Text>
+                            <TouchableOpacity
+                                style={styles.conditionView}
+                                onPress={() => {
+                                    if (conditionStat == 5) {
+                                        setConditionStat(0)
+                                    } else {
+                                        setConditionStat(conditionStat + 1)
+                                    }
+                                    setPrices({
+                                        BJPrice: priceOfCondition[conditionStat][conditionStat].BJPrice,
+                                        JNPrice: priceOfCondition[conditionStat][conditionStat].JNPrice,
+                                    })
+                                    const persentRes = todayPersent({
+                                        BJPrice: priceOfCondition[conditionStat][conditionStat].BJPrice,
+                                        JNPrice: priceOfCondition[conditionStat][conditionStat].JNPrice,
+                                    })
+                                    setPersent(persentRes)
+                                }}
+                            >
+                                <Text style={styles.conditionText}> 상태 - {conditions[conditionStat]}</Text>
+                            </TouchableOpacity>
+                        </View>
+         
+
                         <Linechart ptDatas={prices} selectedPlatform={selectedPlatform} onPlatformSelect={handlePlatformSelect} />
                     </View>
 
@@ -399,11 +404,11 @@ const styles = StyleSheet.create({
     },
     stateText: {
         fontSize: 16,
-        fontFamily: 'Pretendard-Regular',
+        fontFamily: 'Pretendard-SemiBold',
         color: '#767676',
     },
     firststateDescription: {
-        marginLeft: 14,
+        marginLeft: 10,
         fontSize: 16,
         fontFamily: 'Pretendard-Regular',
         color: '#111111',
@@ -419,7 +424,7 @@ const styles = StyleSheet.create({
     //중고 거래 플랫폼 시세 차트 세션
     priceChartSection: {
         width: '91%',
-        height: 330,
+        height: 340,
         borderRadius: 20,
         backgroundColor: '#f5f5f5',
         marginTop: 12,
@@ -436,6 +441,20 @@ const styles = StyleSheet.create({
         left: 10,
         width: 40,
         height: 40,
+    },
+    conditionView: {
+        width: 120,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+        top: -26,
+        position: 'absolute',
+        right: 24,
+    },
+    conditionText: {
+        fontSize: 16,
+        fontFamily: 'Pretendard-SemiBold',
+        color: '#767676',
     },
 
 
