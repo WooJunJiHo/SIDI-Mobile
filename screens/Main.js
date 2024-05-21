@@ -34,6 +34,7 @@ const Home = (props) => {
 
 	const [priceLoad, setPriceLoad] = useState(true);
 	const [asset, setAsset] = useState(null)
+	const [location, setLocation] = useState(null)
 	const [totalPrice, setTotalPrice] = useState(0)
 	const [buttonScale, setButtonScale] = useState(1);
 	const [totalScale, setTotalScale] = useState(1);
@@ -86,6 +87,8 @@ const Home = (props) => {
 				setPriceLoad(true)
 				const assetData = await AsyncStorage.getItem('@assetData');
 				const scrapData = await AsyncStorage.getItem('@priceData');
+				const locationData = await AsyncStorage.getItem("@locationData");
+				setLocation(JSON.parse(locationData))
 
 				const assetList = JSON.parse(assetData)
 				setAsset(assetList)
@@ -137,7 +140,7 @@ const Home = (props) => {
 						props.navigation.navigate('Scan')
 					}
 				},
-				{ text: '사진 촬영', onPress: () => props.navigation.navigate('MyPage', {screen: 'AssetsAdd'}) },
+				{ text: '사진 촬영', onPress: () => props.navigation.navigate('MyPage', { screen: 'AssetsAdd' }) },
 			],
 			{ cancelable: true }
 		);
@@ -164,6 +167,7 @@ const Home = (props) => {
 						>
 							<Text style={styles.userText}>{nickname}</Text>
 						</TouchableOpacity>
+						<Text style={styles.userText}> / {location.region_1depth_name} {location.region_2depth_name}</Text>
 					</View>
 
 					<View style={[styles.section, { height: 200, backgroundColor: 'rgba(255, 255, 255, 0)' }]}>
@@ -301,7 +305,7 @@ const Home = (props) => {
 						<Text style={styles.totalText}>총 자산 그래프</Text>
 						{priceLoad == false && asset.length != 0 ?
 							<Linechart ptData={mixedData} /> :
-							<TouchableOpacity 
+							<TouchableOpacity
 								style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
 								onPress={handleButton2Release}
 							>
@@ -424,9 +428,9 @@ const styles = StyleSheet.create({
 	},
 	userSection: {
 		flexDirection: 'row',
+		alignItems: 'center',
 		width: '91%',
 		height: 70,
-		alignItems: 'center',
 	},
 	userText: {
 		fontSize: 20,

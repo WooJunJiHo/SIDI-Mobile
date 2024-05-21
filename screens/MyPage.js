@@ -18,7 +18,7 @@ import Icon from '../components/styles/Icons'; // Icon 컴포넌트 import 추�
 import AnimatedNumbers from 'react-native-animated-numbers';
 
 //db로드
-import { fetchUserAssets } from '../components/Fetch/FetchData'
+import { fetchUserAssets, deleteAsset } from '../components/Fetch/FetchData'
 
 //페치 데이터
 import { totalPrices } from '../components/utils/filterPriceList';
@@ -26,9 +26,10 @@ import { totalPrices } from '../components/utils/filterPriceList';
 const MyPage = (props) => {
 
     const [category, setCategory] = useState(0);
-    const [list, setList] = useState([]);
+    let [list, setList] = useState([]);
     const [selectList, setSelectList] = useState([]);
     const [image, setImage] = useState([]);
+    const [loaction, setLoaction] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0)
     const [loading, setLoading] = useState(true);
     const [slideAnimation] = useState(new Animated.Value(0)); // 막대기 위치를 조절할 애니메이션 값
@@ -79,7 +80,17 @@ const MyPage = (props) => {
         setButton2Color('#967DFB');
 
         if (deletionMode) {
-
+            const fetchAssetList = async () => {
+                //await deleteAsset(selectedImageOrder);
+                //자산 리스트 최신화 작성해야함
+                for (i = 0; i < Object.keys(selectedImageOrder).length; i++) {
+                    list = list.filter(item => item.AssetsID != Object.keys(selectedImageOrder)[i])
+                }
+                await AsyncStorage.setItem('@assetData', JSON.stringify(list))
+                const assetData = await AsyncStorage.getItem("@assetData");
+                setList(JSON.parse(assetData))
+            }
+            fetchAssetList()
         } else {
             Alert.alert(
                 '자산 등록을 시작합니다!',
@@ -154,6 +165,8 @@ const MyPage = (props) => {
                     setImage(JSON.parse(imageData))
                     const assetData = await AsyncStorage.getItem("@assetData");
                     setList(JSON.parse(assetData))
+                    const locationData = await AsyncStorage.getItem("@locationData");
+                    setLoaction(JSON.parse(locationData))
                     const priceData = await fetchUserAssets(JSON.parse(user))
                     if (priceData != 0) {
                         const totalValue = totalPrices(priceData)

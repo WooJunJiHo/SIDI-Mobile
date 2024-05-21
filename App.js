@@ -8,9 +8,10 @@ import {
     View, Image
 } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Location from 'expo-location';
 
 //DB 로드
-import { fetchUserAssets, fetchAssetsImages, getScrapingAssets } from './components/Fetch/FetchData'
+import { fetchUserAssets, fetchAssetsImages, getScrapingAssets, fetchLocation } from './components/Fetch/FetchData'
 
 import { useFonts } from 'expo-font';
 
@@ -68,9 +69,9 @@ const MyPageStack = () => (
         <Stack.Screen name="MyAssetsInfo" component={AssetsInfo} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name='Setting' component={Setting} />
-        <Stack.Screen name='AssetsAdd' component={AssetsAdd}/>
-        <Stack.Screen name='AssetsAddCondition' component={AssetsAddCondition}/>
-        <Stack.Screen name='Check' component={Check}/>
+        <Stack.Screen name='AssetsAdd' component={AssetsAdd} />
+        <Stack.Screen name='AssetsAddCondition' component={AssetsAddCondition} />
+        <Stack.Screen name='Check' component={Check} />
     </Stack.Navigator>
 )
 
@@ -83,6 +84,21 @@ const MyPageStack = () => (
 export default function App() {
     const [loading, setLoading] = useState(true)
     const [login, setLogin] = useState(null)
+    const [location, setLocation] = useState(null);
+
+    //위치 찾기
+    useEffect(() => {
+        (async () => {
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                setErrorMsg('Permission to access location was denied');
+                return;
+            }
+            let location = await Location.getCurrentPositionAsync({});
+            const result = await fetchLocation(location);
+            await AsyncStorage.setItem("@locationData", JSON.stringify(result));
+        })();
+    }, []);
 
     useEffect(() => {
         const fetchUserData = async () => {

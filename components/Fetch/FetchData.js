@@ -109,6 +109,19 @@ export const addAsset = async (data) => {
 }
 
 
+//자산 삭제
+export const deleteAsset = async (data) => {
+    try {
+        const response = await axios.post(`${keys.nodeURL}/deleteAsset`, data);
+        return response.data;
+    } catch (error) {
+        console.log('Error:', error)
+        throw error;
+    }
+}
+
+
+
 
 
 
@@ -241,4 +254,29 @@ export const updateAssetImage = async (uri, id, number, assetID) => {
             });
         }
     );
+}
+
+
+
+
+
+
+
+//kakao
+//kakao
+//kakao
+
+export const fetchLocation = async (data) => {
+    try {
+        const response = await axios.get(`https://dapi.kakao.com/v2/local/geo/coord2address.json?y=${data.coords.latitude}&x=${data.coords.longitude}&input_coord=WGS84`, {
+            headers: {
+                Authorization: `KakaoAK ${keys.kakaoApi}`,
+            },
+        });
+        return response.data.documents[0].road_address ? response.data.documents[0].road_address : response.data.documents[0].address;
+
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
 }
