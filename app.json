@@ -4,6 +4,10 @@
     "slug": "Mobile",
     "version": "1.0.0",
     "platforms": ["ios", "android"],
+    "permissions": [
+      "ACCESS_FINE_LOCATION",
+      "ACCESS_COARSE_LOCATION"
+    ],
     "scheme": "SIDI-Mobile",
     "orientation": "portrait",
     "icon": "./assets/icons/icon.png",
