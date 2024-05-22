@@ -110,6 +110,15 @@ export function subtractMaxValue(data) {
     return maxValue;
 }
 
+export function subtractMinValue(data) {
+    // 데이터에서 value 속성만 추출하여 배열로 만듭니다.
+    const values = data.map(item => item.value);
+    
+    // 배열에서 최소값을 찾습니다.
+    const minValue = Math.min(...values);
+    
+    return minValue;
+}
 
 
 //전일 기준 변동 퍼센테이지
@@ -160,4 +169,20 @@ export const mixPlatformData = async (data1, data2) => {
     averageData;
     return mixedData;
 
+}
+
+export function getFirstAndLastDate(data) {
+    // 데이터 배열이 비어있는 경우 빈 객체 반환
+    if (data.length === 0) {
+        return { firstDate: null, lastDate: null };
+    }
+
+    // 데이터 배열을 날짜 순으로 정렬
+    const sortedData = data.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    // 가장 이른 날짜와 가장 늦은 날짜를 찾아서 반환
+    const firstDate = sortedData[0].date;
+    const lastDate = sortedData[sortedData.length - 1].date;
+
+    return { firstDate, lastDate };
 }

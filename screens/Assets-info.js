@@ -270,6 +270,30 @@ const AssetsInfo = (props) => {
 
                     )}
 
+                    {selectedPlatform === '당근마켓' && (
+                        <View style={styles.priceSection}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Image
+                                    source={require('../assets/icons/CarrotMarket.png')}
+                                    style={styles.flatformImage}
+                                />
+                                <Text style={styles.flatformText}>당근마켓</Text>
+                                <Text style={styles.flatformPrice}>{prices.JNPrice[prices.JNPrice.length - 1].value.toLocaleString()} 원</Text>
+
+                            </View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={styles.liveDateText}>{currentDateTimeString} 기준</Text>
+                                {persent.JN >= 0 ?
+                                    <Text style={[styles.updownText, { color: 'red' }]}>{persent.JN}%</Text> :
+                                    <Text style={styles.updownText}>{persent.JN}%</Text>
+                                }
+
+                            </View>
+
+                        </View>
+
+                    )}
+
                     {/* 중고 거래 플랫폼 시세 차트 세션 */}
                     <View style={styles.priceChartSection}>
                         <Image
@@ -300,7 +324,7 @@ const AssetsInfo = (props) => {
                                 <Text style={styles.conditionText}> 상태 - {conditions[conditionStat]}</Text>
                             </TouchableOpacity>
                         </View>
-         
+
 
                         <Linechart ptDatas={prices} selectedPlatform={selectedPlatform} onPlatformSelect={handlePlatformSelect} />
                     </View>
@@ -424,7 +448,7 @@ const styles = StyleSheet.create({
     //중고 거래 플랫폼 시세 차트 세션
     priceChartSection: {
         width: '91%',
-        height: 340,
+        height: 400,
         borderRadius: 20,
         backgroundColor: '#f5f5f5',
         marginTop: 12,
@@ -432,7 +456,7 @@ const styles = StyleSheet.create({
     totalText: {
         fontSize: 18,
         fontFamily: 'Pretendard-SemiBold',
-        left: 56,
+        left: 54,
         top: -18,
     },
 
@@ -449,12 +473,12 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         top: -26,
         position: 'absolute',
-        right: 24,
+        right: 20,
     },
     conditionText: {
         fontSize: 16,
         fontFamily: 'Pretendard-SemiBold',
-        color: '#767676',
+        color: '#111111',
     },
 
 
