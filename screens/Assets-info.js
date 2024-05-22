@@ -74,16 +74,20 @@ const AssetsInfo = (props) => {
                 const imageData = await AsyncStorage.getItem("@imageData");
                 const assetData = await AsyncStorage.getItem("@assetData");
                 const priceData = await AsyncStorage.getItem("@priceData");
+                const locationData = await AsyncStorage.getItem("@locationData");
 
                 const imageList = JSON.parse(imageData).filter(item => item.assetID == assetID);
                 const assetList = JSON.parse(assetData).filter(item => item.AssetsID == assetID);
 
                 const BJFilteredList = JSON.parse(priceData).filter((item) => item.PLATFORM == "번개장터")
                 const JNFilteredList = JSON.parse(priceData).filter((item) => item.PLATFORM == "중고나라")
+                const DJFilteredList = JSON.parse(priceData).filter((item) => item.LOCATION == `${JSON.parse(locationData).region_1depth_name} ${JSON.parse(locationData).region_2depth_name}`)
 
                 const BJPrice = filterPriceList(BJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, assetList[0].CONDITIONS)
                 const JNPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, assetList[0].CONDITIONS)
-                setPrices({ BJPrice, JNPrice })
+                const DJPrice = filterPriceList(DJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, assetList[0].CONDITIONS)
+                setPrices({ BJPrice, JNPrice, DJPrice })
+
 
                 //그래프 상태 변수
                 setConditionStat(conditions.indexOf(assetList[0].CONDITIONS));
@@ -94,7 +98,8 @@ const AssetsInfo = (props) => {
                 for (i = 0; i < conditions.length; i++) {
                     const BJPrice = filterPriceList(BJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, conditions[i])
                     const JNPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, conditions[i])
-                    temp.push({ [i]: { BJPrice, JNPrice } })
+                    const DJPrice = filterPriceList(DJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, conditions[i])
+                    temp.push({ [i]: { BJPrice, JNPrice, DJPrice } })
                 }
                 setPriceOfCondition(temp)
 
@@ -313,10 +318,12 @@ const AssetsInfo = (props) => {
                                     setPrices({
                                         BJPrice: priceOfCondition[conditionStat][conditionStat].BJPrice,
                                         JNPrice: priceOfCondition[conditionStat][conditionStat].JNPrice,
+                                        DJPrice: priceOfCondition[conditionStat][conditionStat].DJPrice,
                                     })
                                     const persentRes = todayPersent({
                                         BJPrice: priceOfCondition[conditionStat][conditionStat].BJPrice,
                                         JNPrice: priceOfCondition[conditionStat][conditionStat].JNPrice,
+                                        DJPrice: priceOfCondition[conditionStat][conditionStat].DJPrice,
                                     })
                                     setPersent(persentRes)
                                 }}

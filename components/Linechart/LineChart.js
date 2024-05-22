@@ -60,10 +60,17 @@ const Chart = (props) => {
                 break;
             case '당근마켓':
                 if (ptDatas != null) {
-                    newData = ptDatas.JNPrice;
-                    newSpacing = ((width * 0.9) / newData.length);
-                    newMaxValue = subtractMaxValue(ptDatas.JNPrice);
-                    newMinValue = subtractMinValue(ptDatas.JNPrice);
+                    if (ptDatas.DJPrice == undefined) {
+                        newData = ptDatas.BJPrice;
+                        newSpacing = ((width * 0.9) / newData.length);
+                        newMaxValue = subtractMaxValue(ptDatas.BJPrice);
+                        newMinValue = subtractMinValue(ptDatas.BJPrice);
+                    } else {
+                        newData = ptDatas.DJPrice;
+                        newSpacing = ((width * 0.9) / newData.length);
+                        newMaxValue = subtractMaxValue(ptDatas.DJPrice);
+                        newMinValue = subtractMinValue(ptDatas.DJPrice);
+                    }
                 }
                 break;
             default:
@@ -108,15 +115,15 @@ const Chart = (props) => {
     return (
         <View style={{ flex: 1 }}>
             <View style={{ borderRadius: 0, width: '100%', alignSelf: 'center', height: 50, marginTop: 8 }}>
-                <View style={{ position: 'absolute', left: 10, alignItems:'flex-start', marginTop: 0 }}>
+                <View style={{ position: 'absolute', left: 10, alignItems: 'flex-start', marginTop: 0 }}>
                     <Text style={styles.dateText}>기간 · {firstDate && firstDate.slice(0, -4)} ~ {lastDate && lastDate.slice(0, -4)}</Text>
-                    <View style={{flexDirection:'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.maxValueText}>최고 · {maxValue}원</Text>
                         <Text style={styles.minValueText}>최저 · {minValue}원</Text>
                     </View>
                 </View>
             </View>
-               
+
             <LineChart
                 style={styles.chart}
                 areaChart
@@ -172,7 +179,7 @@ const Chart = (props) => {
                 }}
             />
             {!ptData ?
-                <View style={{ flexDirection: 'row', bottom: 20, position: 'absolute', justifyContent:'center', width: '100%', height:'16%', bottom: 0, borderBottomLeftRadius: 20, borderBottomRightRadius: 20, }}>
+                <View style={{ flexDirection: 'row', bottom: 20, position: 'absolute', justifyContent: 'center', width: '100%', height: '16%', bottom: 0, borderBottomLeftRadius: 20, borderBottomRightRadius: 20, }}>
                     <TouchableOpacity
                         onPress={() => {
                             handlePeriodSelect('번개장터');

@@ -1,20 +1,19 @@
-export const filterPriceList = (list, asset, condition, location) => {
+export const filterPriceList = (list, asset, condition) => {
     // 예측된 모델 필터링   
     const modelList = list.filter((item) => item.AssetsName == asset);
 
     const conditionList = modelList.filter((item) => item.CONDITIONS == condition)
 
-    const locationList = conditionList.filter((item) => item.LOCATION == location)
 
 
     let statList;
     if (conditionList.length == 0 || conditionList.length == 1) {
         statList = modelList;
-    } else if (locationList.length == 0 || locationList.length == 1) {
-        statList = conditionList;
     } else {
-        statList = locationList;
+        statList = conditionList;
     }
+
+
 
 
     // 날짜를 기준으로 오름차순으로 정렬
@@ -117,10 +116,10 @@ export function subtractMaxValue(data) {
 export function subtractMinValue(data) {
     // 데이터에서 value 속성만 추출하여 배열로 만듭니다.
     const values = data.map(item => item.value);
-    
+
     // 배열에서 최소값을 찾습니다.
     const minValue = Math.min(...values);
-    
+
     return minValue;
 }
 
@@ -178,7 +177,7 @@ export const mixPlatformData = async (data1, data2) => {
         } else {
             mixedValue = item.value
         }
-        
+
 
         // 합산한 데이터를 새로운 배열에 추가
         mixedData.push({
