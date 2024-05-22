@@ -5,60 +5,65 @@ import { Dimensions } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
-//데이터 필터링 
-import { subtractMaxValue } from '../utils/filterPriceList';
+// 데이터 필터링 
+import { subtractMaxValue, subtractMinValue, getFirstAndLastDate } from '../utils/filterPriceList';
 
 const Chart = (props) => {
     let ptData = props.ptData ? props.ptData : null;
     const ptDatas = props.ptDatas ? props.ptDatas : null;
 
-
-    let maxValue;
-    if (ptData != null) {
-        maxValue = subtractMaxValue(ptData);
-    } else {
-        maxValue = subtractMaxValue(ptDatas.BJPrice);
-    }
+    const [maxValue, setMaxValue] = useState(0);
+    const [minValue, setMinValue] = useState(0);
 
     useEffect(() => {
-        handlePeriodSelect(selectedPeriod);
-    },[ptDatas])
-
+        handlePeriodSelect('번개장터');
+    }, [ptDatas]);
 
     const [selectedPeriod, setSelectedPeriod] = useState('번개장터');
     const [chartData, setChartData] = useState([]);
     const [chartSpacing, setChartSpacing] = useState(0);
     const [isPressedBungae, setIsPressedBungae] = useState(false);
     const [isPressedJoongna, setIsPressedJoongna] = useState(false);
+    const [isPressedCarrot, setIsPressedCarrot] = useState(false);
 
-
-
-    useEffect(() => {
-        handlePeriodSelect('번개장터');
-    }, []);
+    // 첫 번째 날짜와 마지막 날짜 가져오기
+    const { firstDate, lastDate } = getFirstAndLastDate(chartData);
 
     const handlePeriodSelect = (period) => {
         setSelectedPeriod(period);
         let newData = [];
         let newSpacing = 0;
+        let newMaxValue = 0;
+        let newMinValue = 0;
 
         switch (period) {
             case '번개장터':
                 if (ptDatas != null) {
                     newData = ptDatas.BJPrice;
                     newSpacing = ((width * 0.9) / newData.length);
-                    maxValue = subtractMaxValue(ptDatas.BJPrice);
+                    newMaxValue = subtractMaxValue(ptDatas.BJPrice);
+                    newMinValue = subtractMinValue(ptDatas.BJPrice);
                 } else {
                     newData = ptData;
                     newSpacing = ((width * 0.9) / newData.length);
-                    maxValue = subtractMaxValue(ptData);
+                    newMaxValue = subtractMaxValue(ptData);
+                    newMinValue = subtractMinValue(ptData);
                 }
                 break;
             case '중고나라':
                 if (ptDatas != null) {
                     newData = ptDatas.JNPrice;
                     newSpacing = ((width * 0.9) / newData.length);
-                    maxValue = subtractMaxValue(ptDatas.JNPrice);
+                    newMaxValue = subtractMaxValue(ptDatas.JNPrice);
+                    newMinValue = subtractMinValue(ptDatas.JNPrice);
+                }
+                break;
+            case '당근마켓':
+                if (ptDatas != null) {
+                    newData = ptDatas.JNPrice;
+                    newSpacing = ((width * 0.9) / newData.length);
+                    newMaxValue = subtractMaxValue(ptDatas.JNPrice);
+                    newMinValue = subtractMinValue(ptDatas.JNPrice);
                 }
                 break;
             default:
@@ -68,10 +73,14 @@ const Chart = (props) => {
                     newData = ptDatas.BJPrice;
                 }
                 newSpacing = ((width * 0.9) / newData.length);
+                newMaxValue = subtractMaxValue(newData);
+                newMinValue = subtractMinValue(newData);
         }
 
         setChartData(newData);
         setChartSpacing(newSpacing);
+        setMaxValue(newMaxValue);
+        setMinValue(newMinValue);
     };
 
     const handlePressInBungae = () => {
@@ -97,9 +106,17 @@ const Chart = (props) => {
     };
 
     return (
-        <View
-            style={{ flex: 1, }}
-        >
+        <View style={{ flex: 1 }}>
+            <View style={{ borderRadius: 0, width: '100%', alignSelf: 'center', height: 50, marginTop: 8 }}>
+                <View style={{ position: 'absolute', left: 10, alignItems:'flex-start', marginTop: 0 }}>
+                    <Text style={styles.dateText}>기간 · {firstDate && firstDate.slice(0, -4)} ~ {lastDate && lastDate.slice(0, -4)}</Text>
+                    <View style={{flexDirection:'row'}}>
+                        <Text style={styles.maxValueText}>최고 · {maxValue}원</Text>
+                        <Text style={styles.minValueText}>최저 · {minValue}원</Text>
+                    </View>
+                </View>
+            </View>
+               
             <LineChart
                 style={styles.chart}
                 areaChart
@@ -115,7 +132,7 @@ const Chart = (props) => {
                 endOpacity={0}
                 initialSpacing={36}
                 noOfSections={6}
-                maxValue={maxValue + (maxValue * 1.8)}
+                maxValue={maxValue + (maxValue * 1.4)}
                 yAxisThickness={0}
                 rulesColor="#fafafa"
                 xAxisThickness={0}
@@ -124,10 +141,9 @@ const Chart = (props) => {
                 yAxisSide='right'
                 xAxisColor="#111111"
                 disableScroll={true}
-                curved={true}
                 lineGradient={true}
                 lineGradientStartColor='#CE9FFC'
-                lineGradientEndColor='#7367F0'
+                lineGradientEndColor='#967DFB'
                 pointerConfig={{
                     pointerStripHeight: 150,
                     pointerStripColor: '#6C60F1',
@@ -139,7 +155,6 @@ const Chart = (props) => {
                     alignItems: 'center',
                     activatePointersOnLongPress: true,
                     autoAdjustPointerLabelPosition: false,
-                    
                     pointerLabelComponent: items => {
                         return (
                             <View style={{ height: 150, width: 90, justifyContent: 'center', marginTop: -50, marginLeft: -35 }}>
@@ -157,7 +172,7 @@ const Chart = (props) => {
                 }}
             />
             {!ptData ?
-                <View style={{ flexDirection: 'row', marginHorizontal: 28, bottom: 14, position:'absolute', alignSelf:'center'}}>
+                <View style={{ flexDirection: 'row', bottom: 20, position: 'absolute', justifyContent:'center', width: '100%', height:'16%', bottom: 0, borderBottomLeftRadius: 20, borderBottomRightRadius: 20, }}>
                     <TouchableOpacity
                         onPress={() => {
                             handlePeriodSelect('번개장터');
@@ -190,7 +205,23 @@ const Chart = (props) => {
                         />
                         <Text style={[styles.btText, selectedPeriod === '중고나라' ? styles.selectedButtonText : styles.unselectedButtonText]}>중고나라</Text>
                     </TouchableOpacity>
-                </View>: <></>
+                    <TouchableOpacity
+                        onPress={() => {
+                            handlePeriodSelect('당근마켓');
+                            props.onPlatformSelect('당근마켓'); // 버튼 클릭 시 번개장터를 선택한 것으로 전달
+                        }}
+                        onPressIn={handlePressInJoongna}
+                        onPressOut={handlePressOutJoongna}
+                        style={[styles.dayBt2, selectedPeriod === '당근마켓' ? styles.selectedButton : styles.unselectedButton, { transform: [{ scale: isPressedCarrot ? 0.95 : 1 }] }]}
+                        activeOpacity={1}
+                    >
+                        <Image
+                            source={require('../../assets/icons/CarrotMarket.png')}
+                            style={styles.flatformImage2}
+                        />
+                        <Text style={[styles.btText, selectedPeriod === '당근마켓' ? styles.selectedButtonText : styles.unselectedButtonText]}>당근마켓</Text>
+                    </TouchableOpacity>
+                </View> : <></>
             }
         </View>
     );
@@ -203,19 +234,25 @@ const styles = StyleSheet.create({
         overflow: 'visible',
     },
     dayBt: {
-        width: 120,
-        height: 44,
-        borderRadius: 12,
+        width: '33%',
+        height: '100%',
+        borderBottomLeftRadius: 12,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        marginRight: 50,
     },
     dayBt1: {
         width: 120,
-        height: 44,
-        borderRadius: 12,
+        height: '100%',
         justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+    },
+    dayBt2: {
+        width: 120,
+        height: '100%',
+        justifyContent: 'center',
+        borderBottomRightRadius: 12,
         alignItems: 'center',
         flexDirection: 'row',
     },
@@ -244,5 +281,27 @@ const styles = StyleSheet.create({
         width: 20,
         height: 20,
         marginRight: 6,
+    },
+    maxValueText: {
+        fontSize: 14,
+        fontFamily: 'Pretendard-Medium',
+        color: 'red',
+        left: 10,
+        marginBottom: 4,
+        marginRight: 8
+    },
+    minValueText: {
+        fontSize: 14,
+        fontFamily: 'Pretendard-Medium',
+        color: 'blue',
+        left: 10,
+        marginBottom: 0
+    },
+    dateText: {
+        fontSize: 14,
+        fontFamily: 'Pretendard-SemiBold',
+        color: '#3E3E3E',
+        left: 10,
+        top: -8
     },
 });
