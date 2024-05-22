@@ -268,13 +268,30 @@ export const updateAssetImage = async (uri, id, number, assetID) => {
 
 export const fetchLocation = async (data) => {
     try {
-        const response = await axios.get(`https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?y=${data.coords.latitude}&x=${data.coords.longitude}`, {
+        const response = await axios.get(`https://dapi.kakao.com/v2/local/geo/coord2address.json?y=${data.coords.latitude}&x=${data.coords.longitude}`, {
             headers: {
                 Authorization: `KakaoAK ${keys.kakaoApi}`,
             },
         });
-        return response.data.documents[0];
+        return response.data.documents[0].road_address ? response.data.documents[0].road_address : response.data.documents[0].address;
 
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+}
+
+export const fetchReLocation = async (data) => {
+    // 한글 주소를 인코딩
+    const query = encodeURIComponent(data);
+
+    try {
+        const response = await axios.get(`https://dapi.kakao.com/v2/local/search/address.json?query=${query}`, {
+            headers: {
+                Authorization: `KakaoAK ${keys.kakaoApi}`,
+            },
+        })
+        console.log(response.data.documents[0])
     } catch (error) {
         console.log(error)
         throw error
