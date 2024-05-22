@@ -81,7 +81,7 @@ const MyPage = (props) => {
 
         if (deletionMode) {
             const fetchAssetList = async () => {
-                //await deleteAsset(selectedImageOrder);
+                await deleteAsset(selectedImageOrder);
                 //자산 리스트 최신화 작성해야함
                 for (i = 0; i < Object.keys(selectedImageOrder).length; i++) {
                     list = list.filter(item => item.AssetsID != Object.keys(selectedImageOrder)[i])
@@ -89,6 +89,14 @@ const MyPage = (props) => {
                 await AsyncStorage.setItem('@assetData', JSON.stringify(list))
                 const assetData = await AsyncStorage.getItem("@assetData");
                 setList(JSON.parse(assetData))
+                if (JSON.parse(assetData) != 0) {
+                    const totalValue = totalPrices(JSON.parse(assetData))
+                    if (totalValue != null) {
+                        setTotalPrice(totalValue)
+                    }
+                } else {
+                    setTotalPrice(0)
+                }
             }
             fetchAssetList()
         } else {

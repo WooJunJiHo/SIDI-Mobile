@@ -268,12 +268,12 @@ export const updateAssetImage = async (uri, id, number, assetID) => {
 
 export const fetchLocation = async (data) => {
     try {
-        const response = await axios.get(`https://dapi.kakao.com/v2/local/geo/coord2address.json?y=${data.coords.latitude}&x=${data.coords.longitude}&input_coord=WGS84`, {
+        const response = await axios.get(`https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?y=${data.coords.latitude}&x=${data.coords.longitude}`, {
             headers: {
                 Authorization: `KakaoAK ${keys.kakaoApi}`,
             },
         });
-        return response.data.documents[0].road_address ? response.data.documents[0].road_address : response.data.documents[0].address;
+        return response.data.documents[0];
 
     } catch (error) {
         console.log(error)

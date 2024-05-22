@@ -167,7 +167,9 @@ const Home = (props) => {
 						>
 							<Text style={styles.userText}>{nickname}</Text>
 						</TouchableOpacity>
-						<Text style={styles.userText}> / {location.region_1depth_name} {location.region_2depth_name}</Text>
+						{location != null ?
+							<Text style={styles.userText}> / {location.region_1depth_name} {location.region_2depth_name}</Text> : <></>
+						}
 					</View>
 
 					<View style={[styles.section, { height: 200, backgroundColor: 'rgba(255, 255, 255, 0)' }]}>

@@ -1,15 +1,19 @@
-export const filterPriceList = (list, asset, condition) => {
+export const filterPriceList = (list, asset, condition, location) => {
     // 예측된 모델 필터링   
     const modelList = list.filter((item) => item.AssetsName == asset);
 
     const conditionList = modelList.filter((item) => item.CONDITIONS == condition)
 
+    const locationList = conditionList.filter((item) => item.LOCATION == location)
+
 
     let statList;
     if (conditionList.length == 0 || conditionList.length == 1) {
         statList = modelList;
-    } else {
+    } else if (locationList.length == 0 || locationList.length == 1) {
         statList = conditionList;
+    } else {
+        statList = locationList;
     }
 
 
@@ -145,11 +149,27 @@ export const todayPersent = (data) => {
 
 //플랫폼 합산 평균
 export const mixPlatformData = async (data1, data2) => {
+    let list1 = null;
+    let list2 = null;
+    if (data1.length >= data2.length) {
+        list1 = data1
+        list2 = data2
+    } else {
+        list1 = data2
+        list2 = data1
+    }
 
     let mixedData = [];
-    const averageData = data1.map((item, index) => {
+    const averageData = list1.map((item, index) => {
+        let mixedValue;
+
         // 두 배열의 같은 날짜의 데이터를 합산
-        const mixedValue = (item.value + data2[index].value) / 2;
+        if (list2[index] != undefined) {
+            mixedValue = (item.value + list2[index].value) / 2;
+        } else {
+            mixedValue = item.value
+        }
+        
 
         // 합산한 데이터를 새로운 배열에 추가
         mixedData.push({
