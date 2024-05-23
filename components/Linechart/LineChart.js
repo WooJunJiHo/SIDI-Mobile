@@ -51,12 +51,12 @@ const Chart = (props) => {
             case '번개장터':
                 if (ptDatas != null) {
                     newData = ptDatas.BJPrice;
-                    newSpacing = ((width * 0.9) / newData.length);
+                    newSpacing = ((width * 0.85) / newData.length);
                     newMaxValue = subtractMaxValue(ptDatas.BJPrice);
                     newMinValue = subtractMinValue(ptDatas.BJPrice);
                 } else {
                     newData = ptData;
-                    newSpacing = ((width * 0.9) / newData.length);
+                    newSpacing = ((width * 0.85) / newData.length);
                     newMaxValue = subtractMaxValue(ptData);
                     newMinValue = subtractMinValue(ptData);
                 }
@@ -64,7 +64,7 @@ const Chart = (props) => {
             case '중고나라':
                 if (ptDatas != null) {
                     newData = ptDatas.JNPrice;
-                    newSpacing = ((width * 0.9) / newData.length);
+                    newSpacing = ((width * 0.85) / newData.length);
                     newMaxValue = subtractMaxValue(ptDatas.JNPrice);
                     newMinValue = subtractMinValue(ptDatas.JNPrice);
                 }
@@ -73,12 +73,12 @@ const Chart = (props) => {
                 if (ptDatas != null) {
                     if (ptDatas.DJPrice == undefined) {
                         newData = ptDatas.BJPrice;
-                        newSpacing = ((width * 0.9) / newData.length);
+                        newSpacing = ((width * 0.85) / newData.length);
                         newMaxValue = subtractMaxValue(ptDatas.BJPrice);
                         newMinValue = subtractMinValue(ptDatas.BJPrice);
                     } else {
                         newData = ptDatas.DJPrice;
-                        newSpacing = ((width * 0.9) / newData.length);
+                        newSpacing = ((width * 0.85) / newData.length);
                         newMaxValue = subtractMaxValue(ptDatas.DJPrice);
                         newMinValue = subtractMinValue(ptDatas.DJPrice);
                     }
@@ -142,7 +142,7 @@ const Chart = (props) => {
         <View style={{ flex: 1 }}>
             <View style={{ borderRadius: 0, width: '88%', alignSelf: 'center', height: 50 }}>
                 <View style={{ position: 'absolute', left: 0, alignItems: 'flex-start', marginTop: 16 }}>
-                    <Text style={styles.dateText}>{firstDate && firstDate.slice(0, -4)} ~ {lastDate && lastDate.slice(0, -4)}</Text>
+                    <Text style={styles.dateText}>{firstDate && firstDate.slice(0, -5)} ~ {lastDate && lastDate.slice(0, -5)}</Text>
                     <View style={{ flexDirection: 'row' }}>
                         <Icon name="chevron-with-circle-up" size={14} color="red" style={{ marginRight: 4 }} />
                         <Text style={styles.maxValueText}>{formatNumber(maxValue)}원</Text>
