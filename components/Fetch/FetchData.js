@@ -297,3 +297,73 @@ export const fetchReLocation = async (data) => {
         throw error
     }
 }
+
+
+
+
+
+//GPT
+//GPT
+//GPT
+
+export const gptContent = async (asset) => {
+    try {
+        const response = await axios.post(
+            'https://api.openai.com/v1/chat/completions',
+            {
+                messages: [
+                    {
+                        role: 'system', 
+                        content:
+                            `
+                                역할: 상품에 대한 정보를 보고 판매글을 만들어줘.
+                                주의사항: 
+                                1. 2~3줄 사이로 짧고 간결하게 작성돼야 해. 
+                                2. 거짓 또는 부풀린 설명이 있어서는 안돼.
+                                3. 상세 설명이 있어야 하며 예시 같은 글이 있어야한다.
+                                4. 상품 데이터에 포함 되어 있지 않는 것은 넣지 마.
+                                [에시]
+                                예민하신 분 거래 피해주시길 바랍니다 
+                                기스, 찍힘 모두 존재하며 사진 참고 바랍니다 
+                                
+                                자급제이며 사설 수리 내역 없습니다 
+                                트루톤, 스피커, 음향, 페•아 등등 모두 정상 작동합니다 
+                                
+                                케이스 끼우고 다녀서 불편함없이 사용하였습니다 
+                            `,
+                    },
+
+                    { role: 'user', content: JSON.stringify(asset) },
+                ],
+                max_tokens: 2000,
+                model: 'gpt-3.5-turbo'
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${keys.openAiApi}`,
+                }
+            }
+        )
+
+        // 응답이 없는 경우 재시도를 위해 null 반환
+        if (!response.data.choices || response.data.choices.length === 0) {
+            return null;
+        }
+
+        try {
+            // 데이터를 파싱하여 점수와 평가를 추출합니다.
+            const content = response.data.choices[0].message.content;
+
+            console.log(`회사: ${asset.COMPANY}\n모델: ${asset.MODEL + ' ' + asset.MORE}\n색상: ${asset.COLOR}\n상태: ${asset.CONDITIONS}\n제품 설명: ${content}\n추가 사항: `)
+            return `회사: ${asset.COMPANY}\n모델: ${asset.MODEL + ' ' + asset.MORE}\n색상: ${asset.COLOR}\n상태: ${asset.CONDITIONS}\n제품 설명: ${content}\n추가 사항: `
+        } catch (error) {
+            console.error('GPT error:', error)
+            return null;
+        }
+
+    } catch (error) {
+        console.error('Error text: ', error)
+        return null;
+    }
+}

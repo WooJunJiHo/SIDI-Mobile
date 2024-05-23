@@ -85,8 +85,10 @@ const AssetsInfo = (props) => {
 
                 const BJPrice = filterPriceList(BJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, assetList[0].CONDITIONS)
                 const JNPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, assetList[0].CONDITIONS)
-                const DJPrice = filterPriceList(DJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, assetList[0].CONDITIONS)
+                const DJPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, assetList[0].CONDITIONS)
                 setPrices({ BJPrice, JNPrice, DJPrice })
+
+        
 
 
                 //그래프 상태 변수
@@ -98,7 +100,7 @@ const AssetsInfo = (props) => {
                 for (i = 0; i < conditions.length; i++) {
                     const BJPrice = filterPriceList(BJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, conditions[i])
                     const JNPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, conditions[i])
-                    const DJPrice = filterPriceList(DJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, conditions[i])
+                    const DJPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, conditions[i])
                     temp.push({ [i]: { BJPrice, JNPrice, DJPrice } })
                 }
                 setPriceOfCondition(temp)
@@ -156,7 +158,7 @@ const AssetsInfo = (props) => {
 
     // 데이터 예시 (텍스트와 스타일을 포함하는 배열)
     const data = [
-        { text: '복사가 되나요? 테스트용입니당', style: styles.AiText },
+        { text: !asset ? '데이터가 존재하지 않습니다.' : asset[0].GPTCONTENT , style: styles.AiText },
     ];
 
     const getCurrentDateTime = () => {

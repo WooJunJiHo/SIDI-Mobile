@@ -8,7 +8,7 @@ import ScannerOverlay from './ScannerOverlay';
 //서버 주소
 import { keys } from '../env'
 //db로드
-import { fetchQR, fetchAssetsImages, fetchUserAssets, updateAssetImage } from '../components/Fetch/FetchData'
+import { fetchQR, fetchAssetsImages, fetchUserAssets, updateAssetImage, gptContent } from '../components/Fetch/FetchData'
 
 //크롤링 데이터 전처리
 import { filterPriceList } from '../components/utils/filterPriceList'
@@ -62,11 +62,22 @@ const Scanner = (props) => {
                         text: '등록', onPress: () => {
                             const updateQR = async () => {
                                 setLoad(true)
+                                const gptRes = await gptContent({
+                                    index: JSON.parse(data).asset.index,
+                                    COMPANY: JSON.parse(data).asset.COMPANY,
+                                    MODEL: JSON.parse(data).asset.MODEL,
+                                    MORE: JSON.parse(data).asset.MORE,
+                                    CATEGORY: JSON.parse(data).asset.CATEGORY,
+                                    RGB: JSON.parse(data).rgb.RGB,
+                                    COLOR: JSON.parse(data).rgb.color,
+                                    CONDITIONS: JSON.parse(data).condition
+                                });
                                 const filteredList = filterPriceList(priceList, `${JSON.parse(data).asset.COMPANY} ${JSON.parse(data).asset.MODEL} ${JSON.parse(data).asset.MORE}`, JSON.parse(data).condition)
                                 await fetchQR({
                                     userID: user.userID,
                                     assetID: JSON.parse(data).id,
-                                    price: filteredList[filteredList.length - 1].value
+                                    price: filteredList[filteredList.length - 1].value,
+                                    gpt: gptRes,
                                 })
                                 for (i = 1; i <= 4; i++) {
                                     await updateAssetImage(`${keys.flaskURL}/image_${i}`, user.userID, i, JSON.parse(data).id)

@@ -12,7 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from '@react-navigation/native';
 import Icon from '../components/styles/Icons'; // Icon 컴포넌트 import 추가
 //db로드
-import { addAsset, fetchQR, updateAssetImage, fetchAssetsImages } from '../components/Fetch/FetchData'
+import { addAsset, fetchQR, updateAssetImage, fetchAssetsImages, gptContent } from '../components/Fetch/FetchData'
 
 //keys
 import { keys } from '../env';
@@ -239,12 +239,22 @@ const Check = (props) => {
                                     COLOR: rgb.color,
                                     CONDITIONS: condition
                                 });
-                                //console.log(`${asset.COMPANY} ${asset.MODEL} ${asset.MORE}`)
+                                const gptRes = await gptContent({
+                                    index: asset.index,
+                                    COMPANY: asset.COMPANY,
+                                    MODEL: asset.MODEL,
+                                    MORE: asset.MORE,
+                                    CATEGORY: asset.CATEGORY,
+                                    RGB: rgb.RGB,
+                                    COLOR: rgb.color,
+                                    CONDITIONS: condition
+                                });
                                 const filteredList = filterPriceList(priceList, `${asset.COMPANY} ${asset.MODEL} ${asset.MORE}`, condition)
                                 await fetchQR({
                                     userID: user.userID,
                                     assetID: addResult.id,
                                     price: filteredList[filteredList.length - 1].value,
+                                    gpt: gptRes
                                 })
                                 await updateAssetImage(`${keys.flaskURL}/image_m`, user.userID, 1, addResult.id)
                                 await imageList.push({ url: `${keys.flaskURL}/image_m`, name: `${addResult.id}_1.jpeg`, assetID: `${addResult.id}`, imageNumber: `1` })

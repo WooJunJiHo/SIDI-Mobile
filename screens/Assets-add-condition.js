@@ -12,7 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from '@react-navigation/native';
 
 //db로드
-import { addAsset, fetchQR, updateAssetImage, fetchAssetsImages } from '../components/Fetch/FetchData'
+import { addAsset, fetchQR, updateAssetImage, fetchAssetsImages, gptContent } from '../components/Fetch/FetchData'
 
 //keys
 import { keys } from '../env';
@@ -150,12 +150,22 @@ const AssetsAddCondition = (props) => {
                                 COLOR: rgb.color,
                                 CONDITIONS: '이상 없음' //상태 로직 구현해야함
                             });
-                            //console.log(`${asset.COMPANY} ${asset.MODEL} ${asset.MORE}`)
+                            const gptRes = await gptContent({
+                                index: asset.index,
+                                COMPANY: asset.COMPANY,
+                                MODEL: asset.MODEL,
+                                MORE: asset.MORE,
+                                CATEGORY: asset.CATEGORY,
+                                RGB: rgb.RGB,
+                                COLOR: rgb.color,
+                                CONDITIONS: '이상 없음' //상태 로직 구현해야함
+                            });
                             const filteredList = filterPriceList(priceList, `${asset.COMPANY} ${asset.MODEL} ${asset.MORE}`, '이상 없음')
                             await fetchQR({
                                 userID: user.userID,
                                 assetID: addResult.id,
                                 price: filteredList[filteredList.length - 1].value,
+                                gpt: gptRes,
                             })
                             await updateAssetImage(`${keys.flaskURL}/image_m`, user.userID, 1, addResult.id)
                             await imageList.push({ url: `${keys.flaskURL}/image_m`, name: `${addResult.id}_1.jpeg`, assetID: `${addResult.id}`, imageNumber: `1` })
