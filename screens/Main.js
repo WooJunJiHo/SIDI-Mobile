@@ -19,7 +19,7 @@ import Icon from 'react-native-vector-icons/Entypo'; // Entypo 아이콘 import
 
 //패치 데이터
 import { fetchUserAssets } from '../components/Fetch/FetchData';
-import { filterPriceList, totalPrices, mixPlatformData } from '../components/utils/filterPriceList';
+import { filterPriceList, totalPrices, mixPlatformData, totalAssetsPrice } from '../components/utils/filterPriceList';
 
 //라인 그래프
 import Linechart from '../components/Linechart/LineChart';
@@ -97,12 +97,18 @@ const Home = (props) => {
 					const BJFilteredList = JSON.parse(scrapData).filter((item) => item.PLATFORM == "번개장터")
 					const JNFilteredList = JSON.parse(scrapData).filter((item) => item.PLATFORM == "중고나라")
 
-					const BJPrice = filterPriceList(BJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, assetList[0].CONDITIONS)
-					const JNPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, assetList[0].CONDITIONS)
+					let temp =[];
 
-					const platformMix = await mixPlatformData(BJPrice, JNPrice)
+					const allPrice = assetList.map(async (item, idx) => {
+						let BJPrice = filterPriceList(BJFilteredList, `${assetList[idx].COMPANY} ${assetList[idx].MODEL} ${assetList[idx].MORE}`, assetList[idx].CONDITIONS)
+						let JNPrice = filterPriceList(JNFilteredList, `${assetList[idx].COMPANY} ${assetList[idx].MODEL} ${assetList[idx].MORE}`, assetList[idx].CONDITIONS)
 
-					setMixedData(platformMix)
+						const platformMix = await mixPlatformData(BJPrice, JNPrice)
+						temp.push(...platformMix)
+					})
+					await allPrice;
+					const totalRes = totalAssetsPrice(temp);
+					setMixedData(totalRes);
 				}
 
 
@@ -253,11 +259,11 @@ const Home = (props) => {
 
 						<View style={[styles.sectioninside,]}>
 							<View style={{ width: '88%', height: '80%', alignSelf: 'center' }}>
-								<View style={{flexDirection:'row', alignItems:'center'}}>
+								<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 									<Text style={styles.totalSubText1}>
 										총 자산
 									</Text>
-									<TouchableOpacity style={{marginLeft:'auto'}} onPress={handleTotalPress} activeOpacity={1}>
+									<TouchableOpacity style={{ marginLeft: 'auto' }} onPress={handleTotalPress} activeOpacity={1}>
 										<Text style={styles.goText}>자세히보기</Text>
 									</TouchableOpacity>
 								</View>
@@ -279,7 +285,7 @@ const Home = (props) => {
 						{priceLoad == false && asset.length != 0 ?
 							<Linechart ptData={mixedData} /> :
 							<TouchableOpacity
-								style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}
+								style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
 								onPress={handleButton2Release}
 							>
 								<Text style={styles.userText}>자산 등록하러 가기!</Text>

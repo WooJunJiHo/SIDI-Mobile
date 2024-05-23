@@ -11,7 +11,17 @@ import { subtractMaxValue, subtractMinValue, getFirstAndLastDate } from '../util
 
 const Chart = (props) => {
     let ptData = props.ptData ? props.ptData : null;
-    const ptDatas = props.ptDatas ? props.ptDatas : null;
+    let ptDatas = props.ptDatas ? props.ptDatas : null;
+
+    // 배열의 길이를 체크하여 7개만 자르기
+    if (ptData != null) {
+        ptData = ptData.length > 7 ? ptData.slice(-7) : ptData;
+    } else {
+        ptDatas.BJPrice = ptDatas.BJPrice.length > 7 ? ptDatas.BJPrice.slice(-7) : ptDatas.BJPrice;
+        ptDatas.JNPrice = ptDatas.JNPrice.length > 7 ? ptDatas.JNPrice.slice(-7) : ptDatas.JNPrice;
+        ptDatas.DJPrice = ptDatas.DJPrice.length > 7 ? ptDatas.DJPrice.slice(-7) : ptDatas.DJPrice;
+    }
+
 
     const [maxValue, setMaxValue] = useState(0);
     const [minValue, setMinValue] = useState(0);
@@ -186,7 +196,7 @@ const Chart = (props) => {
                         return (
                             <View style={{ height: 150, width: 90, justifyContent: 'center', marginTop: -50, marginLeft: -35 }}>
                                 <Text style={{ color: '#111111', fontSize: 14, marginBottom: 0, textAlign: 'center', left: 0, fontFamily: 'Pretendard-Medium', }}>
-                                    {items[0].date.slice(0, -4)}
+                                    {items[0].date.slice(0, -5)}
                                 </Text>
                                 <View style={{ marginTop: 4, width: 100, right: 4 }}>
                                     <Text style={{ fontFamily: 'Pretendard-Bold', textAlign: 'center', color: '#6C60F1' }}>

@@ -4,16 +4,12 @@ export const filterPriceList = (list, asset, condition) => {
 
     const conditionList = modelList.filter((item) => item.CONDITIONS == condition)
 
-
-
     let statList;
     if (conditionList.length == 0 || conditionList.length == 1) {
         statList = modelList;
     } else {
         statList = conditionList;
     }
-
-
 
 
     // 날짜를 기준으로 오름차순으로 정렬
@@ -52,7 +48,7 @@ export const filterPriceList = (list, asset, condition) => {
 
     // 같은 날짜의 데이터를 합산하고 개수로 나누어 평균을 계산한 후, 평균 값을 가지고 있는 배열 생성
     const transformedData = filledData.reduce((acc, item) => {
-        const dateKey = new Date(item.DATE).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        const dateKey = new Date(item.DATE).toLocaleDateString();
         if (!acc[dateKey]) {
             acc[dateKey] = { totalPrice: item.PRICE, count: 1 };
         } else {
@@ -196,12 +192,69 @@ export function getFirstAndLastDate(data) {
         return { firstDate: null, lastDate: null };
     }
 
-    // 데이터 배열을 날짜 순으로 정렬
-    const sortedData = data.sort((a, b) => new Date(a.date) - new Date(b.date));
+    function parseDateString(dateString) {
+        const parts = dateString.split('/');
+        const year = parseInt(parts[2]);
+        const month = parseInt(parts[0]) - 1; // JavaScript에서 월은 0부터 시작하므로 1을 뺍니다.
+        const day = parseInt(parts[1]);
+        return new Date(year, month, day);
+    }
+
+    const parsedData = data.map(item => ({
+        date: parseDateString(item.date),
+        value: item.value
+    }));
+
+    //날짜순으로 정렬
+    parsedData.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    const reList = parsedData.map(item => ({
+        date: new Date(item.date).toLocaleDateString(),
+        value: item.value
+    }));
 
     // 가장 이른 날짜와 가장 늦은 날짜를 찾아서 반환
-    const firstDate = sortedData[0].date;
-    const lastDate = sortedData[sortedData.length - 1].date;
+    const firstDate = reList[0].date;
+    const lastDate = reList[reList.length - 1].date;
 
     return { firstDate, lastDate };
+}
+
+
+
+//메인 페이지 총 자산 계산
+export const totalAssetsPrice = (list) => {
+    // 데이터를 date 기준으로 그룹화하고 value 합산
+    const aggregatedData = list.reduce((acc, current) => {
+        const existing = acc.find(item => item.date === current.date);
+        if (existing) {
+            existing.value += current.value;
+        } else {
+            acc.push({ ...current });
+        }
+        return acc;
+    }, []);
+
+    function parseDateString(dateString) {
+        const parts = dateString.split('/');
+        const year = parseInt(parts[2]);
+        const month = parseInt(parts[0]) - 1; // JavaScript에서 월은 0부터 시작하므로 1을 뺍니다.
+        const day = parseInt(parts[1]);
+        return new Date(year, month, day);
+    }
+
+    const parsedData = aggregatedData.map(item => ({
+        date: parseDateString(item.date),
+        value: item.value
+    }));
+
+    //날짜순으로 정렬
+    parsedData.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    const reList = parsedData.map(item => ({
+        date: new Date(item.date).toLocaleDateString(),
+        value: item.value
+    }));
+
+    return reList;
 }

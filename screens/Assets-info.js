@@ -533,7 +533,7 @@ const styles = StyleSheet.create({
     //Ai 세션
     AiSection: {
         width: '100%',
-        height: 330,
+        minHeight: 330,
     },
     AiTitle: {
         fontSize: 18,
@@ -541,7 +541,8 @@ const styles = StyleSheet.create({
         marginLeft: 8
     },
     AiTextView: {
-        height: 210,
+        minHeight: 210,
+        marginBottom: 20,
     },
     AiText: {
         fontSize: 14,
@@ -549,6 +550,7 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginTop: 12,
         color: '#111111',
+        flexWrap: 'wrap',
     },
     copyBtn: {
         width: '91%',
