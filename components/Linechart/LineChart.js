@@ -124,6 +124,10 @@ const Chart = (props) => {
         props.onPlatformSelect('당근마켓');
     };
 
+    const formatNumber = (number) => {
+        return number.toLocaleString();
+    };
+
     return (
         <View style={{ flex: 1 }}>
             <View style={{ borderRadius: 0, width: '88%', alignSelf: 'center', height: 50 }}>
@@ -131,9 +135,9 @@ const Chart = (props) => {
                     <Text style={styles.dateText}>{firstDate && firstDate.slice(0, -4)} ~ {lastDate && lastDate.slice(0, -4)}</Text>
                     <View style={{ flexDirection: 'row' }}>
                         <Icon name="chevron-with-circle-up" size={14} color="red" style={{ marginRight: 4 }} />
-                        <Text style={styles.maxValueText}>{maxValue}원</Text>
+                        <Text style={styles.maxValueText}>{formatNumber(maxValue)}원</Text>
                         <Icon name="chevron-with-circle-down" size={14} color="blue" style={{ marginRight: 4 }} />
-                        <Text style={styles.minValueText}>{minValue}원</Text>
+                        <Text style={styles.minValueText}>{formatNumber(minValue)}원</Text>
                     </View>
                 </View>
             </View>
@@ -184,9 +188,9 @@ const Chart = (props) => {
                                 <Text style={{ color: '#111111', fontSize: 14, marginBottom: 0, textAlign: 'center', left: 0, fontFamily: 'Pretendard-Medium', }}>
                                     {items[0].date.slice(0, -4)}
                                 </Text>
-                                <View style={{ paddingHorizontal: 10, paddingVertical: 4, width: 90 }}>
+                                <View style={{ marginTop: 4, width: 100, right: 4 }}>
                                     <Text style={{ fontFamily: 'Pretendard-Bold', textAlign: 'center', color: '#6C60F1' }}>
-                                        {items[0].value + '원'}
+                                        {items[0].value.toLocaleString() + '원'}
                                     </Text>
                                 </View>
                             </View>
@@ -263,6 +267,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
+        borderColor: '#f1f1f1',
+        borderWidth: 2,
     },
     dayBt1: {
         width: '33.4%',
@@ -270,6 +276,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
+        borderColor: '#f1f1f1',
+        borderWidth: 2,
     },
     dayBt2: {
         width: '33.4%',
@@ -278,6 +286,8 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 12,
         alignItems: 'center',
         flexDirection: 'row',
+        borderColor: '#f1f1f1',
+        borderWidth: 2,
     },
     btText: {
         fontSize: 16,

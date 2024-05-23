@@ -470,11 +470,11 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         position: 'absolute',
         right: 20,
-        top: - 66
+        top: - 70
     },
     conditionText: {
-        fontSize: 16,
-        fontFamily: 'Pretendard-SemiBold',
+        fontSize: 14,
+        fontFamily: 'Pretendard-Regular',
         color: '#111111',
     },
 
@@ -483,14 +483,13 @@ const styles = StyleSheet.create({
     //중고 거래 플랫폼 시세 세션
     priceSection: {
         width: '91%',
-        height: 80,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
         backgroundColor: '#f5f5f5',
         marginTop: 20,
     },
 
-    flatformImage: {
+    flatformImage: { 
         top: 16,
         width: 24,
         height: 24,
