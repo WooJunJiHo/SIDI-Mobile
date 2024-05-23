@@ -396,7 +396,7 @@ const styles = StyleSheet.create({
     },
     priceMainText: {
         fontSize: 30,
-        fontFamily: 'Pretendard-SemiBold',
+        fontFamily: 'Pretendard-Bold',
         alignItems: 'center',
         color: '#111111',
     },

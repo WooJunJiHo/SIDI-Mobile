@@ -250,71 +250,44 @@ const Home = (props) => {
 					</View>
 
 					<View style={styles.section}>
-						<TouchableWithoutFeedback onPress={handleTotalPress} >
-							<View
-								onTouchStart={() => setTotalScale(0.95)}
-								onTouchEnd={() => setTotalScale(1)}
-								style={[
-									styles.sectioninside,
-									{
-										height: 80,
-										top: 8,
-										flexDirection: 'row',
-										alignItems: 'center',
-										transform: [{ scale: totalScale }],
-										backgroundColor: totalScale === 0.95 ? '#F5F5F5' : '#FFFFFF',
-									}
-								]}
-							>
-								<View style={styles.assetsContainer}>
-									<Image
-										source={require('../assets/icons/Pig.png')}
-										style={styles.totalAssetsImage}
-									/>
-								</View>
-								<View style={{ width: '60%', left: 24, height: '90%' }}>
+
+						<View style={[styles.sectioninside,]}>
+							<View style={{ width: '88%', height: '80%', alignSelf: 'center' }}>
+								<View style={{flexDirection:'row', alignItems:'center'}}>
 									<Text style={styles.totalSubText1}>
-										총 자산{'\n'}
+										총 자산
 									</Text>
-									<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-										{initialAnimationCompleted && (
-											<AnimatedNumbers
-												includeComma
-												animateToNumber={totalPrice}
-												fontStyle={styles.totalMainText}
-											/>
-										)}
-										<Text style={{ marginLeft: 5, fontSize: 18, fontFamily: 'Pretendard-SemiBold' }}>원</Text>
-
-									</View>
+									<TouchableOpacity style={{marginLeft:'auto'}} onPress={handleTotalPress} activeOpacity={1}>
+										<Text style={styles.goText}>자세히보기</Text>
+									</TouchableOpacity>
 								</View>
 
-								<Icon
-									name="chevron-small-right"
-									size={24}
-									color="#767676"
-									style={styles.totalShortcutIcon}
-								/>
-							</View>
-						</TouchableWithoutFeedback>
-					</View>
+								<View style={{ flexDirection: 'row', alignItems: 'center', top: 8 }}>
+									{initialAnimationCompleted && (
+										<AnimatedNumbers
+											includeComma
+											animateToNumber={totalPrice}
+											fontStyle={styles.totalMainText}
+										/>
+									)}
+									<Text style={{ marginLeft: 5, fontSize: 18, fontFamily: 'Pretendard-SemiBold' }}>원</Text>
 
-					<View style={[styles.section, { height: 330 }]}>
-						<Image
-							source={require('../assets/icons/Graph.png')}
-							style={styles.totalGraphImage}
-						/>
-						<Text style={styles.totalText}>총 자산 그래프</Text>
+								</View>
+							</View>
+
+						</View>
 						{priceLoad == false && asset.length != 0 ?
 							<Linechart ptData={mixedData} /> :
 							<TouchableOpacity
-								style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+								style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}
 								onPress={handleButton2Release}
 							>
 								<Text style={styles.userText}>자산 등록하러 가기!</Text>
 							</TouchableOpacity>
 						}
+
 					</View>
+
 				</View>
 				<View style={{ width: '100%', alignSelf: 'center', flexDirection: 'row' }}>
 					<ScrollView
@@ -383,7 +356,7 @@ const styles = StyleSheet.create({
 	},
 	section: {
 		width: '91%',
-		height: 95,
+		height: 360,
 		borderRadius: 20,
 		marginBottom: 12,
 		backgroundColor: '#FFFFFF',
@@ -422,11 +395,9 @@ const styles = StyleSheet.create({
 		backgroundColor: '#FFFFFF',
 	},
 	sectioninside: {
-		width: '96%',
-		borderRadius: 20,
-		backgroundColor: '#FFFFFF',
-		elevation: 2,
-		alignSelf: 'center',
+		borderRadius: 0,
+		height: 80,
+		top: 20,
 	},
 	userSection: {
 		flexDirection: 'row',
@@ -499,11 +470,15 @@ const styles = StyleSheet.create({
 		color: '#111111',
 		fontSize: 18,
 		fontFamily: 'Pretendard-Regular',
-		top: 14,
+	},
+	goText: {
+		fontSize: 14,
+		fontFamily: 'Pretendard-Regular',
+		color: '#111111',
 	},
 	totalMainText: {
-		fontFamily: 'Pretendard-SemiBold',
-		fontSize: 18,
+		fontFamily: 'Pretendard-Bold',
+		fontSize: 26,
 	},
 	assetsContainer: {
 		flexDirection: 'row',

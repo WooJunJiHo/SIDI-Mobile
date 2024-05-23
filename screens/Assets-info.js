@@ -42,7 +42,6 @@ const AssetsInfo = (props) => {
 
     const [selectedPlatform, setSelectedPlatform] = useState("번개장터"); // 선택된 플랫폼 상태
 
-    // 번개장터 또는 중고나라 선택 시 해당 정보를 저장하고, Chart 컴포넌트에 전달
     const handlePlatformSelect = (platform) => {
         setSelectedPlatform(platform);
     };
@@ -226,17 +225,17 @@ const AssetsInfo = (props) => {
                     {/* 중고 거래 플랫폼 시세 세션 */}
                     {selectedPlatform === '번개장터' && (
                         <View style={styles.priceSection}>
-                            <View style={{ flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: '88%', alignSelf: 'center', marginTop: 4 }}>
                                 <Image
                                     source={require('../assets/icons/bungaeIcon.png')}
                                     style={styles.flatformImage}
                                 />
                                 <Text style={styles.flatformText}>번개장터</Text>
-                                <Text style={styles.flatformPrice}>{prices.BJPrice[prices.BJPrice.length - 1].value.toLocaleString()} 원</Text>
 
                             </View>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Text style={styles.liveDateText}>{currentDateTimeString} 기준</Text>
+                            <View style={{ width: '88%', alignSelf: 'center', flexDirection: 'row', alignItems: 'center' }}>
+                                <Text style={styles.flatformPrice}>{prices.BJPrice[prices.BJPrice.length - 1].value.toLocaleString()}</Text>
+                                <Text style={styles.subflatformPrice}>원</Text>
                                 {persent.BJ >= 0 ?
                                     <Text style={[styles.updownText, { color: 'red' }]}>{persent.BJ}%</Text> :
                                     <Text style={styles.updownText}>{persent.BJ}%</Text>
@@ -248,22 +247,21 @@ const AssetsInfo = (props) => {
 
                     {selectedPlatform === '중고나라' && (
                         <View style={styles.priceSection}>
-                            <View style={{ flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: '88%', alignSelf: 'center', marginTop: 4 }}>
                                 <Image
                                     source={require('../assets/icons/joongna Icon.png')}
                                     style={styles.flatformImage}
                                 />
                                 <Text style={styles.flatformText}>중고나라</Text>
-                                <Text style={styles.flatformPrice}>{prices.JNPrice[prices.JNPrice.length - 1].value.toLocaleString()} 원</Text>
 
                             </View>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Text style={styles.liveDateText}>{currentDateTimeString} 기준</Text>
+                            <View style={{ flexDirection: 'row', width: '88%', alignSelf: 'center', alignItems: 'center' }}>
+                                <Text style={styles.flatformPrice}>{prices.JNPrice[prices.JNPrice.length - 1].value.toLocaleString()}</Text>
+                                <Text style={styles.subflatformPrice}>원</Text>
                                 {persent.JN >= 0 ?
                                     <Text style={[styles.updownText, { color: 'red' }]}>{persent.JN}%</Text> :
                                     <Text style={styles.updownText}>{persent.JN}%</Text>
                                 }
-
                             </View>
 
                         </View>
@@ -272,63 +270,53 @@ const AssetsInfo = (props) => {
 
                     {selectedPlatform === '당근마켓' && (
                         <View style={styles.priceSection}>
-                            <View style={{ flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: '88%', alignSelf: 'center', marginTop: 4 }}>
                                 <Image
                                     source={require('../assets/icons/CarrotMarket.png')}
                                     style={styles.flatformImage}
                                 />
                                 <Text style={styles.flatformText}>당근마켓</Text>
-                                <Text style={styles.flatformPrice}>{prices.JNPrice[prices.JNPrice.length - 1].value.toLocaleString()} 원</Text>
+
 
                             </View>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Text style={styles.liveDateText}>{currentDateTimeString} 기준</Text>
+                            <View style={{ flexDirection: 'row', width: '88%', alignSelf: 'center', alignItems: 'center' }}>
+                                <Text style={styles.flatformPrice}>{prices.JNPrice[prices.JNPrice.length - 1].value.toLocaleString()}</Text>
+                                <Text style={styles.subflatformPrice}>원</Text>
                                 {persent.JN >= 0 ?
                                     <Text style={[styles.updownText, { color: 'red' }]}>{persent.JN}%</Text> :
                                     <Text style={styles.updownText}>{persent.JN}%</Text>
                                 }
-
                             </View>
 
                         </View>
 
                     )}
 
-                    {/* 중고 거래 플랫폼 시세 차트 세션 */}
-                    <View style={styles.priceChartSection}>
-                        <Image
-                            source={require('../assets/icons/Graph.png')}
-                            style={styles.totalGraphImage}
-                        />
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={styles.totalText}>가격 그래프</Text>
-                            <TouchableOpacity
-                                style={styles.conditionView}
-                                onPress={() => {
-                                    if (conditionStat == 5) {
-                                        setConditionStat(0)
-                                    } else {
-                                        setConditionStat(conditionStat + 1)
-                                    }
-                                    setPrices({
-                                        BJPrice: priceOfCondition[conditionStat][conditionStat].BJPrice,
-                                        JNPrice: priceOfCondition[conditionStat][conditionStat].JNPrice,
-                                    })
-                                    const persentRes = todayPersent({
-                                        BJPrice: priceOfCondition[conditionStat][conditionStat].BJPrice,
-                                        JNPrice: priceOfCondition[conditionStat][conditionStat].JNPrice,
-                                    })
-                                    setPersent(persentRes)
-                                }}
-                            >
-                                <Text style={styles.conditionText}> 상태 - {conditions[conditionStat]}</Text>
-                            </TouchableOpacity>
-                        </View>
-
+                    <View style={{ height: 300, backgroundColor: '#f5f5f5', width: '91%', borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
+                        <TouchableOpacity
+                            style={styles.conditionView}
+                            onPress={() => {
+                                if (conditionStat == 5) {
+                                    setConditionStat(0)
+                                } else {
+                                    setConditionStat(conditionStat + 1)
+                                }
+                                setPrices({
+                                    BJPrice: priceOfCondition[conditionStat][conditionStat].BJPrice,
+                                    JNPrice: priceOfCondition[conditionStat][conditionStat].JNPrice,
+                                })
+                                const persentRes = todayPersent({
+                                    BJPrice: priceOfCondition[conditionStat][conditionStat].BJPrice,
+                                    JNPrice: priceOfCondition[conditionStat][conditionStat].JNPrice,
+                                })
+                                setPersent(persentRes)
+                            }}
+                        >
+                            <Text style={styles.conditionText}> 상태 - {conditions[conditionStat]}</Text>
+                        </TouchableOpacity>
 
                         <Linechart ptDatas={prices} selectedPlatform={selectedPlatform} onPlatformSelect={handlePlatformSelect} />
                     </View>
-
                     <View style={{ width: '100%', height: 1, backgroundColor: '#f5f5f5', marginTop: 16 }}></View>
 
                     {/* AI가 작성해주는 글 세션 */}
@@ -471,9 +459,9 @@ const styles = StyleSheet.create({
         height: 40,
         justifyContent: 'center',
         alignItems: 'flex-end',
-        top: -26,
         position: 'absolute',
         right: 20,
+        top: - 66
     },
     conditionText: {
         fontSize: 16,
@@ -486,46 +474,49 @@ const styles = StyleSheet.create({
     //중고 거래 플랫폼 시세 세션
     priceSection: {
         width: '91%',
-        height: 86,
-        borderRadius: 20,
+        height: 80,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
         backgroundColor: '#f5f5f5',
-        marginTop: 30,
+        marginTop: 20,
     },
 
     flatformImage: {
         top: 16,
-        left: 20,
         width: 24,
         height: 24,
+        marginRight: 8,
     },
     flatformText: {
         fontSize: 18,
         fontFamily: 'Pretendard-SemiBold',
-        marginLeft: 28,
         marginTop: 18,
         color: '#111111',
     },
     flatformPrice: {
+        fontSize: 26,
+        fontFamily: 'Pretendard-Bold',
+        marginTop: 12,
+        color: '#111111',
+    },
+    subflatformPrice: {
         fontSize: 18,
         fontFamily: 'Pretendard-SemiBold',
-        marginLeft: 'auto',
-        marginRight: 20,
-        marginTop: 18,
+        marginTop: 12,
         color: '#111111',
+        marginLeft: 4
     },
     liveDateText: {
         fontSize: 14,
         fontFamily: 'Pretendard-Regular',
-        marginLeft: 20,
         marginTop: 14,
         color: '#767676',
     },
     updownText: {
         fontSize: 14,
         fontFamily: 'Pretendard-Regular',
-        marginLeft: 'auto',
-        marginRight: 20,
         marginTop: 14,
+        marginLeft: 8,
         color: 'blue',
     },
 
@@ -562,7 +553,7 @@ const styles = StyleSheet.create({
     copyText: {
         color: '#ffffff',
         fontSize: 18,
-        fontFamily: 'Pretendard-Regular',
+        fontFamily: 'Pretendard-SemiBol',
         alignSelf: 'center',
     },
 

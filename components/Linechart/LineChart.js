@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { LineChart } from "react-native-gifted-charts";
 import { Dimensions } from 'react-native';
+import Icon from 'react-native-vector-icons/Entypo'; // Entypo 아이콘 import
 
 const { width } = Dimensions.get('window');
 
@@ -105,18 +106,31 @@ const Chart = (props) => {
         props.onPlatformSelect('중고나라');
     };
 
+    const handlePressInCarrot = () => {
+        // 중고나라 버튼이 눌렸을 때 스케일을 줄입니다.
+        setIsPressedCarrot(true);
+    };
+
+    const handlePressOutCarrot = () => {
+        // 중고나라 버튼에서 손을 뗐을 때 스케일을 원래대로 돌려놓습니다.
+        setIsPressedCarrot(false);
+        props.onPlatformSelect('당근마켓');
+    };
+
     return (
         <View style={{ flex: 1 }}>
-            <View style={{ borderRadius: 0, width: '100%', alignSelf: 'center', height: 50, marginTop: 8 }}>
-                <View style={{ position: 'absolute', left: 10, alignItems:'flex-start', marginTop: 0 }}>
-                    <Text style={styles.dateText}>기간 · {firstDate && firstDate.slice(0, -4)} ~ {lastDate && lastDate.slice(0, -4)}</Text>
-                    <View style={{flexDirection:'row'}}>
-                        <Text style={styles.maxValueText}>최고 · {maxValue}원</Text>
-                        <Text style={styles.minValueText}>최저 · {minValue}원</Text>
+            <View style={{ borderRadius: 0, width: '88%', alignSelf: 'center', height: 50 }}>
+                <View style={{ position: 'absolute', left: 0, alignItems: 'flex-start', marginTop: 16 }}>
+                    <Text style={styles.dateText}>{firstDate && firstDate.slice(0, -4)} ~ {lastDate && lastDate.slice(0, -4)}</Text>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Icon name="chevron-with-circle-up" size={14} color="red" style={{ marginRight: 4 }} />
+                        <Text style={styles.maxValueText}>{maxValue}원</Text>
+                        <Icon name="chevron-with-circle-down" size={14} color="blue" style={{ marginRight: 4 }} />
+                        <Text style={styles.minValueText}>{minValue}원</Text>
                     </View>
                 </View>
             </View>
-               
+
             <LineChart
                 style={styles.chart}
                 areaChart
@@ -127,12 +141,13 @@ const Chart = (props) => {
                 spacing={chartSpacing}
                 rulesType="none"
                 color="#00FF80"
-                thickness={4}
-                startOpacity={0}
-                endOpacity={0}
+                thickness={3}
+                startOpacity={200}
+                startFillColor1='#CE9FFC'
+                endOpacity={100}
                 initialSpacing={36}
                 noOfSections={6}
-                maxValue={maxValue + (maxValue * 1.4)}
+                maxValue={maxValue + (maxValue * 1.2)}
                 yAxisThickness={0}
                 rulesColor="#fafafa"
                 xAxisThickness={0}
@@ -142,6 +157,7 @@ const Chart = (props) => {
                 xAxisColor="#111111"
                 disableScroll={true}
                 lineGradient={true}
+                curved={true}
                 lineGradientStartColor='#CE9FFC'
                 lineGradientEndColor='#967DFB'
                 pointerConfig={{
@@ -158,11 +174,11 @@ const Chart = (props) => {
                     pointerLabelComponent: items => {
                         return (
                             <View style={{ height: 150, width: 90, justifyContent: 'center', marginTop: -50, marginLeft: -35 }}>
-                                <Text style={{ color: '#111111', fontSize: 14, marginBottom: 10, textAlign: 'center', left: 0 }}>
-                                    {items[0].date}
+                                <Text style={{ color: '#111111', fontSize: 14, marginBottom: 0, textAlign: 'center', left: 0, fontFamily: 'Pretendard-Medium', }}>
+                                    {items[0].date.slice(0, -4)}
                                 </Text>
-                                <View style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 16, backgroundColor: '#6C60F1', width: 90 }}>
-                                    <Text style={{ fontWeight: 'bold', textAlign: 'center', color: '#FFFFFF' }}>
+                                <View style={{ paddingHorizontal: 10, paddingVertical: 4, width: 90 }}>
+                                    <Text style={{ fontFamily: 'Pretendard-Bold', textAlign: 'center', color: '#6C60F1' }}>
                                         {items[0].value + '원'}
                                     </Text>
                                 </View>
@@ -172,7 +188,7 @@ const Chart = (props) => {
                 }}
             />
             {!ptData ?
-                <View style={{ flexDirection: 'row', bottom: 20, position: 'absolute', justifyContent:'center', width: '100%', height:'16%', bottom: 0, borderBottomLeftRadius: 20, borderBottomRightRadius: 20, }}>
+                <View style={{ flexDirection: 'row', alignSelf: 'center', position: 'absolute', justifyContent: 'center', width: '100%', height: '16%', bottom: 0, borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
                     <TouchableOpacity
                         onPress={() => {
                             handlePeriodSelect('번개장터');
@@ -208,10 +224,10 @@ const Chart = (props) => {
                     <TouchableOpacity
                         onPress={() => {
                             handlePeriodSelect('당근마켓');
-                            props.onPlatformSelect('당근마켓'); // 버튼 클릭 시 번개장터를 선택한 것으로 전달
+                            props.onPlatformSelect('당근마켓');
                         }}
-                        onPressIn={handlePressInJoongna}
-                        onPressOut={handlePressOutJoongna}
+                        onPressIn={handlePressInCarrot}
+                        onPressOut={handlePressOutCarrot}
                         style={[styles.dayBt2, selectedPeriod === '당근마켓' ? styles.selectedButton : styles.unselectedButton, { transform: [{ scale: isPressedCarrot ? 0.95 : 1 }] }]}
                         activeOpacity={1}
                     >
@@ -234,7 +250,7 @@ const styles = StyleSheet.create({
         overflow: 'visible',
     },
     dayBt: {
-        width: '33%',
+        width: '33.4%',
         height: '100%',
         borderBottomLeftRadius: 12,
         justifyContent: 'center',
@@ -242,14 +258,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     dayBt1: {
-        width: 120,
+        width: '33.4%',
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
     },
     dayBt2: {
-        width: 120,
+        width: '33.4%',
         height: '100%',
         justifyContent: 'center',
         borderBottomRightRadius: 12,
@@ -286,7 +302,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontFamily: 'Pretendard-Medium',
         color: 'red',
-        left: 10,
         marginBottom: 4,
         marginRight: 8
     },
@@ -294,14 +309,12 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontFamily: 'Pretendard-Medium',
         color: 'blue',
-        left: 10,
         marginBottom: 0
     },
     dateText: {
         fontSize: 14,
         fontFamily: 'Pretendard-SemiBold',
         color: '#3E3E3E',
-        left: 10,
         top: -8
     },
 });
