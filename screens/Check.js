@@ -259,7 +259,7 @@ const Check = (props) => {
                                 await updateAssetImage(`${keys.flaskURL}/image_m`, user.userID, 1, addResult.id)
                                 await imageList.push({ url: `${keys.flaskURL}/image_m`, name: `${addResult.id}_1.jpeg`, assetID: `${addResult.id}`, imageNumber: `1` })
                                 await AsyncStorage.setItem("@imageData", JSON.stringify(imageList));
-                                await assetList.push({ AssetsID: addResult.id, COMPANY: asset.COMPANY, MODEL: asset.MODEL, MORE: asset.MORE, COLOR: rgb.color, GPTCONTENT: null, UserID: user.userID, CategoryID: asset.CATEGORY, PRICE: filteredList[filteredList.length - 1].value, CONDITIONS: condition, DATE: new Date() })
+                                await assetList.push({ AssetsID: addResult.id, COMPANY: asset.COMPANY, MODEL: asset.MODEL, MORE: asset.MORE, COLOR: rgb.color, GPTCONTENT: null, UserID: user.userID, CategoryID: asset.CATEGORY, PRICE: filteredList[filteredList.length - 1].value, CONDITIONS: condition, GPTCONTENT: gptRes,  DATE: new Date() })
                                 await AsyncStorage.setItem("@assetData", JSON.stringify(assetList));
                                 setLoad(false)
                                 props.navigation.navigate('MyPageMain')

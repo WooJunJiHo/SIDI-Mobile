@@ -354,9 +354,7 @@ export const gptContent = async (asset) => {
         try {
             // 데이터를 파싱하여 점수와 평가를 추출합니다.
             const content = response.data.choices[0].message.content;
-
-            console.log(`회사: ${asset.COMPANY}\n모델: ${asset.MODEL + ' ' + asset.MORE}\n색상: ${asset.COLOR}\n상태: ${asset.CONDITIONS}\n제품 설명: ${content}\n추가 사항: `)
-            return `회사: ${asset.COMPANY}\n모델: ${asset.MODEL + ' ' + asset.MORE}\n색상: ${asset.COLOR}\n상태: ${asset.CONDITIONS}\n제품 설명: ${content}\n추가 사항: `
+            return `회사: ${asset.COMPANY}\n모델: ${asset.MODEL + ' ' + asset.MORE}\n색상: ${asset.COLOR}\n상태: ${asset.CONDITIONS}\n제품 설명: \n${content}\n\n추가 사항: `
         } catch (error) {
             console.error('GPT error:', error)
             return null;
