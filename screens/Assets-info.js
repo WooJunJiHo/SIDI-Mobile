@@ -84,7 +84,7 @@ const AssetsInfo = (props) => {
 
                 const BJPrice = filterPriceList(BJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, assetList[0].CONDITIONS)
                 const JNPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, assetList[0].CONDITIONS)
-                const DJPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, assetList[0].CONDITIONS)
+                const DJPrice = filterPriceList(DJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, assetList[0].CONDITIONS)
                 setPrices({ BJPrice, JNPrice, DJPrice })
 
         
@@ -99,7 +99,7 @@ const AssetsInfo = (props) => {
                 for (i = 0; i < conditions.length; i++) {
                     const BJPrice = filterPriceList(BJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, conditions[i])
                     const JNPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, conditions[i])
-                    const DJPrice = filterPriceList(JNFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, conditions[i])
+                    const DJPrice = filterPriceList(DJFilteredList, `${assetList[0].COMPANY} ${assetList[0].MODEL} ${assetList[0].MORE}`, conditions[i])
                     temp.push({ [i]: { BJPrice, JNPrice, DJPrice } })
                 }
                 setPriceOfCondition(temp)
@@ -108,7 +108,7 @@ const AssetsInfo = (props) => {
                 setImage(imageList)
                 setAsset(assetList)
 
-                const persentRes = todayPersent({ BJPrice, JNPrice })
+                const persentRes = todayPersent({ BJPrice, JNPrice, DJPrice })
                 setPersent(persentRes)
 
 
@@ -287,11 +287,11 @@ const AssetsInfo = (props) => {
 
                             </View>
                             <View style={{ flexDirection: 'row', width: '88%', alignSelf: 'center', alignItems: 'center' }}>
-                                <Text style={styles.flatformPrice}>{prices.JNPrice[prices.JNPrice.length - 1].value.toLocaleString()}</Text>
+                                <Text style={styles.flatformPrice}>{prices.DJPrice[prices.DJPrice.length - 1].value.toLocaleString()}</Text>
                                 <Text style={styles.subflatformPrice}>원</Text>
-                                {persent.JN >= 0 ?
-                                    <Text style={[styles.updownText, { color: 'red' }]}>{persent.JN}%</Text> :
-                                    <Text style={styles.updownText}>{persent.JN}%</Text>
+                                {persent.DJ >= 0 ?
+                                    <Text style={[styles.updownText, { color: 'red' }]}>{persent.DJ}%</Text> :
+                                    <Text style={styles.updownText}>{persent.DJ}%</Text>
                                 }
                             </View>
 
