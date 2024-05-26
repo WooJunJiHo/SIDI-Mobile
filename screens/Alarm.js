@@ -35,7 +35,6 @@ const Alarm = (props) => {
                         const asset = assetsData.find((asset) => asset.AssetsID === item.AssetsID);
                         item.MODEL = asset.MODEL + ' ' + asset.MORE;
                     })
-                    console.log(alarmData);
                 } else {
                     // 사용자 정보가 없을 때 처리할 부분
                 }

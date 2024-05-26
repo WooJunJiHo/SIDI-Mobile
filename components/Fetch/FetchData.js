@@ -126,7 +126,6 @@ export const deleteAsset = async (data) => {
 export const getAlarm = async (data) => {
     try {
         const response = await axios.post(`${keys.nodeURL}/getAlarm`, data);
-        console.log(response.data)
         return response.data;
     } catch (error) {
         console.error('Error:', error);
