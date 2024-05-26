@@ -122,30 +122,32 @@ export function subtractMinValue(data) {
 
 //전일 기준 변동 퍼센테이지
 export const todayPersent = (data) => {
-    if (data.BJPrice.length == 0 || data.BJPrice.length == 1) {
-        if (data.JNPrice.length == 0 || data.JNPrice.length == 1) {
-            return {
-                BJ: 0,
-                JN: 0,
-            }
-        } else {
-            return {
-                BJ: 0,
-                JN: Math.round(((data.JNPrice[data.JNPrice.length - 1].value - data.JNPrice[data.JNPrice.length - 2].value) / data.JNPrice[data.JNPrice.length - 2].value) * 100),
-            }
-        }
+    let BJ;
+    let JN;
+    let DJ;
+
+    if (data.BJPrice.length <= 1) {
+        BJ = 0
     } else {
-        if (data.JNPrice.length == 0 || data.JNPrice.length == 1) {
-            return {
-                BJ: Math.round(((data.BJPrice[data.BJPrice.length - 1].value - data.BJPrice[data.BJPrice.length - 2].value) / data.BJPrice[data.BJPrice.length - 2].value) * 100),
-                JN: 0,
-            }
-        } else {
-            return {
-                BJ: Math.round(((data.BJPrice[data.BJPrice.length - 1].value - data.BJPrice[data.BJPrice.length - 2].value) / data.BJPrice[data.BJPrice.length - 2].value) * 100),
-                JN: Math.round(((data.JNPrice[data.JNPrice.length - 1].value - data.JNPrice[data.JNPrice.length - 2].value) / data.JNPrice[data.JNPrice.length - 2].value) * 100),
-            }
-        }
+        BJ = Math.round(((data.BJPrice[data.BJPrice.length - 1].value - data.BJPrice[data.BJPrice.length - 2].value) / data.BJPrice[data.BJPrice.length - 2].value) * 100)
+    }
+    
+    if (data.JNPrice.length <= 1) {
+        JN = 0
+    } else {
+        JN = Math.round(((data.JNPrice[data.JNPrice.length - 1].value - data.JNPrice[data.JNPrice.length - 2].value) / data.JNPrice[data.JNPrice.length - 2].value) * 100)
+    }
+    
+    if (data.DJPrice.length <= 1) {
+        DJ = 0
+    } else {
+        DJ =  Math.round(((data.DJPrice[data.DJPrice.length - 1].value - data.DJPrice[data.DJPrice.length - 2].value) / data.DJPrice[data.DJPrice.length - 2].value) * 100)
+    }
+
+    return {
+        BJ: BJ,
+        JN: JN,
+        DJ: DJ,
     }
 
 }
