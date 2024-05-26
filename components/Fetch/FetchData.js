@@ -122,6 +122,18 @@ export const deleteAsset = async (data) => {
 
 
 
+//알람 조회
+export const getAlarm = async (data) => {
+    try {
+        const response = await axios.post(`${keys.nodeURL}/getAlarm`, data);
+        console.log(response.data)
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
 
 
 
