@@ -93,6 +93,18 @@ const Home = (props) => {
 				const assetList = JSON.parse(assetData)
 				setAsset(assetList)
 
+				setNickname(JSON.parse(user).nickname);
+
+				const priceData = await fetchUserAssets(JSON.parse(user))
+				let totalValue=0;
+
+				if (priceData != 0) {
+					totalValue = totalPrices(priceData)
+					if (totalValue != null) {
+						setTotalPrice(totalValue)
+					}
+				}
+
 				if (assetList.length != 0) {
 					const BJFilteredList = JSON.parse(scrapData).filter((item) => item.PLATFORM == "번개장터")
 					const JNFilteredList = JSON.parse(scrapData).filter((item) => item.PLATFORM == "중고나라")
@@ -108,25 +120,14 @@ const Home = (props) => {
 					})
 					await allPrice;
 					const totalRes = totalAssetsPrice(temp);
+					totalRes[totalRes.length-1].value = totalValue;
+
 					setMixedData(totalRes);
 				}
 
 
 				setPriceLoad(false)
 
-			}
-
-			if (user !== null) {
-				setNickname(JSON.parse(user).nickname);
-
-				const priceData = await fetchUserAssets(JSON.parse(user))
-
-				if (priceData != 0) {
-					const totalValue = totalPrices(priceData)
-					if (totalValue != null) {
-						setTotalPrice(totalValue)
-					}
-				}
 			}
 		};
 
