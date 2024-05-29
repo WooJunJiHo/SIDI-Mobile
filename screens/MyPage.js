@@ -157,7 +157,7 @@ const MyPage = (props) => {
             });
         } else {
             // 삭제 모드가 아닌 경우, 이미지 클릭은 기존과 같이 처리됩니다.
-            props.navigation.navigate('MyAssetsInfo', { assetID });
+            props.navigation.navigate('MyAssetsInfo', { assetID, image });
         }
     };
 

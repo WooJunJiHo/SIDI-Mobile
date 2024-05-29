@@ -27,6 +27,7 @@ const AssetsInfo = (props) => {
     //로그인 확인
     const { params } = props.route;
     const assetID = params ? params.assetID : null;
+    const imageData = params ? params.image : null;
 
     const conditions = ['새상품', '이상 없음', '기스', '액정 파손', '외판 손상', '기능 고장']
     const [conditionStat, setConditionStat] = useState(0)
@@ -70,12 +71,12 @@ const AssetsInfo = (props) => {
             const userData = await AsyncStorage.getItem("@user");
             if (userData !== null) {
                 //핸드폰에 저장되어있는 데이터 불러오기
-                const imageData = await AsyncStorage.getItem("@imageData");
                 const assetData = await AsyncStorage.getItem("@assetData");
                 const priceData = await AsyncStorage.getItem("@priceData");
                 const locationData = await AsyncStorage.getItem("@locationData");
+                await AsyncStorage.setItem("@imageData", JSON.stringify(imageData));
 
-                const imageList = JSON.parse(imageData).filter(item => item.assetID == assetID);
+                const imageList = imageData.filter(item => item.assetID == assetID);
                 const assetList = JSON.parse(assetData).filter(item => item.AssetsID == assetID);
 
                 const BJFilteredList = JSON.parse(priceData).filter((item) => item.PLATFORM == "번개장터")
