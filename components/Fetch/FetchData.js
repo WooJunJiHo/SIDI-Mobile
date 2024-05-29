@@ -1,21 +1,20 @@
 import axios from "axios";
 
-//FireBase
-import storage from './FireBaseStorage'
+// FireBase
+import storage from './FireBaseStorage';
 import { listAll, getDownloadURL, ref, uploadBytesResumable } from '@firebase/storage';
 
-//서버 주소
-import { keys } from '../../env'
+// 서버 주소
+import { keys } from '../../env';
 
+// Mysql
 
-
-
-
-//Mysql
-//Mysql
-//Mysql
-
-// /getInfo에 GET 요청 보내기 
+/**
+ * 예측된 자산 정보를 fetch 하는 서비스
+ * @param {Object} data - 요청에 필요한 데이터
+ * @returns {Promise<Object>} - 자산 정보
+ * @throws Will throw an error if the request fails.
+ */
 export const getInfos = async (data) => {
     try {
         const response = await axios.post(`${keys.nodeURL}/getInfo`, data);
@@ -24,10 +23,13 @@ export const getInfos = async (data) => {
         console.error('Error:', error);
         throw error; // 에러를 상위로 다시 던지기
     }
-}
+};
 
-
-// 지원 가능 자산 로드
+/**
+ * 지원 가능 자산을 fetch 하는 서비스
+ * @returns {Promise<Object>} - 지원 가능 모델 리스트
+ * @throws Will throw an error if the request fails.
+ */
 export const getModelList = async () => {
     try {
         const response = await axios.get(`${keys.nodeURL}/getModelList`);
@@ -36,10 +38,13 @@ export const getModelList = async () => {
         console.error('Error:', error);
         throw error; // 에러를 상위로 다시 던지기
     }
-}
+};
 
-
-// /getColor에 GET 요청 보내기
+/**
+ * /getColor에 GET 요청 보내기
+ * @returns {Promise<Object>} - 색상 리스트
+ * @throws Will throw an error if the request fails.
+ */
 export const getColors = async () => {
     try {
         const response = await axios.get(`${keys.nodeURL}/getColor`);
@@ -48,9 +53,13 @@ export const getColors = async () => {
         console.error('Error:', error);
         throw error; // 에러를 상위로 다시 던지기
     }
-}
+};
 
-// /getScrapingAssets에 GET 요청 보내기
+/**
+ * /getScrapingAssets에 GET 요청 보내기
+ * @returns {Promise<Object>} - 스크래핑된 자산 리스트
+ * @throws Will throw an error if the request fails.
+ */
 export const getScrapingAssets = async () => {
     try {
         const response = await axios.get(`${keys.nodeURL}/getScrapingAssets`);
@@ -59,11 +68,14 @@ export const getScrapingAssets = async () => {
         console.error('Error:', error);
         throw error; // 에러를 상위로 다시 던지기
     }
-}
+};
 
-
-
-//로그인 확인 / POST
+/**
+ * 로그인 확인 / POST
+ * @param {Object} data - 로그인 데이터
+ * @returns {Promise<Object>} - 로그인 결과
+ * @throws Will throw an error if the request fails.
+ */
 export const fetchLogin = async (data) => {
     try {
         const response = await axios.post(`${keys.nodeURL}/fetchLogin`, data);
@@ -72,10 +84,14 @@ export const fetchLogin = async (data) => {
         console.error('Error:', error);
         throw error; // 에러를 상위로 다시 던지기
     }
-}
+};
 
-
-//사용자 자산 로드 / POST
+/**
+ * 사용자 자산 로드 / POST
+ * @param {Object} data - 사용자 데이터
+ * @returns {Promise<Object>} - 사용자 자산 정보
+ * @throws Will throw an error if the request fails.
+ */
 export const fetchUserAssets = async (data) => {
     try {
         const response = await axios.post(`${keys.nodeURL}/fetchUserAssets`, data);
@@ -84,9 +100,14 @@ export const fetchUserAssets = async (data) => {
         console.error('Error:', error);
         throw error; // 에러를 상위로 다시 던지기
     }
-}
+};
 
-//사용자 QR코드 자산 추가 / POST
+/**
+ * 사용자 QR코드 자산 추가 / POST
+ * @param {Object} data - QR 코드 데이터
+ * @returns {Promise<Object>} - QR 코드 업데이트 결과
+ * @throws Will throw an error if the request fails.
+ */
 export const fetchQR = async (data) => {
     try {
         const response = await axios.post(`${keys.nodeURL}/updateQR`, data);
@@ -95,9 +116,14 @@ export const fetchQR = async (data) => {
         console.error('Error:', error);
         throw error; // 에러를 상위로 다시 던지기
     }
-}
+};
 
-//자산 추가
+/**
+ * 자산 추가
+ * @param {Object} data - 자산 데이터
+ * @returns {Promise<Object>} - 자산 추가 결과
+ * @throws Will throw an error if the request fails.
+ */
 export const addAsset = async (data) => {
     try {
         const response = await axios.post(`${keys.nodeURL}/addAsset`, data);
@@ -106,23 +132,30 @@ export const addAsset = async (data) => {
         console.error('Error:', error);
         throw error; // 에러를 상위로 다시 던지기
     }
-}
+};
 
-
-//자산 삭제
+/**
+ * 자산 삭제
+ * @param {Object} data - 자산 데이터
+ * @returns {Promise<Object>} - 자산 삭제 결과
+ * @throws Will throw an error if the request fails.
+ */
 export const deleteAsset = async (data) => {
     try {
         const response = await axios.post(`${keys.nodeURL}/deleteAsset`, data);
         return response.data;
     } catch (error) {
-        console.log('Error:', error)
+        console.log('Error:', error);
         throw error;
     }
-}
+};
 
-
-
-//알람 조회
+/**
+ * 알람 조회
+ * @param {Object} data - 알람 데이터
+ * @returns {Promise<Object>} - 알람 정보
+ * @throws Will throw an error if the request fails.
+ */
 export const getAlarm = async (data) => {
     try {
         const response = await axios.post(`${keys.nodeURL}/getAlarm`, data);
@@ -131,17 +164,16 @@ export const getAlarm = async (data) => {
         console.error('Error:', error);
         throw error;
     }
-}
+};
 
+// Flask
 
-
-
-
-
-//flask
-//flask
-//flask
-
+/**
+ * 이미지 업로드 서비스
+ * @param {string} img - 이미지 URI
+ * @returns {Promise<Object>} - 업로드 결과
+ * @throws Will throw an error if the request fails.
+ */
 export const uploadImage = async (img) => {
     const formData = new FormData();
     formData.append('photo', {
@@ -153,7 +185,7 @@ export const uploadImage = async (img) => {
     try {
         const response = await fetch(`${keys.flaskURL}/imageUpload`, {
             method: 'POST', // POST 요청 설정
-            body: formData
+            body: formData,
         });
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -164,19 +196,22 @@ export const uploadImage = async (img) => {
         console.error('Error fetching images:', error);
         throw error; // 예외를 다시 던져서 호출하는 쪽에서 처리할 수 있도록 함
     }
-}
+};
 
-
-
-// 서버로부터 이미지를 색상 패치
+/**
+ * 서버로부터 이미지를 색상 패치
+ * @param {Object} imageData - 이미지 데이터
+ * @returns {Promise<Object>} - 색상 정보
+ * @throws Will throw an error if the request fails.
+ */
 export const fetchColor = async (imageData) => {
     try {
         const response = await fetch(`${keys.flaskURL}/color`, {
             method: 'POST', // POST 요청 설정
             headers: {
-                'Content-Type': 'application/json' // JSON 형식의 데이터 전송
+                'Content-Type': 'application/json', // JSON 형식의 데이터 전송
             },
-            body: JSON.stringify(imageData) // 빈 객체를 JSON 문자열로 변환하여 전송 (필요에 따라 데이터 추가 가능)
+            body: JSON.stringify(imageData), // 빈 객체를 JSON 문자열로 변환하여 전송 (필요에 따라 데이터 추가 가능)
         });
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -187,19 +222,16 @@ export const fetchColor = async (imageData) => {
         console.error('Error fetching images:', error);
         throw error; // 예외를 다시 던져서 호출하는 쪽에서 처리할 수 있도록 함
     }
-}
+};
 
+// FireBase
 
-
-
-
-
-
-//FireBase
-//FireBase
-//FireBase
-
-//자산 이미지 로드  
+/**
+ * 자산 이미지 로드
+ * @param {string} data - 이미지 경로 데이터
+ * @returns {Promise<Object[]>} - 이미지 URL 리스트
+ * @throws Will throw an error if the request fails.
+ */
 export const fetchAssetsImages = async (data) => {
     const imageUrls = [];
     try {
@@ -221,8 +253,6 @@ export const fetchAssetsImages = async (data) => {
             } else {
                 console.log('파일 이름에서 자산 ID와 이미지 번호를 찾을 수 없습니다.');
             }
-
-
         }
     } catch (error) {
         console.error('이미지 로딩 오류:', error);
@@ -230,9 +260,13 @@ export const fetchAssetsImages = async (data) => {
     return imageUrls;
 };
 
-
-
-//사용자 자산 이미지 업로드
+/**
+ * 사용자 자산 이미지 업로드
+ * @param {string} uri - 이미지 URI
+ * @param {string} id - 사용자 ID
+ * @param {number} number - 이미지 번호
+ * @param {string} assetID - 자산 ID
+ */
 export const updateAssetImage = async (uri, id, number, assetID) => {
     const response = await fetch(uri);
     const blob = await response.blob();
@@ -265,18 +299,16 @@ export const updateAssetImage = async (uri, id, number, assetID) => {
             });
         }
     );
-}
+};
 
+// Kakao
 
-
-
-
-
-
-//kakao
-//kakao
-//kakao
-
+/**
+ * 주소 로드
+ * @param {Object} data - 위치 데이터
+ * @returns {Promise<Object>} - 주소 정보
+ * @throws Will throw an error if the request fails.
+ */
 export const fetchLocation = async (data) => {
     try {
         const response = await axios.get(`https://dapi.kakao.com/v2/local/geo/coord2address.json?y=${data.coords.latitude}&x=${data.coords.longitude}`, {
@@ -285,13 +317,17 @@ export const fetchLocation = async (data) => {
             },
         });
         return response.data.documents[0].road_address ? response.data.documents[0].road_address : response.data.documents[0].address;
-
     } catch (error) {
-        console.log(error)
-        throw error
+        console.log(error);
+        throw error;
     }
-}
+};
 
+/**
+ * 주소를 충청남도에서 충남으로 변경
+ * @param {string} data - 주소 문자열
+ * @throws Will throw an error if the request fails.
+ */
 export const fetchReLocation = async (data) => {
     // 한글 주소를 인코딩
     const query = encodeURIComponent(data);
@@ -301,22 +337,22 @@ export const fetchReLocation = async (data) => {
             headers: {
                 Authorization: `KakaoAK ${keys.kakaoApi}`,
             },
-        })
-        console.log(response.data.documents[0])
+        });
+        console.log(response.data.documents[0]);
     } catch (error) {
-        console.log(error)
-        throw error
+        console.log(error);
+        throw error;
     }
-}
+};
 
+// GPT
 
-
-
-
-//GPT
-//GPT
-//GPT
-
+/**
+ * GPT-3를 이용한 상품 설명 생성
+ * @param {Object} asset - 자산 데이터
+ * @returns {Promise<string|null>} - 생성된 설명 또는 null
+ * @throws Will throw an error if the request fails.
+ */
 export const gptContent = async (asset) => {
     try {
         const response = await axios.post(
@@ -324,26 +360,24 @@ export const gptContent = async (asset) => {
             {
                 messages: [
                     {
-                        role: 'system', 
-                        content:
-                            `
-                                역할: 상품에 대한 정보를 보고 판매글을 만들어줘.
-                                주의사항: 
-                                1. 2~3줄 사이로 짧고 간결하게 작성돼야 해. 
-                                2. 거짓 또는 부풀린 설명이 있어서는 안돼.
-                                3. 상세 설명이 있어야 하며 예시 같은 글이 있어야한다.
-                                4. 상품 데이터에 포함 되어 있지 않는 것은 넣지 마.
-                                [에시]
-                                예민하신 분 거래 피해주시길 바랍니다 
-                                기스, 찍힘 모두 존재하며 사진 참고 바랍니다 
-                                
-                                자급제이며 사설 수리 내역 없습니다 
-                                트루톤, 스피커, 음향, 페•아 등등 모두 정상 작동합니다 
-                                
-                                케이스 끼우고 다녀서 불편함없이 사용하였습니다 
-                            `,
+                        role: 'system',
+                        content: `
+                            역할: 상품에 대한 정보를 보고 판매글을 만들어줘.
+                            주의사항: 
+                            1. 2~3줄 사이로 짧고 간결하게 작성돼야 해. 
+                            2. 거짓 또는 부풀린 설명이 있어서는 안돼.
+                            3. 상세 설명이 있어야 하며 예시 같은 글이 있어야한다.
+                            4. 상품 데이터에 포함 되어 있지 않는 것은 넣지 마.
+                            [에시]
+                            예민하신 분 거래 피해주시길 바랍니다 
+                            기스, 찍힘 모두 존재하며 사진 참고 바랍니다 
+                            
+                            자급제이며 사설 수리 내역 없습니다 
+                            트루톤, 스피커, 음향, 페•아 등등 모두 정상 작동합니다 
+                            
+                            케이스 끼우고 다녀서 불편함없이 사용하였습니다 
+                        `,
                     },
-
                     { role: 'user', content: JSON.stringify(asset) },
                 ],
                 max_tokens: 2000,
@@ -355,7 +389,7 @@ export const gptContent = async (asset) => {
                     'Authorization': `Bearer ${keys.openAiApi}`,
                 }
             }
-        )
+        );
 
         // 응답이 없는 경우 재시도를 위해 null 반환
         if (!response.data.choices || response.data.choices.length === 0) {
@@ -363,16 +397,15 @@ export const gptContent = async (asset) => {
         }
 
         try {
-            // 데이터를 파싱하여 점수와 평가를 추출합니다.
+            // 데이터를 파싱하여 설명을 추출합니다.
             const content = response.data.choices[0].message.content;
-            return `회사: ${asset.COMPANY}\n모델: ${asset.MODEL + ' ' + asset.MORE}\n색상: ${asset.COLOR}\n상태: ${asset.CONDITIONS}\n제품 설명: \n${content}\n\n추가 사항: `
+            return `회사: ${asset.COMPANY}\n모델: ${asset.MODEL + ' ' + asset.MORE}\n색상: ${asset.COLOR}\n상태: ${asset.CONDITIONS}\n제품 설명: \n${content}\n\n추가 사항: `;
         } catch (error) {
-            console.error('GPT error:', error)
+            console.error('GPT error:', error);
             return null;
         }
-
     } catch (error) {
-        console.error('Error text: ', error)
+        console.error('Error text: ', error);
         return null;
     }
-}
+};
